@@ -44,6 +44,13 @@ describe('what must never leave', () => {
     expect(text).not.toMatch(/6771/);
   });
 
+  it('does not swallow the space after a number', () => {
+    // "+237 677 12 34 56 or mail" became "[PHONE_1]or mail" - words glued
+    // together in the exact text a model is asked to read.
+    const { text } = scrub('call +237 677 12 34 56 or mail me');
+    expect(text).toMatch(/\] or mail me$/);
+  });
+
   it('takes email addresses', () => {
     const { text } = scrub('mail me: paul.mbarga@example.cm please');
     expect(text).not.toMatch(/@example\.cm/);

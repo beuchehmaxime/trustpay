@@ -66,8 +66,15 @@ export interface ScrubOptions {
  */
 const PHONE = /(?:\+?237[\s.-]*)?[62](?:[\s.-]*\d){8}/g;
 
-/** Any `+237` number, even if the national part is malformed or truncated. */
-const PHONE_PREFIXED = /\+?237[\s.-]*\d[\d\s.-]{5,}/g;
+/**
+ * Any `+237` number, even if the national part is malformed or truncated.
+ *
+ * Must END on a digit. Without the trailing `\d` the character class ran on
+ * into the following space and swallowed it, so "+237 677 12 34 56 or mail"
+ * came back as "[PHONE_1]or mail" - words glued together in the very text
+ * being handed to a model to read.
+ */
+const PHONE_PREFIXED = /\+?237[\s.-]*\d[\d\s.-]{4,}\d/g;
 
 const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
 
