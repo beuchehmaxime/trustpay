@@ -99,6 +99,94 @@ const ID_NUMBER =
 const PIN =
   /\b(?:pin|code\s+secret|secret\s+code|mot\s+de\s+passe|password|motdepasse)\b[\s:is=]*(\d{4,6})\b/gi;
 
+/**
+ * Digits as people SAY them, in the three languages one voice note mixes.
+ *
+ * A transcript is not text someone typed - it is speech. "Call me on six
+ * sept sept un deux trois quatre cinq six" is a phone number that every
+ * pattern above sails straight past, because it contains no digits at all.
+ * For a voice-first product in Cameroon that is the leak, not an edge case.
+ *
+ * Mixed deliberately into one table rather than one per language, because
+ * the speech is mixed: "six sept seven un deux three" is a perfectly normal
+ * way to read a number out here, and a per-language pass would break the run
+ * in half and catch neither part.
+ */
+const SPOKEN_DIGITS: Record<string, string> = {
+  // English, also the Pidgin numerals
+  zero: '0', oh: '0', one: '1', two: '2', three: '3', four: '4',
+  five: '5', six: '6', seven: '7', eight: '8', nine: '9',
+  // French
+  zéro: '0', zero_fr: '0', un: '1', une: '1', deux: '2', trois: '3',
+  quatre: '4', cinq: '5', sept: '7', huit: '8', neuf: '9',
+};
+
+/**
+ * How many spoken digits in a row count as a number being read out.
+ *
+ * Seven, not six, and the gap matters. A Cameroonian mobile is nine digits
+ * and people read them one at a time, so seven still catches a number the
+ * transcription clipped. Amounts are the opposite: nobody says "two five
+ * zero zero zero zero", they say "deux cent cinquante mille" - compound
+ * words that are not in the table at all. Dropping to six would start
+ * eating money read digit by digit, which is evidence.
+ */
+const SPOKEN_RUN_LENGTH = 7;
+
+/**
+ * Redact a number that was spoken rather than typed.
+ *
+ * Works on runs: a sequence of digit-words long enough to be somebody
+ * reading out a number. Ordinary speech does not stack seven of these in a
+ * row, so the false-positive cost is low and the miss cost is a published
+ * phone number.
+ */
+function scrubSpokenDigits(text: string, mark: (original: string) => string): string {
+  const words = text.split(/(\s+)/);
+  const output = [...words];
+
+  let runStart = -1;
+  // The index of the LAST digit word, not of the word that broke the run.
+  // Blanking up to the breaking word swallowed the separator before it, so
+  // "...five six now" came back as "...five sixnow" - words fused together
+  // in the exact text a model is asked to read. Same bug the written phone
+  // pattern had; same shape, different place.
+  let runEnd = -1;
+  let runDigits = 0;
+
+  const closeRun = () => {
+    if (runDigits >= SPOKEN_RUN_LENGTH && runStart >= 0) {
+      const spoken = words.slice(runStart, runEnd + 1).join('');
+      // Keep whatever punctuation closed the run. "...cinq six. I don pay"
+      // would otherwise come back as "[SPOKEN_1] I don pay", losing the
+      // sentence boundary in text a model is about to reason over - and a
+      // mediator is about to read.
+      const trailing = spoken.match(/[^\p{L}\p{N}\s]+$/u)?.[0] ?? '';
+      const token = mark(spoken.trim()) + trailing;
+      for (let index = runStart; index <= runEnd; index += 1) output[index] = '';
+      output[runStart] = token;
+    }
+    runStart = -1;
+    runEnd = -1;
+    runDigits = 0;
+  };
+
+  words.forEach((word, index) => {
+    if (/^\s+$/.test(word)) return; // separators never break a run
+    const normalised = word.toLowerCase().replace(/[^a-zà-ÿ]/gi, '');
+    if (SPOKEN_DIGITS[normalised] !== undefined) {
+      if (runStart < 0) runStart = index;
+      runEnd = index;
+      runDigits += 1;
+      return;
+    }
+    closeRun();
+  });
+  closeRun();
+
+  return output.join('');
+}
+
 /** Tokens are bracketed so a model cannot mistake one for ordinary prose. */
 const token = (kind: string, index: number) => `[${kind.toUpperCase()}_${index}]`;
 
@@ -183,6 +271,11 @@ export function scrub(text: string, options: ScrubOptions = {}): ScrubResult {
   output = output.replace(EMAIL, (match) => tokenFor(match, 'email'));
   output = output.replace(PHONE_PREFIXED, (match) => tokenFor(match.trim(), 'phone'));
   output = output.replace(PHONE, (match) => tokenFor(match.trim(), 'phone'));
+
+  // Last, and on the already-redacted text: a number read aloud. Runs last
+  // because the written forms are the cheaper match, and there is no point
+  // scanning word-by-word over text a regex has already cleaned.
+  output = scrubSpokenDigits(output, (spoken) => tokenFor(spoken, 'phone', 'spoken'));
 
   return { text: output, replacements };
 }

@@ -173,14 +173,70 @@ describe('restoring for the human who is allowed to see it', () => {
   });
 });
 
-describe('the limits, stated rather than hidden', () => {
-  it('does NOT catch a number spoken as words in a transcript', () => {
-    // "six sept sept un deux trois quatre cinq six" survives, because digits
-    // are not what is written. This is a real gap in the voice path and it is
-    // pinned here so it is a known limitation rather than a surprise - the
-    // transcript step must normalise spoken digits before this runs.
-    const spoken = 'appelle-moi au six sept sept un deux trois quatre cinq six';
-    const { text } = scrub(spoken);
-    expect(text).toBe(spoken);
+describe('numbers spoken aloud, which is how they arrive in a voice note', () => {
+  // A transcript is speech, not typing. "six sept sept un deux trois quatre
+  // cinq six" is a phone number containing no digits at all, and every
+  // written-form pattern sails straight past it. For a voice-first product
+  // this is THE leak, not an edge case.
+
+  it('catches a number read out in French', () => {
+    const { text } = scrub('appelle-moi au six sept sept un deux trois quatre cinq six');
+    expect(text).not.toMatch(/sept un deux/);
+    expect(text).toMatch(/\[SPOKEN_\d+\]/);
+  });
+
+  it('catches a number read out in English', () => {
+    const { text } = scrub('call me on six seven seven one two three four five six');
+    expect(text).not.toMatch(/seven one two/);
+    expect(text).toMatch(/\[SPOKEN_\d+\]/);
+  });
+
+  it('catches one read out in BOTH at once, which is how people actually talk', () => {
+    // The reason the digit table is one mixed map rather than one per
+    // language: a per-language pass would split this run in half and catch
+    // neither piece.
+    const { text } = scrub('na six sept seven un deux three quatre cinq six');
+    expect(text).toMatch(/\[SPOKEN_\d+\]/);
+    expect(text).not.toMatch(/un deux three/);
+  });
+
+  it('survives the separators a transcript puts in', () => {
+    const { text } = scrub('six, sept, sept, un, deux, trois, quatre, cinq, six');
+    expect(text).toMatch(/\[SPOKEN_\d+\]/);
+  });
+
+  it('leaves ordinary counting alone', () => {
+    // Short runs are how people talk about quantities, and quantities are
+    // the evidence.
+    const original = 'he sent two, not ten';
+    expect(scrub(original).text).toBe(original);
+  });
+
+  it('leaves a spoken AMOUNT alone, because that is the dispute', () => {
+    // Nobody reads money out digit by digit - they say "deux cent cinquante
+    // mille". Those are compound words, not single digits, so they are not
+    // in the table and cannot start a run.
+    const original = "j'ai payé deux cent cinquante mille francs pour dix pièces";
+    expect(scrub(original).text).toBe(original);
+  });
+
+  it('does not fire on six spoken digits, so money read out survives', () => {
+    // The threshold is seven for exactly this: "two five zero zero zero
+    // zero" is someone reading an amount, not a phone number.
+    const original = 'two five zero zero zero zero';
+    expect(scrub(original).text).toBe(original);
+  });
+
+  it('keeps the punctuation that ended the run, so sentences survive', () => {
+    // "...cinq six. I don pay" must not become "[SPOKEN_1] I don pay" - the
+    // model and the mediator both read this text.
+    const { text } = scrub('call am for six sept seven un deux three quatre cinq six. I don pay');
+    expect(text).toMatch(/\]\. I don pay/);
+  });
+
+  it('restores a spoken number for the mediator like any other redaction', () => {
+    const original = 'call six seven seven one two three four five six now';
+    const { text, replacements } = scrub(original);
+    expect(restore(text, replacements)).toBe(original);
   });
 });
