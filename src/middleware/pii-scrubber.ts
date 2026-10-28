@@ -115,7 +115,10 @@ export function scrub(text: string, options: ScrubOptions = {}): ScrubResult {
   for (const existing of replacements) seen.set(existing.original, existing.token);
 
   const counts = new Map<PiiKind, number>();
-  function tokenFor(original: string, kind: PiiKind, label = kind): string {
+  // `label` is the word that appears in the token and is NOT the kind: an
+  // id_number reads as [ID_1], which is shorter for the model to carry and
+  // easier for a mediator to match up. Typed as string so they can diverge.
+  function tokenFor(original: string, kind: PiiKind, label: string = kind): string {
     const already = seen.get(original);
     if (already) return already;
     const next = (counts.get(kind) ?? replacements.filter((r) => r.kind === kind).length) + 1;
