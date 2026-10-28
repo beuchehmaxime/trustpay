@@ -28,6 +28,25 @@ export const config = {
   env: optional('NODE_ENV', 'development'),
   port: numeric('PORT', 4100),
 
+  /**
+   * Which Meta tier we are on, and therefore what may be sent.
+   *
+   * Meta's data commitments draw the line here: on Discounted Services
+   * "Meta may use your Content, including Inputs and Outputs, to train,
+   * develop, evaluate, and improve Meta's AI models", while "Meta does not
+   * use your Content from Standard Services to train Meta Models". The
+   * billing dashboard says the same of free credits in plainer words:
+   * *while using free credits your content may be used for product
+   * improvement*.
+   *
+   * So on `discounted` - which is where $150 of free credits puts us - every
+   * payload is training data. Combined with Cameroon's Law No. 2024/017,
+   * enforceable since 23 June 2026, which restricts transferring personal
+   * data abroad without an adequacy finding or prior authorisation, that
+   * makes real dispute evidence unsendable. Not inadvisable: unsendable.
+   */
+  tier: optional('META_TIER', 'discounted') as 'discounted' | 'standard',
+
   meta: {
     apiKey: optional('MODEL_API_KEY'),
     baseUrl: optional('META_API_BASE_URL', 'https://api.meta.ai/v1'),

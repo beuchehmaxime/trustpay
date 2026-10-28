@@ -28,6 +28,13 @@ router.get('/health', (_req, res) => {
       openWeights: config.openWeights.model,
     },
     escalation: config.escalation,
+    // Reported rather than assumed. On the discounted tier every payload is
+    // training data, so this field decides what may be sent at all.
+    tier: config.tier,
+    evidencePolicy:
+      config.tier === 'standard'
+        ? 'Standard tier: content is not used for training.'
+        : 'Discounted tier: SYNTHETIC EVIDENCE ONLY - inputs may be used for training.',
   });
 });
 

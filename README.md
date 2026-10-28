@@ -59,6 +59,46 @@ once been lit, because nothing has ever filled it.
 TrustPay fills it. The pipeline has no write path to the ledger, and the demo
 shows a mediator overruling the model in the console that was already running.
 
+## What may be sent, and why that shaped the build
+
+TrustPay reasons about disputes between Cameroonian traders. Two constraints
+decide what can actually leave the country, and both are external:
+
+**Meta's data commitments.** On Discounted Services - which is where $150 of
+free hackathon credits puts you - *"Meta may use your Content, including
+Inputs and Outputs, to train, develop, evaluate, and improve Meta's AI
+models."* On Standard Services, *"Meta does not use your Content from Standard
+Services to train Meta Models."* The billing dashboard says the same thing in
+plainer words: while using free credits your content may be used for product
+improvement.
+
+**Cameroon's Law No. 2024/017 on personal data protection**, enforceable since
+23 June 2026, restricts transferring personal data abroad without an adequacy
+finding or prior authorisation. The supervisory authority it creates was not
+yet operational at the time of writing, which is not a safe harbour - the
+obligation exists whether or not anyone is currently administering it.
+
+Taken together: **real dispute evidence is unsendable on this tier.** Not
+inadvisable. Unsendable. So the corpus in this repository is synthetic, the
+demo runs on it, and no real voice note, photo or chat log is sent to a model
+API at any point.
+
+That is a constraint, and it made the architecture better:
+
+- the **PII scrubber** exists and is tested from the attacker's end, because
+  redaction had to be load-bearing rather than tidy
+- TrustPay receives **opaque party ids**, never names, numbers or KYC data
+- there is **one outbound door** (`src/meta/client.ts`) that refuses to send
+  anything still identifying, so the rule is enforced in one place rather than
+  remembered in a dozen
+- `/health` reports the tier, and the service says it on every boot
+
+**The lawful production path is the open-weight one.** Running Muse Spark Open
+on infrastructure we control means the evidence never crosses a border at all,
+which answers both constraints at once rather than negotiating with either.
+That is why the open-weight path is wired here, and it is a better reason than
+the bonus prize.
+
 ## Meta models used
 
 | Capability | Model | Why this one |
