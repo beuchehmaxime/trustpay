@@ -1,0 +1,74 @@
+# Automated dependency + base-image updates. Fast patching is the single best
+# defence against zero-days: a disclosed CVE is only exploitable while you run
+# the vulnerable version. Dependabot opens PRs; review + merge promptly, and
+# prioritise anything flagged "security".
+version: 2
+updates:
+  # ---- Node dependencies (one entry per package.json) ----
+  - package-ecosystem: "npm"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels: ["dependencies", "backend"]
+    groups:
+      # Batch low-risk minor/patch bumps into one PR to reduce noise; majors
+      # (breaking) still come as individual PRs for careful review.
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "npm"
+    directory: "/web/user"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels: ["dependencies", "web-user"]
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "npm"
+    directory: "/web/admin"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels: ["dependencies", "web-admin"]
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "npm"
+    directory: "/mobile"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels: ["dependencies", "mobile"]
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+
+  # ---- Container base images (Debian/Alpine/OpenSSL patch pickup) ----
+  - package-ecosystem: "docker"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "docker"]
+
+  - package-ecosystem: "docker"
+    directory: "/web/user"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "docker"]
+
+  - package-ecosystem: "docker"
+    directory: "/web/admin"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "docker"]
+
+  # ---- GitHub Actions ----
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "ci"]

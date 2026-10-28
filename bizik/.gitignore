@@ -1,0 +1,52 @@
+# ---- Dependencies ----
+node_modules/
+
+# ---- Environment / secrets (never commit real env files) ----
+.env
+.env.*
+# Templates carry no secrets and a new deployment needs them, but `.env.*`
+# above was swallowing every one except `.env.example`.
+!.env.example
+!.env*.example
+*.local
+
+# ---- Build output ----
+dist/
+build/
+backend/dist/
+mobile/.expo/
+mobile/web-build/
+mobile/expo-env.d.ts
+
+# ---- Runtime data (locally-stored KYC documents / uploads) ----
+backend/uploads/
+
+# ---- Logs ----
+*.log
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# ---- Native / signing material ----
+*.jks
+*.p8
+*.p12
+*.key
+*.keystore
+*.mobileprovision
+*.pem
+mobile/.kotlin/
+mobile/*.orig.*
+
+# ---- TypeScript ----
+*.tsbuildinfo
+
+# ---- Metro ----
+mobile/.metro-health-check*
+
+# ---- Editors / OS / tooling ----
+.DS_Store
+.idea/
+.vscode/
+.claude/
+*.swp

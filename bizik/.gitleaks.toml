@@ -1,0 +1,27 @@
+# Secret scanning config.
+#
+# Starts from the full default ruleset and narrows it in exactly one place.
+# Everything an allowlist hides is a secret this repository will never be told
+# about again, so each entry has to earn its place and say why.
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = """
+The IndexNow key in .github/workflows/deploy.yml.
+
+It looks like an API key to the generic-api-key rule, and it is not one. The
+IndexNow protocol proves you own a domain by making you SERVE the key from it:
+ours is at https://bizik.cm/e90c9159b182eb60ad1baa5e6c89c562.txt, which returns
+the key in plain text to anyone who asks. It is published on purpose, from
+web/user/public, and that is the only way the protocol works.
+
+It also grants nothing. The worst anyone can do with it is tell Bing and Yandex
+that pages on bizik.cm have changed - which they can already do by reading it
+off the live site. There is no account behind it and nothing to rotate.
+
+Scoped to the literal value rather than to the file, so a real credential
+committed to deploy.yml tomorrow is still caught.
+"""
+regexes = ['''e90c9159b182eb60ad1baa5e6c89c562''']

@@ -1,0 +1,2565 @@
+{
+  "common": {
+    "retry": "Retry",
+    "error": "Something went wrong",
+    "processing": "Processing…",
+    "close": "Close"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "wallet": "Wallet",
+    "addMoney": "Deposit",
+    "withdraw": "Withdraw",
+    "convert": "Convert",
+    "transactions": "Transactions",
+    "activity": "Activity",
+    "deals": "Deals",
+    "disputes": "Disputes",
+    "settings": "Settings",
+    "help": "Help & support",
+    "home": "Home",
+    "profile": "Profile",
+    "newDeal": "New deal"
+  },
+  "group": {
+    "overview": "Overview",
+    "money": "Money",
+    "work": "Work",
+    "settings": "Settings",
+    "account": "Account"
+  },
+  "user": {
+    "profile": "Profile",
+    "signOut": "Sign out"
+  },
+  "lang": {
+    "title": "Language",
+    "en": "English",
+    "fr": "Français"
+  },
+  "offline": {
+    "title": "You're offline",
+    "subtitle": "Pages you already opened still work. We will sync when you reconnect.",
+    "retry": "Retry",
+    "cached": "Deals and wallet are cached"
+  },
+  "dashboard": {
+    "loadError": "Couldn't load your dashboard.",
+    "welcomeBack": "Welcome back",
+    "walletBalance": "Wallet balance",
+    "lockedInEscrow": "Locked in escrow",
+    "fundsProtected": "Funds protected",
+    "inEscrow": "In escrow",
+    "activeDeals": "Active deals",
+    "noActiveDeals": "No active deals",
+    "noActiveDealsSub": "Deals you start or get invited to will appear here.",
+    "completed": "Completed",
+    "needAction": "{{count}} need action",
+    "onTime": "{{pct}}% on time",
+    "dealsCount": "{{count}} deals",
+    "needsAttention": "Needs your attention",
+    "seeAll": "See all",
+    "escrowFlow": "Escrow flow",
+    "escrowFlowSub": "Released vs still held in escrow",
+    "lastMonths": "Last 6 months",
+    "escrowByDeal": "Escrow by deal",
+    "activity": "Activity",
+    "youGetPaid": "you get paid",
+    "milestonesShort": "{{done}}/{{total}} milestones",
+    "install": {
+      "title": "Add BiZik to your home screen",
+      "subtitle": "Full-screen, works offline.",
+      "dismiss": "Dismiss"
+    },
+    "table": {
+      "deal": "Deal",
+      "escrowValue": "Escrow value",
+      "status": "Status",
+      "nextStep": "Next step"
+    },
+    "quick": {
+      "startDeal": "Start deal",
+      "wallet": "Wallet",
+      "disputes": "Disputes",
+      "activities": "Activities",
+      "transactions": "Transactions"
+    },
+    "noActivity": "No recent activity yet.",
+    "completedNote": "Funds released"
+  },
+  "wallet": {
+    "loadError": "Couldn't load your wallet.",
+    "availableBalance": "Available balance",
+    "addMoney": "Add money",
+    "withdraw": "Withdraw",
+    "convert": "Convert",
+    "inEscrow": "In escrow",
+    "payoutProcessing": "Payout processing",
+    "completed": "Completed",
+    "escrowFlow": "Escrow flow",
+    "lastMonths": "Last 6 months",
+    "holdings": "Holdings by currency",
+    "yourCurrencies": "Your currencies",
+    "payoutMethods": "Payout methods",
+    "manage": "Manage",
+    "addMethod": "Add method",
+    "noPayoutMethods": "No payout methods yet",
+    "transactions": "Transactions",
+    "seeAll": "See all",
+    "badge": {
+      "default": "Default",
+      "verified": "Verified",
+      "pending": "Pending"
+    },
+    "table": {
+      "description": "Description",
+      "deal": "Deal",
+      "amount": "Amount",
+      "status": "Status"
+    },
+    "status": {
+      "completed": "Completed",
+      "processing": "Processing",
+      "pending": "Pending",
+      "failed": "Failed"
+    },
+    "tx": {
+      "release": "Escrow released",
+      "topup": "Wallet top-up",
+      "withdrawal": "Withdrawal",
+      "fee": "Service fee",
+      "fx": "FX conversion"
+    }
+  },
+  "deposit": {
+    "title": "Add money",
+    "subtitle": "Top up your wallet so escrow can be funded instantly.",
+    "amountToAdd": "Amount to add",
+    "payFrom": "Pay from",
+    "instant": "Instant",
+    "arrives1h": "Arrives within 1 hour",
+    "feeLabel": "{{pct}}% BiZik fee",
+    "methodMomo": "MTN Mobile Money",
+    "methodCard": "Card or bank transfer",
+    "beforeConfirm": "Before you confirm",
+    "amount": "Amount",
+    "bizikFeePct": "BiZik fee ({{pct}}%)",
+    "bizikFee": "BiZik fee",
+    "totalCharged": "Total charged",
+    "creditedNote": "Credited to your {{currency}} balance the moment it clears.",
+    "cta": "Add money · {{total}}",
+    "cancel": "Cancel",
+    "recentTopups": "Recent top-ups",
+    "successToast": "Money added to your wallet",
+    "noTopups": "No top-ups yet",
+    "chargeAmount": "{{amount}} will be charged",
+    "noMethods": "No saved payment methods yet",
+    "noMethodsBody": "Add a payment method to fund your wallet.",
+    "addMethod": "Add a payment method",
+    "successTitle": "Money added",
+    "successBody": "Credited to your {{currency}} balance.",
+    "done": "Back to wallet",
+    "redirecting": "Taking you back to your wallet…"
+  },
+  "withdraw": {
+    "title": "Withdraw",
+    "subtitle": "Money leaves your wallet, not escrow.",
+    "availableToWithdraw": "Available to withdraw",
+    "availableBalanceAmount": "Available balance {{amount}}",
+    "lockedInEscrow": "Locked in escrow",
+    "amountToWithdraw": "Amount to withdraw",
+    "max": "Max",
+    "tierLimit": "Tier 2 limit: {{limit}} per month. {{left}} left this month.",
+    "overBalance": "More than your available balance.",
+    "payTo": "Pay to",
+    "feeFlat": "{{fee}} BiZik fee",
+    "instant": "Instant",
+    "arrivesBank": "Arrives in 1-2 business days",
+    "methodBank": "GTBank · Ada Okafor",
+    "methodMomo": "MTN Mobile Money",
+    "addMethod": "Add method",
+    "beforeConfirm": "Before you confirm",
+    "amount": "Amount",
+    "bizikFee": "BiZik fee",
+    "youReceive": "You receive",
+    "arrivesBy": "Arrives by {{date}}",
+    "cta": "Withdraw {{amount}}",
+    "cancel": "Cancel",
+    "escrowSafeTitle": "Escrow is never touched",
+    "escrowSafeBody": "Only your available balance can be withdrawn. Money held for a deal stays protected until that milestone is approved or a dispute is resolved.",
+    "successToast": "Withdrawal requested",
+    "transferFee": "Transfer fee",
+    "debitedFromWallet": "Debited from wallet"
+  },
+  "convert": {
+    "title": "Convert",
+    "titleFx": "Convert (FX)",
+    "subtitle": "Rate is locked for 60 seconds once you confirm.",
+    "from": "From",
+    "to": "To",
+    "availableBalance": "Available balance {{amount}}",
+    "balance": "Balance {{amount}}",
+    "rateLine": "1 {{to}} = {{rate}}",
+    "beforeConfirm": "Before you confirm",
+    "rate": "Rate",
+    "amount": "Amount",
+    "bizikFeePct": "BiZik fee ({{pct}}%)",
+    "youGet": "You get",
+    "creditedNote": "Credited to your {{currency}} balance",
+    "rateLocked": "Rate locked for 60s",
+    "live": "Live",
+    "liveUpdated": "Live mid-market rate · updated {{time}}",
+    "cta": "Convert {{amount}}",
+    "cancel": "Cancel",
+    "holdings": "Holdings by currency",
+    "successToast": "Conversion complete"
+  },
+  "activity": {
+    "title": "Activity",
+    "subtitle": "Everything happening across your deals, money and account.",
+    "unreadCount": "{{count}} unread",
+    "allCaughtUp": "You're all caught up",
+    "markAllRead": "Mark all read",
+    "emptyTitle": "Nothing here yet",
+    "emptyBody": "New notifications will show up here as they happen.",
+    "filter": {
+      "all": "All",
+      "unread": "Unread",
+      "deal": "Deals",
+      "money": "Money",
+      "dispute": "Disputes",
+      "identity": "Identity",
+      "security": "Security"
+    },
+    "time": {
+      "now": "Just now",
+      "hoursAgo": "{{n}}h",
+      "dayAgo": "{{n}} day ago",
+      "daysAgo": "{{n}} days ago",
+      "minutesAgo": "{{n}}m"
+    },
+    "kind": {
+      "milestoneSubmitted": {
+        "title": "Milestone submitted",
+        "body": "{{name}} submitted milestone {{n}}. Review it to release {{amount}}."
+      },
+      "mediatorEvidence": {
+        "title": "Mediator needs evidence",
+        "body": "Dispute {{ref}} needs your signed scope page by {{date}}."
+      },
+      "walletToppedUp": {
+        "title": "Wallet topped up",
+        "body": "{{amount}} added from {{method}}."
+      },
+      "identityVerified": {
+        "title": "Identity verified",
+        "body": "You are Tier 2. Your withdrawal limit is now {{amount}} / month."
+      },
+      "newSignIn": {
+        "title": "New sign-in",
+        "body": "New sign-in from {{device}} · {{location}}."
+      },
+      "escrowReleased": {
+        "title": "Escrow released",
+        "body": "{{amount}} was released to you for {{deal}}."
+      },
+      "dealInvite": {
+        "title": "New deal invite",
+        "body": "{{name}} invited you to a deal · {{deal}}."
+      },
+      "withdrawalSent": {
+        "title": "Withdrawal on the way",
+        "body": "{{amount}} is heading to {{method}}."
+      },
+      "revisionRequested": {
+        "title": "Revision requested",
+        "body": "{{name}} requested changes on {{deal}}."
+      },
+      "deliveryDue": {
+        "title": "Delivery due tomorrow",
+        "body": "{{deal}} is due {{date}}."
+      },
+      "conversionDone": {
+        "title": "Conversion complete",
+        "body": "You converted {{from}} to {{amount}}."
+      },
+      "disputeResolved": {
+        "title": "Dispute resolved",
+        "body": "Dispute {{ref}} was resolved in your favour."
+      }
+    },
+    "detail": {
+      "notFound": "This notification is no longer available.",
+      "viewDeal": "View deal",
+      "viewDispute": "View dispute",
+      "viewVerification": "View verification",
+      "viewSecurity": "Security settings",
+      "viewWallet": "Go to wallet"
+    },
+    "category": {
+      "PAYMENT": "Payment",
+      "CONTRACT": "Deal",
+      "KYC": "Verification",
+      "DISPUTE": "Dispute",
+      "SECURITY": "Security",
+      "SYSTEM": "System"
+    }
+  },
+  "tx": {
+    "kpi": {
+      "moneyIn": "Money in",
+      "moneyOut": "Money out",
+      "feesPaid": "Fees paid",
+      "count": "Transactions"
+    },
+    "searchPlaceholder": "Search by reference, deal or counterparty",
+    "filter": {
+      "all": "All",
+      "escrow": "Escrow",
+      "topup": "Top-ups",
+      "payout": "Payouts",
+      "fx": "FX"
+    },
+    "exportCsv": "Export CSV",
+    "col": {
+      "description": "Description",
+      "deal": "Deal",
+      "method": "Method",
+      "amount": "Amount",
+      "status": "Status"
+    },
+    "today": "Today",
+    "loading": "Loading",
+    "view": "View",
+    "showing": "Showing {{from}}-{{to}} / {{total}}",
+    "empty": "No transactions match your filters.",
+    "emptyHint": "Try a different filter or search term.",
+    "status": {
+      "completed": "Completed",
+      "pending": "Pending",
+      "processing": "Processing",
+      "failed": "Failed",
+      "disputed": "Disputed"
+    },
+    "kind": {
+      "escrowReleased": "Escrow released",
+      "walletTopup": "Wallet top-up",
+      "withdraw": "Withdrawal",
+      "escrowFunded": "Escrow funded",
+      "currencyConversion": "Currency conversion",
+      "escrowHeldDispute": "Escrow held - dispute"
+    },
+    "detail": {
+      "eyebrow": "Transaction details",
+      "about": "What this was about",
+      "deal": "Deal",
+      "breakdown": "Breakdown",
+      "gross": "Gross amount",
+      "fee": "BiZik fee",
+      "net": "Net amount",
+      "details": "Details",
+      "reference": "Reference",
+      "dateTime": "Date & time",
+      "counterparty": "Counterparty",
+      "takenFrom": "Taken from",
+      "paidInto": "Paid into",
+      "timeline": "Timeline",
+      "downloadReceipt": "Download receipt",
+      "shareReceipt": "Share receipt",
+      "copyReference": "Copy reference",
+      "copied": "Copied",
+      "reportProblem": "Report a problem"
+    },
+    "step": {
+      "requested": "Requested",
+      "approvedByYou": "Approved by you",
+      "settled": "Settled",
+      "initiated": "Initiated",
+      "processing": "Processing",
+      "held": "Funds held",
+      "underReview": "Under review"
+    },
+    "errorTitle": "Couldn't load transactions",
+    "errorHint": "Please check your connection and try again."
+  },
+  "deals": {
+    "detailTitle": "Deal detail",
+    "kpi": {
+      "active": "Active deals",
+      "heldInEscrow": "Held in escrow",
+      "invited": "Invited"
+    },
+    "tab": {
+      "mine": "My deals",
+      "invited": "Invited"
+    },
+    "newDeal": "New deal",
+    "searchPlaceholder": "Search deals",
+    "forName": "{{amount}} for {{name}}",
+    "milestones": "{{done}}/{{total}} milestones",
+    "due": "Due {{date}}",
+    "cardBanner": {
+      "in_progress": "Next: approve the delivery to release the next milestone.",
+      "awaiting_funding": "Next: fund the escrow so work can start.",
+      "in_review": "Next: waiting for the buyer to approve.",
+      "disputed": "A BiZik mediator is reviewing this dispute."
+    },
+    "filter": {
+      "all": "All",
+      "pending": "Pending",
+      "awaiting_funding": "Awaiting funding",
+      "in_progress": "In progress",
+      "disputed": "Disputed"
+    },
+    "filterLabel": "Filter",
+    "filterStatus": "Status",
+    "col": {
+      "deal": "Deal",
+      "escrowValue": "Escrow value",
+      "progress": "Progress",
+      "status": "Status",
+      "nextStep": "Next step"
+    },
+    "rel": {
+      "to": "to",
+      "from": "from",
+      "invitedBy": "Invited by"
+    },
+    "meta": {
+      "singlePayment": "single payment",
+      "youGetPaid": "you get paid"
+    },
+    "status": {
+      "in_progress": "In progress",
+      "awaiting_funding": "Awaiting funding",
+      "in_review": "In review",
+      "pending": "Pending",
+      "disputed": "Disputed",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "next": {
+      "approveMilestone": "Approve milestone {{n}}",
+      "fundEscrow": "Fund escrow",
+      "waitingApproval": "Waiting for approval"
+    },
+    "accept": "Accept",
+    "decline": "Decline",
+    "declineConfirm": "Decline this deal? This can't be undone.",
+    "declineSuccess": "Invitation declined",
+    "banner": {
+      "invitesWaiting_one": "You have {{count}} deal invitation waiting",
+      "invitesWaiting_other": "You have {{count}} deal invitations waiting",
+      "hint": "Accept or decline to get started.",
+      "review": "Review"
+    },
+    "empty": "No deals match your filters.",
+    "emptyMineTitle": "You don't have any deals yet",
+    "emptyMineSub": "Create a deal to hold a payment safely in escrow until the work is done.",
+    "emptyInvited": "No invitations yet",
+    "detail": {
+      "total": "Total",
+      "whoPays": "Who pays",
+      "whoGetsPaid": "Who gets paid",
+      "signedBoth": "Signed by both · protected by BiZik Escrow",
+      "signedPending": "Awaiting both signatures",
+      "scope": "Scope of work",
+      "timeline": "Milestone timeline",
+      "addMilestone": "Add milestone",
+      "col": {
+        "milestone": "Milestone",
+        "amount": "Amount",
+        "deliveryDate": "Delivery date",
+        "status": "Status"
+      },
+      "mStatus": {
+        "released": "Released",
+        "submitted": "Submitted",
+        "pending": "Pending",
+        "funded": "Funded",
+        "approved": "Approved",
+        "in_progress": "In progress",
+        "disputed": "Disputed",
+        "cancelled": "Cancelled"
+      },
+      "deliveryNote": "Delivery note · Revision {{rev}}",
+      "deliveryNoteShort": "Delivery note",
+      "payee": "Payee",
+      "payer": "Payer",
+      "totalYouPay": "Total · You pay",
+      "totalYouReceive": "Total · You receive",
+      "approxFor": "{{approx}} for {{name}}",
+      "dueRevision": "Due {{date}} · Revision {{rev}}",
+      "due": "Due {{date}}",
+      "whatNext": "What happens next",
+      "next": {
+        "review": "Next step: review the delivery, then release {{amount}}.",
+        "fund": "Next step: fund escrow so {{name}} can start.",
+        "waiting": "You delivered. Waiting for {{name}} to approve and release {{amount}}.",
+        "invite": "{{name}} invited you to this deal. Accept to get started.",
+        "awaitingDelivery": "Next step: waiting for {{name}} to deliver the work.",
+        "deliver": "The escrow is funded - submit your work when it's ready.",
+        "awaitingFund": "Waiting for {{name}} to fund the escrow before you start."
+      },
+      "autoReleases": "Auto-releases in {{time}}",
+      "approveRelease": "Approve & release",
+      "submitWork": "Submit work",
+      "markComplete": "Mark complete",
+      "requestRevision": "Request revision",
+      "openDispute": "Open dispute",
+      "detailsScope": "Details & scope",
+      "released": "Released",
+      "inEscrow": "In escrow",
+      "requiredDate": "Required delivery date",
+      "bizikFee": "BiZik fee",
+      "shareInvite": "Share invite",
+      "shareDeal": "Share deal",
+      "moreOptions": "More options",
+      "copyLink": "Copy link",
+      "linkCopied": "Link copied to clipboard",
+      "linkCopyFailed": "Couldn't copy the link",
+      "shareText": "Join me on BiZik for \"{{title}}\" - protected by escrow.",
+      "escrow": "Escrow",
+      "escrowHeld": "Held in escrow",
+      "refunded": "Refunded",
+      "unfunded": "Not yet funded",
+      "protectedByEscrow": "Funds are protected by BiZik Escrow until work is approved.",
+      "details": "Details",
+      "dealRef": "Deal reference",
+      "totalValue": "Total value",
+      "milestonesLabel": "Milestones done",
+      "createdOn": "Created on",
+      "revisionRequested": "Revision requested",
+      "cancelDeal": "Cancel deal",
+      "cancelDealConfirm": "Cancel this deal? It ends the deal for both of you and can't be undone - a cancelled deal can't be revived or re-invited.",
+      "cancelDealSuccess": "Deal cancelled",
+      "cancelMilestone": "Cancel milestone",
+      "cancelMilestoneConfirm": "Cancel this milestone? The rest of the deal carries on and the total drops by its amount. This can't be undone.",
+      "cancelMilestoneSuccess": "Milestone cancelled",
+      "remind": "Send a reminder",
+      "remindSent": "{{name}} has been reminded about this deal.",
+      "remindNothing": "This deal is not waiting on the other party right now.",
+      "remindTooSoon": "You reminded them recently - you can send another in about {{minutes}} minutes.",
+      "remindYourMove": {
+        "accept": "This deal is waiting on you to accept it.",
+        "fund": "This deal is waiting on you to fund it - the other party can't move until you do.",
+        "deliver": "This deal is waiting on your delivery.",
+        "approve": "This deal is waiting on you to review the delivery and release the payment."
+      },
+      "downloadRecord": "Download record (PDF)"
+    },
+    "release": {
+      "title": "Release {{amount}} to {{name}}?",
+      "subtitle": "You are confirming the delivery for milestone {{n}}. The money leaves escrow immediately.",
+      "amount": "Amount",
+      "fee": "BiZik fee",
+      "payeeReceives": "Payee receives",
+      "cannotUndo": "This cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Approve & release"
+    },
+    "revision": {
+      "title": "Request a revision",
+      "subtitle": "Tell them what needs to change on “{{title}}”. This resets the review period.",
+      "feedbackLabel": "What needs changing?",
+      "feedbackPlaceholder": "Be specific so they can fix it quickly…",
+      "minHint": "Add at least a few words.",
+      "cancel": "Cancel",
+      "confirm": "Send revision request",
+      "successToast": "Revision requested"
+    },
+    "submit": {
+      "title": "Submit your work",
+      "subtitle": "Add a note and photos of the completed work. The payer reviews before funds are released.",
+      "whatToFix": "What to fix",
+      "noteLabel": "Note (optional)",
+      "notePlaceholder": "Describe what you delivered…",
+      "photosLabel": "Photos",
+      "addPhotos": "Add photos",
+      "removePhoto": "Remove photo",
+      "photosHint": "Up to {{max}} images.",
+      "cancel": "Cancel",
+      "confirm": "Submit work",
+      "successToast": "Delivery submitted"
+    }
+  },
+  "newDeal": {
+    "step": "Step {{n}} / {{total}}",
+    "cancel": "Cancel",
+    "basics": {
+      "title": "Basics",
+      "subtitle": "Who you are dealing with, and how much is protected.",
+      "dealType": "Deal type",
+      "simple": "Simple",
+      "simpleDesc": "One payment",
+      "milestones": "Milestones",
+      "milestonesDesc": "Staged payments",
+      "dealTitle": "Deal title",
+      "dealTitlePlaceholder": "e.g. Brand identity & packaging",
+      "counterpartyPhone": "Counterparty phone number",
+      "phonePlaceholder": "24 812 5566",
+      "alreadyOnBiZik": "Already on BiZik",
+      "willInvite": "New to BiZik - we'll invite them by SMS",
+      "roleQuestion": "Your role in this deal",
+      "roleGettingPaid": "I'm the Seller",
+      "rolePaying": "I'm the Buyer",
+      "rolePayingHint": "Buyer: you pay into escrow; the seller delivers and gets paid once each milestone is approved.",
+      "roleGettingPaidHint": "Seller: you deliver the goods/work and get paid from escrow once each milestone is approved.",
+      "amount": "Amount",
+      "amountNote": "Entered in your currency ({{currency}}). The counterparty sees the equivalent in theirs.",
+      "deliveryDate": "Required delivery date",
+      "selectDate": "Select a date",
+      "scope": "Scope of work",
+      "scopePlaceholder": "What is being delivered?",
+      "continue": "Continue",
+      "counterpartyName": "Their name (optional)",
+      "counterpartyNamePlaceholder": "A name you'll recognise (optional)",
+      "lookupChecking": "Checking if they're on BiZik…",
+      "lookupSelf": "That's your own number - pick a different contact."
+    },
+    "milestones": {
+      "title": "Milestones",
+      "subtitle": "Split the total into stages. Each one is funded and released on its own.",
+      "milestoneN": "Milestone {{n}}",
+      "deliverablePlaceholder": "What is delivered in this stage?",
+      "amountPlaceholder": "0.00",
+      "date": "Date",
+      "addMilestone": "Add milestone",
+      "runningTotal": "Running total",
+      "toAllocate": "{{amount}} still to allocate across milestones.",
+      "overAllocated": "{{amount}} over the deal amount.",
+      "allocated": "All funds allocated across milestones.",
+      "back": "Back",
+      "continue": "Continue"
+    },
+    "review": {
+      "title": "Review",
+      "subtitle": "Check the numbers. Nothing moves until you confirm.",
+      "dealSummary": "Deal summary",
+      "counterparty": "Counterparty",
+      "whoPays": "Who pays",
+      "youPay": "You pay",
+      "theyPay": "They pay",
+      "role": "Your role",
+      "roleBuyer": "Buyer - you pay",
+      "roleSeller": "Seller - you receive",
+      "dealType": "Deal type",
+      "simpleType": "Simple",
+      "milestonesType": "{{count}} milestones",
+      "deliveryDate": "Required delivery date",
+      "escrowValue": "Escrow value",
+      "bizikFee": "BiZik fee ({{pct}}%)",
+      "total": "You pay",
+      "totalThem": "They pay",
+      "counterpartySees": "{{name}} sees ≈ {{amount}}",
+      "infoMilestones": "Money stays in escrow until you approve each milestone. {{name}} is notified by SMS once you fund.",
+      "infoSimple": "Money stays in escrow until you approve delivery. {{name}} is notified by SMS once you fund.",
+      "back": "Back",
+      "create": "Create & fund",
+      "creating": "Creating…",
+      "created": "Deal created",
+      "createdBody": "{{name}} has been notified by SMS."
+    },
+    "gate": {
+      "title": "Verify your account to create a deal",
+      "body": "A quick identity check (KYC) - your phone, country and an ID document - is needed before you can create deals and get paid.",
+      "cta": "Verify my account",
+      "footer": "You can still pay and track deals you're invited to."
+    }
+  },
+  "disputes": {
+    "title": "Disputes",
+    "detailTitle": "Dispute detail",
+    "subtitle": "A BiZik mediator reviews every dispute. Funds stay in escrow meanwhile.",
+    "searchPlaceholder": "Search disputes",
+    "disputedAmount": "Disputed amount",
+    "filterLabel": "Filter",
+    "filterStatus": "Status",
+    "filterAll": "All",
+    "filedByMeOnly": "Filed by me only",
+    "resultsNone": "No disputes match your filters.",
+    "col": {
+      "milestone": "Milestone",
+      "deal": "Deal",
+      "amount": "Amount",
+      "status": "Status",
+      "nextStep": "Next step"
+    },
+    "status": {
+      "under_review": "Under review",
+      "resolved": "Resolved",
+      "open": "Open"
+    },
+    "filedByYou": "Filed by you",
+    "next": {
+      "addEvidence": "Add evidence",
+      "awaitingMediator": "Awaiting mediator"
+    },
+    "outcomePrefix": "Outcome:",
+    "empty": {
+      "title": "No disputes",
+      "body": "Every deal you have is on track. We mediate if that changes."
+    },
+    "detail": {
+      "evidence": "Evidence & messages",
+      "you": "You",
+      "mediator": "BiZik mediator",
+      "composerPlaceholder": "Write a message…",
+      "addEvidence": "Add evidence",
+      "send": "Send",
+      "now": "Just now",
+      "summary": "Deal summary",
+      "disputedAmount": "Disputed amount",
+      "deal": "Deal",
+      "counterparty": "Counterparty",
+      "filedByYou": "Filed by you",
+      "filed": "Filed",
+      "nextStep": "Next step",
+      "nextLine": "Next: {{text}} by {{deadline}}.",
+      "uploadFile": "Upload file",
+      "withdrawDispute": "Withdraw dispute",
+      "resolved": "Resolved",
+      "outcome": "Outcome"
+    }
+  },
+  "settings": {
+    "hubTitle": "Profile & settings",
+    "nav": {
+      "personal": "Personal information",
+      "kyc": "Identity & KYC",
+      "security": "Security & biometrics",
+      "payouts": "Payout methods",
+      "language": "Language",
+      "languageTitle": "Language"
+    },
+    "tierLine": "Tier {{tier}} · {{status}}",
+    "verified": "Verified",
+    "hero": {
+      "dealsDone": "Deals done",
+      "onTime": "On time",
+      "rating": "Rating",
+      "active": "Active",
+      "total": "Total"
+    },
+    "cards": {
+      "personalSub": "Phone number · Email (optional) · Country",
+      "kycSub": "Tier {{tier}} · Monthly limit {{limit}}",
+      "securitySub": "Two-factor authentication · Active sessions",
+      "payoutsSub": "{{list}}",
+      "payoutsEmpty": "No payout methods yet"
+    },
+    "personal": {
+      "title": "Personal information",
+      "fullName": "Full name",
+      "emailOptional": "Email (optional)",
+      "phoneLogin": "Phone number · your login",
+      "phoneHint": "Changing this changes how you sign in. We will send a code to the new number.",
+      "companyOptional": "Company (optional)",
+      "country": "Country",
+      "fromId": "From your ID",
+      "cancel": "Cancel",
+      "save": "Save changes",
+      "saved": "Changes saved"
+    },
+    "kyc": {
+      "title": "Your identity",
+      "step": "Step {{n}} / {{total}}",
+      "subtitle": "This unlocks funding, releases and withdrawals.",
+      "country": "Country",
+      "idType": "ID type",
+      "idNational": "National ID (NIN)",
+      "idPassport": "Passport",
+      "idDrivers": "Driver's licence",
+      "idNumber": "ID number",
+      "captureTitle": "Capture your ID",
+      "captureSubtitle": "Photograph the front and back, then take a selfie.",
+      "idFront": "ID - front",
+      "idBack": "ID - back",
+      "selfie": "Selfie",
+      "captured": "Captured",
+      "retake": "Retake",
+      "tapToCapture": "Tap to capture",
+      "openCamera": "Open camera",
+      "uploadFile": "Upload file",
+      "selfieHint": "Face the camera in good light",
+      "reviewTitle": "Review & submit",
+      "reviewSubtitle": "Check everything matches your document.",
+      "rowCountry": "Country",
+      "rowIdType": "ID type",
+      "rowIdNumber": "ID number",
+      "rowPhone": "Phone number",
+      "encryptedNote": "Your documents are encrypted and used only to verify your identity.",
+      "submit": "Submit for review",
+      "statusTitle": "Verification status",
+      "statusSubtitle": "Most reviews finish within 10 minutes.",
+      "verifiedTitle": "Identity verified",
+      "verifiedBody": "You can now fund escrow and withdraw without extra checks.",
+      "tier": "Tier",
+      "tierValue": "Tier {{n}}",
+      "monthlyLimit": "Monthly limit",
+      "underReview": "Other states · Under review",
+      "rejected": "Rejected - blurry ID photo. Retake and resubmit.",
+      "restart": "Restart wizard",
+      "back": "Back",
+      "continue": "Continue",
+      "loadError": "Couldn't load your verification status.",
+      "submitError": "Couldn't submit your documents. Please try again.",
+      "submitted": "Documents submitted for review",
+      "reviewTitleStatus": "Verification in review",
+      "reviewBody": "We're checking your documents. Most reviews finish within 10 minutes.",
+      "rejectedTitle": "Verification rejected",
+      "rejectedBody": "Your submission couldn't be verified. Please review the reason and resubmit.",
+      "notStarted": "Not started",
+      "documentsRequired": "Please capture the front{{back}} and a selfie before submitting.",
+      "andBack": " and back",
+      "countryPlaceholder": "Select your country",
+      "countryRequired": "Choose the country on your ID before continuing.",
+      "countryLoadFailed": "Could not load the country list. Check your connection and try again.",
+      "countryLoading": "Loading countries..."
+    },
+    "security": {
+      "title": "Security & biometrics",
+      "changePassword": "Change password",
+      "lastChanged": "Last changed {{date}}",
+      "twoFactor": "Two-factor authentication",
+      "smsTo": "SMS to •••• {{last}}",
+      "biometrics": "Face ID / fingerprint",
+      "mobileOnly": "Mobile app only",
+      "comingSoon": "Coming soon",
+      "activeSessions": "Active sessions",
+      "thisDevice": "This device",
+      "revoke": "Revoke",
+      "sessionRevoked": "Session signed out",
+      "revokeConfirm": "Sign out this session?",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password",
+      "passwordUpdate": "Update password",
+      "cancel": "Cancel",
+      "passwordMismatch": "New passwords do not match",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "passwordSaved": "Password changed",
+      "enable": "Enable",
+      "disable": "Disable",
+      "on": "On",
+      "off": "Off",
+      "twoFactorPromptEnable": "Enter the 6-digit code from your authenticator app to enable two-factor",
+      "twoFactorPromptDisable": "Enter your current 6-digit code to disable two-factor",
+      "twoFactorEnabled": "Two-factor authentication enabled",
+      "twoFactorDisabled": "Two-factor authentication disabled",
+      "twoFactorSetupHint": "Scan this secret in your authenticator app, then enter the code: {{secret}}",
+      "sessionsError": "Could not load sessions",
+      "noSessions": "No active sessions",
+      "whatsapp": {
+        "title": "WhatsApp assistant",
+        "statusActive": "Active on this number",
+        "statusLocked": "Locked",
+        "lockedHelp": "This channel is locked: BiZik on WhatsApp will not show your account or act on it until you unlock it here.",
+        "lockedOutHelp": "Too many wrong PIN attempts have frozen money actions on WhatsApp. Unlocking clears that.",
+        "lock": "Lock WhatsApp",
+        "unlock": "Unlock WhatsApp",
+        "locked": "WhatsApp channel locked",
+        "unlocked": "WhatsApp channel unlocked",
+        "resetPin": "Reset WhatsApp PIN",
+        "pinReset": "PIN cleared - you will set a new one on your next money action",
+        "optIn": "Messages on WhatsApp",
+        "optInHint": "Deal invites, verification results and payment updates.",
+        "optedIn": "WhatsApp messages turned on",
+        "optedOut": "WhatsApp messages turned off"
+      }
+    },
+    "payouts": {
+      "title": "Payout methods",
+      "addMethod": "Add method",
+      "badge": {
+        "default": "Default",
+        "verified": "Verified",
+        "pending": "Pending"
+      },
+      "addTitle": "Add a payout method",
+      "addSubtitle": "Where should BiZik send money when you withdraw?",
+      "methodType": "Method type",
+      "typeMomo": "Mobile money",
+      "typeMomoSub": "Instant · 0.2% fee",
+      "typeBank": "Bank account",
+      "typeBankSub": "1-2 business days · flat ₦2,500",
+      "typePayoneer": "Payoneer",
+      "typePayoneerSub": "International · USD only",
+      "details": "Details",
+      "provider": "Provider",
+      "phone": "Phone number",
+      "bankName": "Bank name",
+      "bankNamePlaceholder": "e.g. GTBank",
+      "accountNumber": "Account number",
+      "accountNumberPlaceholder": "e.g. 0142XXXXXX",
+      "email": "Payoneer email",
+      "emailPlaceholder": "you@example.com",
+      "accountName": "Account name",
+      "matchesVerified": "Matches your verified name",
+      "nickname": "Nickname (optional)",
+      "nicknamePlaceholder": "e.g. Salary account",
+      "useDefault": "Use as my default payout method",
+      "whatNext": "What happens next",
+      "next1": "We check the account name against your verified identity.",
+      "next2": "A ₦50 test credit confirms the account is reachable - refunded straight away.",
+      "next3": "Verified methods can be used for withdrawals immediately.",
+      "addVerify": "Add and verify",
+      "setDefault": "Set as default",
+      "remove": "Remove",
+      "empty": "No payout methods yet. Add one to withdraw your funds.",
+      "loadError": "Couldn't load your payout methods.",
+      "retry": "Retry",
+      "added": "Payout method added",
+      "removed": "Payout method removed",
+      "defaultSet": "Default payout method updated",
+      "actionError": "Something went wrong. Please try again.",
+      "otpTitle": "Verify your number",
+      "otpSubtitle": "Enter the code we sent to {{phone}}",
+      "otpHint": "We texted a 6-digit code to confirm this mobile-money number.",
+      "otpResendIn": "Resend code in {{seconds}}s",
+      "otpResent": "Code sent",
+      "limitReached": "Limit reached"
+    },
+    "language": {
+      "title": "Language",
+      "subtitle": "Choose the language for your BiZik app."
+    },
+    "notVerified": "Not verified"
+  },
+  "support": {
+    "title": "Help & support",
+    "subtitle": "Find an answer or reach the BiZik team.",
+    "popularArticles": "Popular articles",
+    "searchPlaceholder": "Search help articles",
+    "articles": {
+      "escrow": "How escrow protects both sides",
+      "dispute": "What happens when I open a dispute",
+      "fx": "Currency conversion and fees explained"
+    },
+    "myTickets": "My tickets",
+    "newTicket": "New ticket",
+    "status": {
+      "open": "Open",
+      "resolved": "Resolved"
+    },
+    "lastReply": "Last reply {{by}} · {{time}}",
+    "closedBy": "Closed by {{by}}",
+    "noArticles": "No help articles yet.",
+    "noArticleMatches": "No articles match your search.",
+    "empty": "No tickets yet",
+    "emptySub": "Open a ticket and our team will get back to you.",
+    "newRequest": "New request",
+    "newSubtitle": "Tell us what's going on and we'll help you sort it out.",
+    "replyFromSupport": "Reply from support",
+    "subject": "Subject",
+    "subjectPlaceholder": "Briefly describe your issue",
+    "category": "Category",
+    "categories": {
+      "PAYMENTS": "Payments",
+      "KYC": "Verification",
+      "DISPUTES": "Disputes",
+      "ACCOUNT": "Account",
+      "TECHNICAL": "Technical",
+      "OTHER": "Other"
+    },
+    "message": "Message",
+    "messagePlaceholder": "Share as much detail as you can",
+    "send": "Send",
+    "ticketCreated": "Ticket created",
+    "actionError": "Something went wrong. Please try again.",
+    "notFound": "Ticket not found",
+    "noMessages": "No messages yet.",
+    "supportLabel": "Support",
+    "you": "You",
+    "resolvedHint": "This ticket has been resolved. Reopen a new one if you still need help.",
+    "replyPlaceholder": "Write a reply…",
+    "replyClosed": "This conversation is closed."
+  },
+  "auth": {
+    "heroTitle": "Money that waits until the work is done.",
+    "heroSubtitle": "Escrow for any deal, at home or across borders.",
+    "loginSubtitle": "Use the phone number you registered with.",
+    "trustFooter": "Bank-grade encryption · funds held in segregated accounts",
+    "phone": "Phone number",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "forgot": "Forgot password?",
+    "login": "Log in",
+    "orContinue": "or continue with",
+    "google": "Google",
+    "facebook": "Facebook",
+    "comingSoon": "Coming soon",
+    "providerSoon": "{{provider}} sign-in isn't enabled yet - use your phone for now.",
+    "noAccount": "Don't have an account?",
+    "createAccount": "Create account",
+    "haveAccount": "Already have an account?",
+    "back": "Back",
+    "register": {
+      "title": "Create account",
+      "subtitle": "Your phone number is your account. It takes a minute.",
+      "fullName": "Full name",
+      "fullNamePlaceholder": "Ada Okafor",
+      "phoneHint": "Your country and currency come from this flag.",
+      "passwordPlaceholder": "Create a strong password",
+      "rule8": "At least 8 characters",
+      "ruleUpper": "One uppercase letter",
+      "ruleNumber": "One number",
+      "ruleSymbol": "One symbol",
+      "agreePrefix": "I agree to the",
+      "terms": "Terms",
+      "and": "and",
+      "privacy": "Privacy Policy",
+      "cta": "Create account"
+    },
+    "verify": {
+      "title": "Verify code",
+      "sentSms": "We sent a 6-digit code to",
+      "twoFactor": "Enter the 6-digit code from your authenticator app.",
+      "cta": "Verify code",
+      "resendIn": "Resend code in {{time}}",
+      "resend": "Resend code",
+      "codeSent": "Code sent",
+      "codeSentBody": "We sent a fresh code to your number.",
+      "notReceived": "Not received? Check your network, then resend after the timer.",
+      "noNewCode": "No new code was sent just yet - one went out recently. Enter that code, or ask again when the timer ends."
+    },
+    "errors": {
+      "signInTitle": "Could not sign in",
+      "createTitle": "Could not create account",
+      "verifyTitle": "Verification failed",
+      "unexpected": "Unexpected response from the server. Please try again."
+    },
+    "forgotPassword": {
+      "title": "Reset password",
+      "subtitle": "Enter your phone number and we'll text you a secure code.",
+      "phoneLabel": "Phone number",
+      "sendCode": "Send code",
+      "sendResetLink": "Send reset link",
+      "checkInbox": "Check your messages",
+      "sentBody": "If an account exists for {{phone}}, a reset link is on its way.",
+      "thatPhone": "that number",
+      "backToLogin": "Back to log in"
+    },
+    "resetPassword": {
+      "title": "New password",
+      "subtitle": "Choose a strong password to secure your account.",
+      "newPasswordLabel": "New password",
+      "newPasswordPlaceholder": "8+ characters",
+      "confirmLabel": "Confirm password",
+      "confirmPlaceholder": "Re-enter password",
+      "mismatch": "Passwords do not match",
+      "tooShort": "Password must be at least 8 characters",
+      "updatePassword": "Update password",
+      "updatedTitle": "Password updated",
+      "updatedToast": "Password updated. Please log in.",
+      "invalidLink": "This reset link is invalid or has expired. Request a new one.",
+      "backToLogin": "Back to log in",
+      "requestNewLink": "Request a new link"
+    },
+    "panel": {
+      "tag": "Escrow platform",
+      "intro": "Bizik holds the payment while the work happens, and releases it the moment you approve.",
+      "feature1Title": "Funds held, not forwarded",
+      "feature1Body": "Money sits in a segregated account until you approve delivery.",
+      "feature2Title": "Pay by milestone",
+      "feature2Body": "Split a deal into stages and release each one on its own.",
+      "feature3Title": "Mediated disputes",
+      "feature3Body": "A mediator reviews both sides before any money moves.",
+      "stat1Label": "XAF held safely",
+      "stat2Label": "Deals completed",
+      "stat3Label": "To a ruling"
+    }
+  },
+  "profile": {
+    "yourAccount": "Your account",
+    "accountDetails": "Account details",
+    "fullName": "Full name",
+    "phone": "Phone number",
+    "loginIdentity": "Your login identity",
+    "email": "Email",
+    "notAdded": "Not added",
+    "country": "Country",
+    "verification": "Verification",
+    "notifications": "Notifications",
+    "previewOffline": "Preview offline state",
+    "signOut": "Sign out"
+  },
+  "kyc": {
+    "unverified": "Unverified",
+    "basic": "Basic",
+    "verified": "Verified",
+    "enhanced": "Enhanced"
+  },
+  "fundFlow": {
+    "title": "Fund escrow",
+    "subtitle": "Choose how you'd like to pay. Funds are held safely in escrow until the work is approved.",
+    "choosePayment": "Choose payment source",
+    "walletName": "BiZik wallet",
+    "walletBalance": "Balance {{amount}}",
+    "insufficient": "Insufficient balance - top up or use another method",
+    "charged": "Charged {{amount}}",
+    "confirmCta": "Pay {{total}}",
+    "addMethod": "Add a payment method",
+    "noMethods": "You don't have a payment method that can cover this yet.",
+    "successTitle": "Escrow funded",
+    "successReassure": "Your payment is held safely and protected by BiZik Escrow until the work is approved.",
+    "backToDeal": "Back to deal",
+    "redirecting": "Taking you back to the deal…",
+    "notFound": "We couldn't find that deal or milestone to fund.",
+    "selectSource": "Select a payment source to continue",
+    "payeeTitle": "You're the seller on this deal",
+    "payeeMessage": "{{name}} pays into escrow for this one. You'll be paid from escrow once you deliver and it's approved.",
+    "promptTitle": "Approve the payment on your phone",
+    "promptBody": "We sent a request for {{amount}} to your Mobile Money number. Approve it on that phone to move the money into escrow.",
+    "promptPinWarning": "Enter your Mobile Money PIN on your own phone - never share it with anyone, including BiZik."
+  },
+  "payments": {
+    "approveTitle": "Approve on your phone",
+    "approveDeposit": "We sent a request to your phone. Approve it to add {{amount}} to your wallet.",
+    "approveWithdraw": "We sent a request to your phone. Approve it to send {{amount}} to your account.",
+    "waitingHint": "Waiting for you to approve… this can take up to a minute.",
+    "withdrawProcessingTitle": "Processing your withdrawal",
+    "withdrawProcessingBody": "We're sending {{amount}} to your account. This usually takes under a minute.",
+    "withdrawProcessingHint": "No action needed - you'll be notified once it arrives.",
+    "cancel": "Cancel",
+    "failedDeposit": "We could not complete your deposit. No money was taken from your account.",
+    "failedWithdraw": "We could not complete your withdrawal. Your balance was not changed.",
+    "timeout": "Still waiting for your approval. Check your wallet in a moment to see if it went through."
+  },
+  "transfer": {
+    "send": {
+      "navTitle": "Send money",
+      "toLabel": "Send to",
+      "toPlaceholder": "@handle or phone number",
+      "toHint": "Their BiZik handle (like @maxime.b) or their phone number.",
+      "notFound": "No BiZik account matches that. Check the handle or number.",
+      "self": "That's your own handle.",
+      "amountLabel": "Amount ({{currency}})",
+      "available": "{{amount}} available",
+      "insufficient": "That's more than your wallet balance.",
+      "noteLabel": "Note (optional)",
+      "notePlaceholder": "What is it for?",
+      "warnTitle": "This is a direct transfer",
+      "warnBody": "The money arrives instantly and cannot be reversed. If you're paying for goods or work you haven't received yet, use a secure deal instead so BiZik holds the money until you approve the delivery.",
+      "useEscrow": "Create a secure deal instead",
+      "cta": "Send money",
+      "sending": "Sending…",
+      "confirmMessage": "Send {{amount}} to {{name}} ({{handle}})? They receive it immediately and a transfer cannot be reversed.",
+      "sentTitle": "Money sent",
+      "sentBody": "{{name}} ({{handle}}) has received it.",
+      "done": "Back to wallet"
+    },
+    "receive": {
+      "title": "Receive money",
+      "yourHandle": "Your BiZik handle",
+      "body": "Share this handle and anyone on BiZik can send money straight to your wallet - no phone number needed.",
+      "copy": "Copy handle",
+      "copied": "Handle copied"
+    }
+  },
+  "marketing": {
+    "chrome": {
+      "skipToContent": "Skip to content",
+      "homeAria": "{{name}} home",
+      "primaryNav": "Primary",
+      "language": "Language",
+      "logIn": "Log in",
+      "getStarted": "Get started",
+      "menu": "Menu",
+      "startOnWhatsApp": "Start on WhatsApp",
+      "readMore": "Read more",
+      "seeAll": "See all",
+      "backTo": "Back to {{name}}",
+      "minRead": "{{count}} min read",
+      "published": "Published {{date}}",
+      "updated": "Last updated {{date}}"
+    },
+    "nav": {
+      "home": "Home",
+      "howItWorks": "How it works",
+      "forFreelancers": "Use cases",
+      "forBusiness": "For business",
+      "pricing": "Pricing",
+      "security": "Security",
+      "blog": "Blog",
+      "helpCentre": "Help centre",
+      "about": "About",
+      "contact": "Contact",
+      "termsOfService": "Terms of service",
+      "privacyPolicy": "Privacy Policy",
+      "cookiePolicy": "Cookie policy",
+      "amlKycPolicy": "AML / KYC policy",
+      "disputePolicy": "Dispute policy",
+      "sendMoney": "Send money",
+      "receiveMoney": "Receive money",
+      "forFreelancersPlain": "For freelancers"
+    },
+    "footer": {
+      "about": "Secure escrow for everyone. Bizik holds the money until the work is delivered or the goods arrive, then pays the seller - on web, mobile and WhatsApp.",
+      "tagline": "Secure escrow for everyone",
+      "marks": [
+        "Bank-grade security",
+        "KYC verified",
+        "Segregated escrow"
+      ],
+      "columns": {
+        "product": "Product",
+        "useCases": "Use cases",
+        "company": "Company",
+        "legalSupport": "Legal & support"
+      }
+    },
+    "home": {
+      "meta": {
+        "title": "Bizik - Secure escrow payments in Cameroon",
+        "description": "Bizik holds the buyer's money in escrow until the goods arrive or the work is delivered, then pays the seller. Pay with MTN MoMo or Orange Money, on the web, in the app or on WhatsApp.",
+        "ogTitle": "Bizik - Secure escrow for everyone",
+        "ogDescription": "Deal with strangers safely. Bizik holds the money in escrow until the goods arrive or the work is delivered - then the seller is paid."
+      },
+      "hero": {
+        "badge": "Bizik now runs entirely inside WhatsApp",
+        "badgeDot": "New",
+        "titleLead": "Deal with strangers",
+        "titleAccent": "safely.",
+        "text": "Bizik holds the money in secure escrow until the work is delivered or the goods arrive. Then the seller gets paid. Create the deal in seconds - on the web, in the app, or just by chatting with Bizik on WhatsApp.",
+        "trustFunds": "Funds protected",
+        "trustCameroon": "Built for Cameroon",
+        "trustDisputes": "Neutral disputes",
+        "statHeldLabel": "held safely",
+        "statDealsValue": "9,200+",
+        "statDealsLabel": "deals completed",
+        "statRulingValue": "48h",
+        "statRulingLabel": "to a ruling",
+        "imgAlt": "The Bizik app: a wallet balance held in secure escrow",
+        "ussdTitle": "USSD prompt",
+        "ussdText": "Confirm 450,000 XAF to <strong>BIZIK ESCROW</strong>. Enter your PIN.",
+        "chatBar": "Bizik on WhatsApp",
+        "chatHeld": "Money held safely in escrow -",
+        "chatDelivered": "Delivered & approved -",
+        "chatPaid": "seller paid"
+      },
+      "rail": {
+        "label": "Pay in & out with",
+        "note": "Bank-grade security · KYC verified · Segregated escrow"
+      },
+      "steps": {
+        "eyebrow": "How it works",
+        "title": "Four steps. The money is safe at every one.",
+        "cta": "See the full flow →",
+        "items": [
+          {
+            "n": "01",
+            "title": "Agree the deal",
+            "text": "One side creates the deal - item or service, price, milestones. The other side gets an invite on WhatsApp and SMS."
+          },
+          {
+            "n": "02",
+            "title": "Pay into escrow",
+            "text": "The buyer funds it from MTN MoMo, Orange Money or their Bizik wallet. Both sides see the money is there."
+          },
+          {
+            "n": "03",
+            "title": "Deliver",
+            "text": "The seller ships or delivers the work and uploads proof. Nobody can touch the money yet."
+          },
+          {
+            "n": "04",
+            "title": "Release",
+            "text": "The buyer approves and the seller is paid out to Mobile Money or bank. Not happy? Open a dispute instead."
+          }
+        ]
+      },
+      "whatsapp": {
+        "badge": "WhatsApp Assistant · New",
+        "title": "Do the whole deal in WhatsApp.",
+        "text": "No app to install. Message Bizik like you'd message a friend - type it or send a voice note - and create, fund, track and release deals without leaving the chat. Even ID verification runs right there.",
+        "cta": "Message Bizik on WhatsApp",
+        "imgAlt": "Bizik deal running inside WhatsApp",
+        "rows": [
+          {
+            "title": "Talk or type - English & French",
+            "text": "Say \"create a deal to buy a TV for 500,000 from Mike\" in a voice note. The assistant does the rest."
+          },
+          {
+            "title": "Nothing moves without your PIN",
+            "text": "The assistant can only propose. Every payment needs your confirmation plus a 4-6 digit PIN, executed by the same audited system as the apps."
+          },
+          {
+            "title": "Invites & reminders, sent for you",
+            "text": "The other party gets a WhatsApp invite with Accept / Decline buttons - SMS if they're not on WhatsApp. Declining cancels the deal."
+          },
+          {
+            "title": "Verify your ID in the chat",
+            "text": "The full KYC wizard - ID front, back, selfie - runs over WhatsApp, and you're notified when a reviewer decides."
+          }
+        ]
+      },
+      "product": {
+        "eyebrow": "The product",
+        "title": "Every deal, every franc - one dashboard.",
+        "sub": "Wallet, escrow, active deals and disputes in a single view - with the exact next step for each one, so nothing stalls.",
+        "trustSameAccount": "Same account on mobile & web",
+        "trustInstallable": "Installable - works offline",
+        "trustNextStep": "A clear next step on every deal"
+      },
+      "why": {
+        "title": "Why Bizik",
+        "sub": "Escrow built for how money actually moves here - not a Western bank product with an African label on it.",
+        "items": [
+          {
+            "title": "Mobile-money native",
+            "text": "Pay in with MTN MoMo and Orange Money, and get paid out to mobile money or your bank."
+          },
+          {
+            "title": "Money held safely",
+            "text": "Funds sit in segregated escrow - visible to both parties, spendable by neither."
+          },
+          {
+            "title": "Neutral mediation",
+            "text": "Disputes are decided on evidence by a Bizik mediator. Release, refund or split."
+          },
+          {
+            "title": "Multi-currency wallet",
+            "text": "XAF first, plus USD, EUR, GBP, NGN and GHS with live FX conversion."
+          },
+          {
+            "title": "Lives inside WhatsApp",
+            "text": "Create, fund and release deals by chat or voice note - English and French, no install needed."
+          },
+          {
+            "title": "One account, two roles",
+            "text": "Buy and sell, hire and freelance - same account, same wallet, app and web."
+          }
+        ]
+      },
+      "useCases": {
+        "title": "Who uses Bizik",
+        "cardTitle": "Not sure which fits your deal? Any two people can start one in under two minutes.",
+        "cardCta": "Start a secure deal",
+        "items": [
+          {
+            "alt": "freelancer at laptop",
+            "title": "Freelancers & clients",
+            "text": "Milestones for bigger projects. Never chase a client again."
+          },
+          {
+            "alt": "market seller with phone",
+            "title": "Online buyers & sellers",
+            "text": "Buy from WhatsApp and Instagram sellers without the scam risk."
+          },
+          {
+            "alt": "car handover",
+            "title": "Vehicles & high-value goods",
+            "text": "Inspection windows and manual review on large payouts."
+          },
+          {
+            "alt": "diaspora video call",
+            "title": "Cross-border & diaspora",
+            "text": "Send money home for a service - and know it was actually done."
+          },
+          {
+            "alt": "marketplace team",
+            "title": "Marketplaces",
+            "text": "Escrow-as-a-service and an API to protect your own customers."
+          }
+        ]
+      },
+      "protection": {
+        "eyebrow": "Protection",
+        "title": "How your money is protected",
+        "text": "Three guarantees behind every deal on Bizik - the same three whether it's a 20,000 XAF phone case or a 12,000,000 XAF car.",
+        "cta": "Read our security page →",
+        "items": [
+          {
+            "title": "Segregated escrow",
+            "text": "Deal funds are held apart from Bizik's own money. We can't spend them and neither can the other party."
+          },
+          {
+            "title": "Release only on approval",
+            "text": "Nothing moves to the seller until the buyer approves the delivery - or a mediator rules that they should be paid."
+          },
+          {
+            "title": "Full refund on non-delivery",
+            "text": "If the goods or work never arrive, open a dispute. Evidence decides it, and the money goes back."
+          }
+        ]
+      },
+      "proof": {
+        "statHeldLabel": "held safely in escrow to date",
+        "statDealsLabel": "deals completed without a dispute",
+        "statRulingLabel": "median time to a dispute ruling",
+        "quotes": [
+          {
+            "text": "A client in Paris used to pay me two months late, every time. Now the money is in escrow before I open Figma.",
+            "name": "Aïcha N.",
+            "role": "Product designer · Douala"
+          },
+          {
+            "text": "I sell phones on WhatsApp. Buyers used to ghost me over trust. Bizik closed four deals for me in one week.",
+            "name": "Emmanuel T.",
+            "role": "Electronics seller · Yaoundé"
+          },
+          {
+            "text": "I bought a car from 6,000 km away. The money only left escrow after my brother inspected it.",
+            "name": "Sylvie M.",
+            "role": "Diaspora buyer · Brussels"
+          }
+        ]
+      },
+      "calc": {
+        "title": "One clear fee. No surprises.",
+        "text": "You see the escrow fee before you commit. The buyer pays it on top of the deal amount, and the seller receives the full amount.",
+        "cta": "See pricing →",
+        "amountLabel": "Deal amount",
+        "currencyAria": "Currency",
+        "rowFee": "Escrow fee ({{pct}}%)",
+        "rowBuyer": "Buyer pays",
+        "rowSeller": "Seller receives"
+      },
+      "blog": {
+        "eyebrow": "From the blog",
+        "title": "Know the scams before they reach you",
+        "cta": "All articles →",
+        "photoPlaceholder": "photo: seller checking phone in a market",
+        "teasers": [
+          {
+            "tag": "Scam alerts",
+            "title": "The fake delivery agent is back - what to watch for",
+            "excerpt": "A third number joins your chat and asks for a delivery fee. It is never a courier. How the scam works, the red flags, and how escrow removes it entirely.",
+            "meta": "Scam alerts · 4 min read"
+          },
+          {
+            "tag": "Guides",
+            "title": "What is escrow, in plain language?",
+            "excerpt": "Who holds the money, when it moves, and what happens if the deal falls apart. Escrow explained without jargon, with a Cameroon example.",
+            "meta": "Guides · 4 min read"
+          },
+          {
+            "tag": "Freelancing",
+            "title": "Freelancers: how to make sure you always get paid",
+            "excerpt": "Milestones, funded stages, a written brief and the polite way to ask a new client for escrow. A practical guide for freelancers in Cameroon.",
+            "meta": "Freelancing · 4 min read"
+          }
+        ]
+      },
+      "faq": {
+        "title": "Questions people ask first",
+        "text": "Most people have never used escrow before. That's normal.",
+        "cta": "Visit the help center",
+        "items": [
+          {
+            "q": "What is escrow, in plain language?",
+            "a": "Escrow is a neutral holding place for money. The buyer pays Bizik instead of paying the seller directly. We hold the funds - visible to both of you, spendable by neither - until the goods arrive or the work is delivered and approved. Then the money goes to the seller."
+          },
+          {
+            "q": "Is my money actually safe?",
+            "a": "Deal funds sit in segregated accounts, separate from Bizik's own money, held with licensed partners. We cannot spend them, and neither party can withdraw them unilaterally. Every movement needs your confirmation and your PIN."
+          },
+          {
+            "q": "How do I get paid?",
+            "a": "Straight to MTN Mobile Money, Orange Money, or a bank account, in the currency you choose. Most payouts land within minutes; larger amounts get a manual review first, which usually takes a few hours."
+          },
+          {
+            "q": "What are the fees?",
+            "a": "A single escrow fee per deal, paid by the buyer and shown before anyone commits. The seller pays no fee on the deal, and there is no monthly charge or account fee. Use the calculator on this page for an exact figure."
+          },
+          {
+            "q": "What if the seller doesn't deliver?",
+            "a": "Open a dispute before the approval window closes. Both sides upload evidence - photos, delivery notes, chat logs - and a Bizik mediator decides on that evidence. The outcome is release, refund, or a split."
+          },
+          {
+            "q": "Which countries and currencies?",
+            "a": "Cameroon and the wider CEMAC region first, in XAF. Your Bizik wallet can also hold USD, EUR, GBP, NGN and GHS with live conversion, shown before you confirm."
+          }
+        ]
+      },
+      "appCta": {
+        "eyebrow": "Mobile app",
+        "title": "Bizik in your pocket",
+        "text": "Fund a deal, approve a delivery or open a dispute from your phone. Same account on Android, iOS and the web - and it works on a slow connection.",
+        "qrAlt": "Scan to open bizik.cm on your phone",
+        "imgAlt": "The Bizik mobile app: wallet balance and a deal being created"
+      },
+      "closing": {
+        "title": "Ready to deal without the risk?",
+        "text": "Free to create an account. You only pay when a deal is funded.",
+        "ctaPrimary": "Create your free account",
+        "ctaSecondary": "Talk to us"
+      },
+      "mockup": {
+        "newDeal": "+ New deal",
+        "groupOverview": "Overview",
+        "groupMoney": "Money",
+        "groupWork": "Work",
+        "dashboard": "Dashboard",
+        "wallet": "Wallet",
+        "addMoney": "Add money",
+        "withdraw": "Withdraw",
+        "convert": "Convert",
+        "transactions": "Transactions",
+        "deals": "Deals",
+        "disputes": "Disputes",
+        "walletBalance": "Wallet balance",
+        "inEscrow": "In escrow",
+        "escrowDeals": "4 deals",
+        "activeDeals": "Active deals",
+        "activeMeta": "2 need action",
+        "completed": "Completed",
+        "completedMeta": "100% on time",
+        "attention": "Needs your attention",
+        "tagAwaiting": "Awaiting funding",
+        "tagSubmitted": "Submitted",
+        "tagUnderReview": "Under review",
+        "dealLamps": "200 solar lamps - bulk order",
+        "dealBrand": "Brand identity & packaging",
+        "dealDispute": "Dispute #D-2041",
+        "dealPhotography": "Office fit-out photography",
+        "metaTo": "to {{name}}",
+        "metaMilestone": "Milestone 3",
+        "nextFund": "Next step: fund the escrow so {{name}} can start.",
+        "nextReview": "Next step: review the delivery, then release {{amount}}.",
+        "nextEvidence": "Next step: add your evidence before Fri 14 Aug.",
+        "btnFund": "Fund escrow",
+        "btnApprove": "Approve & release",
+        "btnEvidence": "Add evidence",
+        "panelActive": "Active deals",
+        "colDeal": "Deal",
+        "colValue": "Escrow value",
+        "colStatus": "Status",
+        "colNext": "Next step",
+        "statusInProgress": "In progress",
+        "statusAwaiting": "Awaiting funding",
+        "statusInReview": "In review",
+        "nextApproveMilestone": "Approve milestone 3",
+        "nextFundEscrow": "Fund escrow",
+        "nextWaiting": "Waiting for approval",
+        "youGetPaid": "you get paid",
+        "panelEscrowBy": "Escrow by deal",
+        "legendBrand": "Brand identity",
+        "legendLamps": "Solar lamps",
+        "legendPhoto": "Photography",
+        "legendOther": "Other",
+        "panelActivity": "Activity",
+        "seeAll": "See all",
+        "actSubmitted": "Milestone submitted",
+        "actEvidence": "Mediator needs evidence",
+        "agoHours": "{{count}} h",
+        "agoDay": "1 day ago"
+      }
+    },
+    "howItWorks": {
+      "meta": {
+        "title": "How escrow works",
+        "description": "Create a deal, fund it with MTN MoMo or Orange Money, deliver, inspect and release. How a Bizik escrow deal protects buyers and sellers in Cameroon, step by step."
+      },
+      "crumbHome": "Home",
+      "eyebrow": "How it works",
+      "title": "How Bizik keeps your money safe",
+      "text": "Follow the money from the buyer's wallet to the seller's payout. At every stage you can see exactly where it is and who controls it.",
+      "flow": {
+        "walletTitle": "In your wallet",
+        "walletMeta": "Buyer controls it",
+        "escrowTitle": "Held in escrow",
+        "escrowMeta": "Nobody can spend it",
+        "releasedTitle": "Released",
+        "releasedMeta": "Seller is paid",
+        "stateLabel": "Live state:",
+        "stateValue": "Released to seller"
+      },
+      "steps": [
+        {
+          "num": "01",
+          "title": "Agree the deal",
+          "text": "Either side creates the deal: what's being sold or built, the price, the currency, the delivery date, and milestones if it's a big one. You invite the other party by phone number - they don't need an account yet.",
+          "label": "Protected:",
+          "note": "nothing is charged until both sides accept the terms in writing.",
+          "cap": "App · New deal"
+        },
+        {
+          "num": "02",
+          "title": "Pay into escrow",
+          "text": "The buyer funds the deal from MTN Mobile Money, Orange Money or their Bizik wallet. Confirmation is usually instant - both sides get a notification the second it lands.",
+          "label": "Protected:",
+          "note": "funds move into a segregated escrow account, not to the seller and not into Bizik's operating money.",
+          "cap": "App · Fund escrow"
+        },
+        {
+          "num": "03",
+          "title": "Deliver",
+          "text": "The seller ships the goods or submits the work, with proof attached - photos, tracking, files. The buyer gets an inspection window to check it and either approve or ask for a revision.",
+          "label": "Protected:",
+          "note": "the delivery, the proof and every message are timestamped - they become the evidence if there's ever a dispute.",
+          "cap": "App · Milestone tracker"
+        },
+        {
+          "num": "04",
+          "title": "Release",
+          "text": "The buyer approves and the money moves. The seller receives the full deal amount in their Bizik wallet, withdraws to MTN Mobile Money or Orange Money, and both sides get a PDF receipt.",
+          "label": "Auto-release:",
+          "note": "if the buyer goes quiet after delivery, the funds release automatically once the inspection window closes - so sellers are never stuck.",
+          "cap": "App · Release"
+        }
+      ],
+      "mockup": {
+        "sellingLabel": "What are you selling?",
+        "sellingValue": "Brand identity + website",
+        "amountLabel": "Amount",
+        "milestonesLabel": "Milestones",
+        "inviteLabel": "Invite by phone",
+        "cardLabel": "Wallet",
+        "ussd": "Confirm 450,000 XAF to BIZIK ESCROW. Enter your Mobile Money PIN.",
+        "ms1": "Discovery & wireframes",
+        "ms1State": "Released",
+        "ms2": "Visual design",
+        "ms2State": "In escrow",
+        "ms3": "Build & handover",
+        "ms3State": "Not funded",
+        "payingOut": "Paying out to",
+        "rowAmount": "Deal amount",
+        "rowFee": "Seller fee",
+        "rowReceive": "You receive"
+      },
+      "disputes": {
+        "eyebrow": "Disputes",
+        "title": "What if something goes wrong?",
+        "text": "Then the money stops moving. Either side can open a dispute at any point before release - you're never left alone with it.",
+        "items": [
+          {
+            "step": "Step 01",
+            "title": "Freeze",
+            "text": "Funds lock instantly. No release, no refund, no payout while the case is open."
+          },
+          {
+            "step": "Step 02",
+            "title": "Evidence",
+            "text": "Both sides upload proof: photos, delivery notes, files, chat history. 72 hours each."
+          },
+          {
+            "step": "Step 03",
+            "title": "Mediator",
+            "text": "A neutral Bizik mediator reviews the file. We never take a side or a cut of the outcome."
+          },
+          {
+            "step": "Step 04",
+            "title": "Binding ruling",
+            "text": "Release, refund, or split. The decision is final and executed the same day."
+          }
+        ]
+      },
+      "buyersTitle": "For buyers",
+      "buyers": [
+        "Your money is never with the seller before delivery",
+        "Inspection window before you release",
+        "Revision requests instead of an argument",
+        "Refund route if nothing arrives"
+      ],
+      "sellersTitle": "For sellers",
+      "sellers": [
+        "Proof the money exists before you start",
+        "Milestones so long projects pay as they go",
+        "Auto-release if the buyer disappears",
+        "Payout to MoMo, bank or Payoneer"
+      ],
+      "faq": [
+        {
+          "q": "How long can money sit in escrow?",
+          "a": "As long as the deal terms allow. Most deals set a delivery date and an inspection window of 3-7 days. If neither side acts, the funds auto-release to the seller once the window closes, or return to the buyer if nothing was ever delivered."
+        },
+        {
+          "q": "Who pays the escrow fee?",
+          "a": "The buyer. The escrow fee is added on top of the deal amount when the deal is funded, and both parties see it before anyone commits. The seller receives the full deal amount, with no Bizik fee deducted."
+        },
+        {
+          "q": "Can I release only part of the money?",
+          "a": "Yes. Deals with milestones release stage by stage, so a designer can be paid for discovery while the build is still in escrow. You can also agree a partial release on a single-stage deal."
+        },
+        {
+          "q": "What happens if the buyer just disappears after delivery?",
+          "a": "Auto-release protects the seller. Once the inspection window closes without an approval or a dispute, the funds are released automatically and paid out on the seller's normal payout schedule."
+        }
+      ]
+    },
+    "shared": {
+      "breadcrumb": "Breadcrumb",
+      "home": "Home",
+      "minRead": "min read",
+      "legalEyebrow": "Legal",
+      "legalVersion": "Version {{version}} · Effective {{date}}",
+      "contents": "Contents",
+      "documentContents": "Document contents",
+      "print": "Print",
+      "months": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ]
+    },
+    "pricing": {
+      "meta": {
+        "title": "Pricing and fees",
+        "description": "One escrow fee, paid by the buyer and shown before anyone commits. Sellers pay nothing on the deal, with no subscription and no account fee. See every Bizik fee and try the calculator."
+      },
+      "crumb": "Pricing",
+      "eyebrow": "Pricing",
+      "title": "One fee. Shown up front. No surprises.",
+      "text": "{{pct}}% of the deal amount, paid by the buyer and charged once when the escrow is funded. The seller pays nothing on the deal. Free to open an account, free to create a deal, free to dispute one.",
+      "calcCta": "Create your free account",
+      "tableTitle": "Every fee, in one table",
+      "tableNote": "Your mobile-money operator may charge its own fees for paying in or cashing out; those are theirs, not ours. Withdrawals of 500,000 XAF or more to mobile money are checked by a person before they are paid out, at no extra charge.",
+      "plansTitle": "What {{pct}}% buys you",
+      "planDirect": {
+        "title": "Sending directly",
+        "price": "0%",
+        "text": "Free - and completely unprotected. If the deal fails you have a screenshot and a phone number."
+      },
+      "planBizik": {
+        "badge": "Recommended",
+        "title": "Bizik",
+        "text": "Mobile-money native, phone-first, FCFA. Mediation, KYC and refunds included. Live in minutes.",
+        "cta": "Start a deal"
+      },
+      "planTraditional": {
+        "title": "Traditional escrow",
+        "price": "3-5%",
+        "per": "+ fixed",
+        "text": "Bank-only, USD-centric, days of paperwork, and often unavailable in the CEMAC region at all."
+      },
+      "faqTitle": "Fee questions",
+      "faq": [
+        {
+          "q": "Is there a monthly fee?",
+          "a": "No. There is no subscription, no account fee and no minimum volume. You pay the escrow fee once, when a deal is funded, and nothing else."
+        },
+        {
+          "q": "When exactly is the fee charged?",
+          "a": "At funding. The fee is calculated and shown before either party commits, added to what the buyer pays when the escrow is funded, and itemised on the PDF receipt."
+        },
+        {
+          "q": "How is the FX rate set?",
+          "a": "We use the live mid-market rate at the moment of conversion and add a 1.2% margin. Both the rate and the margin appear on screen before you confirm, so the amount you see is the amount that moves."
+        },
+        {
+          "q": "Do big deals get a different rate?",
+          "a": "No. The same rate applies to every deal, whatever its size, so the fee is always easy to check. Withdrawals of 500,000 XAF or more to mobile money get an extra manual review before payout, at no extra charge."
+        }
+      ],
+      "colFee": "Fee",
+      "colRate": "Rate",
+      "colWho": "Who pays",
+      "feeRows": {
+        "funding": "Funding a deal into escrow",
+        "fundingWho": "The buyer, added to the deal amount",
+        "release": "Releasing a deal",
+        "releaseFree": "Free",
+        "releaseFreeWho": "Nobody. The seller receives the full amount",
+        "releaseWho": "The seller, deducted on release",
+        "fx": "Currency conversion",
+        "fxRate": "+{{pct}}% over the mid-market rate",
+        "fxWho": "Whoever converts",
+        "minWithdrawal": "Minimum withdrawal",
+        "minWithdrawalRate": "USD {{amount}} equivalent"
+      }
+    },
+    "content": {
+      "blogCrumb": "Blog",
+      "blogTitle": "The Bizik blog",
+      "blogText": "Know the scams before they reach you. Plain-language guides on escrow, getting paid and dealing safely - written for Cameroon and the wider CEMAC region.",
+      "blogMetaTitle": "Blog - scams, guides and getting paid safely",
+      "blogMetaDescription": "Practical guides on escrow, avoiding online scams, freelancing and getting paid safely with Mobile Money in Cameroon and across CEMAC. From the Bizik team.",
+      "blogOgTitle": "The Bizik blog",
+      "blogOgDescription": "Know the scams before they reach you.",
+      "all": "All",
+      "emptyTitle": "Nothing here yet",
+      "emptyText": "New articles are on the way - check back soon.",
+      "categoryMetaTitle": "{{label}} - Blog",
+      "categoryMetaDescription": "Articles on {{label}} from the Bizik blog - escrow, scams and getting paid safely.",
+      "helpCrumb": "Help centre",
+      "relatedTitle": "Related articles",
+      "legal": {
+        "termsTitle": "Terms of Service",
+        "termsDescription": "The terms that govern your use of Bizik - secure escrow for everyone.",
+        "privacyTitle": "Privacy Policy",
+        "privacyDescription": "How Bizik collects, uses and protects your personal data.",
+        "cookieTitle": "Cookie policy",
+        "cookieDescription": "How Bizik uses cookies and similar technologies.",
+        "amlTitle": "AML / KYC policy",
+        "amlDescription": "How Bizik verifies identity and prevents money laundering.",
+        "disputeTitle": "Dispute policy",
+        "disputeDescription": "How disputes between a payer and a payee are decided on Bizik."
+      }
+    },
+    "article": {
+      "notFound": "Article not found",
+      "share": "Share this article",
+      "shareX": "Share on X",
+      "shareLinkedIn": "Share on LinkedIn",
+      "shareWhatsApp": "Share on WhatsApp",
+      "onThisPage": "On this page",
+      "articleContents": "Article contents",
+      "asideTitle": "Deal with strangers, safely",
+      "asideText": "Bizik holds the money until both sides are satisfied.",
+      "asideCta": "Start a deal",
+      "related": "Related reading",
+      "helpNotFound": "Article not found",
+      "helpAsideTitle": "Still stuck?",
+      "helpAsideText": "Our team answers in English and French.",
+      "helpAsideCta": "Contact support"
+    },
+    "help": {
+      "metaTitle": "Help centre - how escrow deals work",
+      "metaDescription": "Answers about escrow deals, funding, verification, disputes, fees, security and the WhatsApp assistant. Search the Bizik help centre or browse by topic.",
+      "ogTitle": "Bizik help centre",
+      "crumb": "Help centre",
+      "title": "How can we help?",
+      "searchOne": "Search {{count}} article, or browse by topic below.",
+      "searchMany": "Search {{count}} articles, or browse by topic below.",
+      "searchLabel": "Search the help centre",
+      "searchPlaceholder": "Search",
+      "popular": "Popular:",
+      "popularTerms": [
+        "automatic release",
+        "wrong person",
+        "verify my account",
+        "on hold"
+      ],
+      "browseTitle": "Browse by topic",
+      "filterAria": "Filter articles by topic",
+      "all": "All",
+      "readArticle": "Read article →",
+      "noMatch": "Nothing matched that search. Try a different word, or contact support below.",
+      "stillTitle": "Still need help?",
+      "stillText": "Our team answers in English and French, 7am-9pm WAT, seven days a week.",
+      "contactCta": "Contact support",
+      "articleNotFound": "Help article not found",
+      "articleMetaTitle": "{{title}} - Help centre",
+      "minRead": "{{count}} min read",
+      "allArticles": "← All help articles",
+      "helpful": "Was this helpful? Tell support what was missing.",
+      "moreIn": "More in {{topic}}",
+      "relatedAria": "Related help articles",
+      "asideText": "Our team answers in English and French. Include your deal or transaction reference.",
+      "topics": {
+        "getting-started": "Getting started",
+        "deals": "Deals and escrow",
+        "money": "Money and your wallet",
+        "verification": "Verification",
+        "fees": "Fees",
+        "disputes": "Disputes",
+        "security": "Security",
+        "whatsapp": "WhatsApp",
+        "troubleshooting": "Troubleshooting",
+        "contact": "Contact"
+      }
+    },
+    "about": {
+      "meta": {
+        "title": "About us - escrow built in Cameroon",
+        "description": "Bizik is an escrow service built in Cameroon by Lyftsoft Technologies, so people who have never met can buy, sell and hire online without either side taking the risk."
+      },
+      "crumb": "About",
+      "eyebrow": "About Bizik",
+      "title": "We're making every online deal in Africa safe.",
+      "text": "Bizik is a Cameroonian company building the trust layer for African commerce - starting with escrow that runs on the money rails people actually use.",
+      "whyEyebrow": "Why we started",
+      "whyImgAlt": "Local commerce in Cameroon - a seller with a phone",
+      "whyP1": "One of our founders sold a laptop on Facebook Marketplace and spent three weeks arguing over who should send first. The other watched a cousin lose 400,000 XAF to a \"seller\" who disappeared the same afternoon.",
+      "whyP2": "Every online deal here starts with the same standoff, and it costs real money and real opportunity. Escrow already solves it - but the existing services want a bank account, a Western currency and a week of paperwork.",
+      "whyP3": "So we built escrow for a phone, in FCFA, in English and French, and made it work with MTN MoMo and Orange Money.",
+      "surfacesTitle": "We meet people where they are",
+      "surfacesSub": "The same escrow, the same account, on three surfaces - because trust shouldn't require downloading anything.",
+      "newTag": "New",
+      "surfaces": [
+        {
+          "title": "WhatsApp Assistant",
+          "text": "Zero install. Chat or voice, EN/FR - create, fund, verify and release right in the conversation, with PIN-confirmed payments."
+        },
+        {
+          "title": "Mobile app",
+          "text": "Full-featured on Android and iOS, offline-friendly, with push notifications for every deal event."
+        },
+        {
+          "title": "Web",
+          "text": "An installable web app for deals, wallet and verification - nothing to download, works on any browser."
+        }
+      ],
+      "missionEyebrow": "Mission",
+      "mission": "Make it normal for two strangers in Africa to do business without either one taking the risk alone.",
+      "visionEyebrow": "Vision",
+      "vision": "A continent where trust is infrastructure - and every marketplace, freelancer and trader can plug into it.",
+      "valuesTitle": "What we hold ourselves to",
+      "values": [
+        {
+          "title": "Trust",
+          "text": "We're only useful if both sides believe us."
+        },
+        {
+          "title": "Fairness",
+          "text": "Evidence decides disputes, never who shouts loudest."
+        },
+        {
+          "title": "Simplicity",
+          "text": "If your aunt can't use it, we haven't finished."
+        },
+        {
+          "title": "Local-first",
+          "text": "FCFA, mobile money, EN/FR - not an afterthought."
+        },
+        {
+          "title": "Security",
+          "text": "Other people's money is not a place to move fast."
+        }
+      ],
+      "whereTitle": "Where we are",
+      "teamImgAlt": "The Bizik team",
+      "timeline": [
+        {
+          "year": "2024",
+          "text": "Founded in Douala. First prototype built around MTN MoMo pay-ins."
+        },
+        {
+          "year": "2025",
+          "text": "Private beta with 200 freelancers and social-commerce sellers. Orange Money and dispute mediation go live."
+        },
+        {
+          "year": "2026",
+          "text": "Public launch in Cameroon, multi-currency wallet, mobile apps, the WhatsApp assistant - the full escrow flow in a chat - and the first escrow-as-a-service partners."
+        }
+      ]
+    },
+    "contact": {
+      "meta": {
+        "title": "Contact us",
+        "description": "Contact the Bizik team for support, business partnerships, press or security reports, by email or on WhatsApp."
+      },
+      "crumb": "Contact",
+      "eyebrow": "Contact",
+      "title": "We're here to help.",
+      "text": "Pick the right team below and you'll get a faster answer. If your deal is live and something is wrong, use support - it's monitored first.",
+      "supportTitle": "Support",
+      "supportSla": "~2 hours",
+      "supportText": "Live deals, payouts, disputes, verification.",
+      "businessTitle": "Business & API",
+      "businessSla": "1 working day",
+      "businessText": "Marketplaces, escrow-as-a-service, volume pricing.",
+      "pressTitle": "Press & partnerships",
+      "pressSla": "2 working days",
+      "pressText": "Interviews, brand assets, co-marketing.",
+      "officeTitle": "Office",
+      "officeCity": "Douala, Cameroon",
+      "officeHours": "Mon-Fri, 8am-6pm WAT",
+      "mapTitle": "Map showing the Bizik office at 1117 Rue 5.056, Douala",
+      "formTitle": "Send us a message",
+      "form": {
+        "honeypot": "Leave this empty",
+        "name": "Full name",
+        "phone": "Phone",
+        "email": "Email",
+        "topic": "Topic",
+        "message": "Message",
+        "consent": "I agree that Bizik may contact me about this enquiry and process my details per the privacy policy.",
+        "submit": "Send message",
+        "sending": "Sending…",
+        "pinWarning": "We never ask for your Mobile Money PIN. Nobody from Bizik ever will.",
+        "error": "Something went wrong sending your message. Please email {{email}} and we'll get straight back to you.",
+        "sentTitle": "Thanks - your message is on its way. ✅",
+        "sentText": "Our team answers in English and French, 7am-9pm WAT. We'll reply to the email you gave us. If it's urgent, message us on WhatsApp.",
+        "sentAgain": "Send another message",
+        "topics": [
+          "A problem with a live deal",
+          "Payouts & mobile money",
+          "Disputes & mediation",
+          "Verification / KYC",
+          "Business & API",
+          "Something else"
+        ]
+      }
+    },
+    "security": {
+      "meta": {
+        "title": "Security - how we protect your money",
+        "description": "Segregated escrow funds, verified identities, PIN-confirmed payments, manual review of large withdrawals and neutral dispute mediation. How Bizik keeps deal money safe."
+      },
+      "crumb": "Security",
+      "eyebrow": "Security & trust",
+      "title": "How we protect your money and your data",
+      "text": "Escrow only works if you believe the middle is solid. Here is exactly what sits in the middle: segregated funds, bank-grade encryption, verified identities and neutral mediation.",
+      "fundsTitle": "How funds are protected",
+      "funds": [
+        {
+          "title": "Segregated escrow accounts",
+          "text": "Customer funds are held in dedicated escrow accounts with our licensed payment partners, separate from Bizik's operating money. They are never used to run the business."
+        },
+        {
+          "title": "Release only on approval",
+          "text": "A release requires the buyer's approval, an expired inspection window, or a mediator's ruling. There is no fourth way for money to leave escrow."
+        },
+        {
+          "title": "Manual review on large payouts",
+          "text": "Payouts above our threshold are reviewed by a human before they execute, and reconciled daily against the escrow ledger."
+        }
+      ],
+      "flowEyebrow": "Fund flow",
+      "flowInTitle": "Buyer's MoMo / bank",
+      "flowInMeta": "Pay-in via licensed provider",
+      "flowEscrowTitle": "Segregated escrow account",
+      "flowEscrowMeta": "Ring-fenced · reconciled daily",
+      "flowOutTitle": "Seller payout",
+      "flowOutMeta": "Only on approval or ruling",
+      "platformTitle": "Platform, identity and account security",
+      "platform": [
+        {
+          "title": "Encryption everywhere",
+          "text": "TLS in transit, encryption at rest for personal and KYC data, isolated secrets management."
+        },
+        {
+          "title": "KYC identity checks",
+          "text": "Government ID plus liveness for verified sellers and for any deal above the verification threshold."
+        },
+        {
+          "title": "AML & sanctions screening",
+          "text": "Every party and payout is screened against sanctions and PEP lists, with monitoring for suspicious patterns."
+        },
+        {
+          "title": "Fraud controls",
+          "text": "Velocity limits, device fingerprinting, and blocks on prohibited transactions and off-platform payment attempts."
+        },
+        {
+          "title": "Your account",
+          "text": "SMS OTP login, session and device management, and alerts on every escrow, release and payout event."
+        },
+        {
+          "title": "Neutral mediation",
+          "text": "Mediators are paid the same whatever they decide. We hold no stake in the outcome of your dispute."
+        }
+      ],
+      "vulnTitle": "Found a vulnerability?",
+      "vulnText": "We welcome responsible disclosure and respond to every credible report within two working days. Please don't test against real user deals.",
+      "reportTo": "Report to",
+      "contactTeam": "Contact the team"
+    },
+    "freelancers": {
+      "meta": {
+        "title": "Escrow for freelancers in Cameroon",
+        "description": "Get paid for every job: clients fund each milestone into escrow before you start, and the money is released when the work is approved. Withdraw to MTN MoMo or Orange Money."
+      },
+      "crumb": "For freelancers",
+      "eyebrow": "For freelancers",
+      "title": "Get paid for every job you finish.",
+      "text": "The client funds the project up front, Bizik holds it, and the money reaches your Mobile Money the moment your work is approved. No invoices chased, no \"next week\" that never comes.",
+      "ctaPrimary": "Create a funded deal",
+      "ctaSecondary": "See how it works",
+      "imgAlt": "A freelancer working at a laptop in Douala",
+      "floatTitle": "Milestone 2 of 3 · approved",
+      "floatTag": "Paid out",
+      "problemEyebrow": "The problem",
+      "problemTitle": "You already did the work. That's the worst time to start negotiating.",
+      "problemText": "A client you met online promises 50% up front and pays 20%. The deliverables go out. Then the messages slow down, the \"accountant is travelling\", and you’re one freelancer with no leverage against someone in another country.",
+      "steps": [
+        {
+          "title": "1 · Client funds before you start",
+          "text": "You send a deal link. They pay into escrow. You can see the money is confirmed before you open a single file."
+        },
+        {
+          "title": "2 · Deliver milestone by milestone",
+          "text": "Split a long project into stages. Each stage is funded and released on its own, so you're never carrying months of unpaid work."
+        },
+        {
+          "title": "3 · Approved, then paid",
+          "text": "The client approves, or the inspection window expires and it auto-releases. Money lands on MTN, Orange, your bank or Payoneer."
+        }
+      ],
+      "benefits": [
+        {
+          "title": "Look professional",
+          "text": "A funded escrow deal reads more seriously than an invoice PDF."
+        },
+        {
+          "title": "Work with anyone",
+          "text": "Take clients in Paris, Lagos or Montreal without wondering if they'll pay."
+        },
+        {
+          "title": "Bill in their currency",
+          "text": "Quote in EUR or USD, get paid out in FCFA at a rate you saw up front."
+        },
+        {
+          "title": "Scope protection",
+          "text": "Revision requests are logged. Endless free rounds stop being invisible."
+        }
+      ],
+      "quote": "I stopped asking for deposits and started sending Bizik deals instead. Two clients said it made me look more serious. Nobody has argued about it since.",
+      "quoteName": "Aïcha N.",
+      "quoteRole": "Product designer · Douala",
+      "otherTitle": "Other ways people use Bizik",
+      "other": [
+        {
+          "title": "Buyers & sellers",
+          "text": "Social commerce, safely."
+        },
+        {
+          "title": "Vehicles",
+          "text": "Inspect before you release."
+        },
+        {
+          "title": "Cross-border",
+          "text": "Diaspora deals back home."
+        },
+        {
+          "title": "Marketplaces",
+          "text": "Escrow as a service."
+        }
+      ]
+    },
+    "business": {
+      "meta": {
+        "title": "Escrow for online sellers and businesses",
+        "description": "Sell to customers who have never met you. Bizik holds the payment in escrow until delivery, so buyers pay with confidence and you never ship on a fake payment screenshot."
+      },
+      "crumb": "For business",
+      "eyebrow": "Escrow as a service",
+      "title": "Add trust to your platform.",
+      "text": "One API for escrow accounts, mobile-money pay-ins, KYC, dispute handling and payouts across Cameroon and the CEMAC region. Your marketplace keeps the relationship; we hold the money.",
+      "ctaTalk": "Talk to us",
+      "ctaDocs": "Read the API docs",
+      "capEyebrow": "Capabilities",
+      "capTitle": "Everything the money side needs",
+      "capabilities": [
+        {
+          "title": "Escrow API",
+          "text": "Create, fund, milestone, release, refund. REST + idempotency keys."
+        },
+        {
+          "title": "Wallets",
+          "text": "Multi-currency balances per user, with live FX and ledger export."
+        },
+        {
+          "title": "Pay-in & payout",
+          "text": "MTN MoMo and Orange Money in; mobile money, bank or Payoneer out - one interface."
+        },
+        {
+          "title": "Hosted KYC",
+          "text": "ID + liveness flows you can embed, with AML and sanctions screening."
+        },
+        {
+          "title": "Dispute engine",
+          "text": "Evidence collection, SLA timers and Bizik mediators as a fallback."
+        },
+        {
+          "title": "Webhooks",
+          "text": "Signed events for every state change, with replay and a sandbox."
+        }
+      ],
+      "pipelineTitle": "How it fits together",
+      "pipeYouTitle": "Your platform",
+      "pipeYouMeta": "Listings, chat, checkout",
+      "pipeUsTitle": "Bizik escrow",
+      "pipeUsMeta": "Hold, mediate, reconcile",
+      "pipeOutTitle": "Seller payout",
+      "pipeOutMeta": "MoMo, bank, Payoneer",
+      "formTitle": "Tell us about your platform",
+      "formText": "We'll come back within one working day with pricing for your volume, a sandbox key, and a settlement and compliance overview for your legal team.",
+      "checklist": [
+        "Volume-based rates from 1.2%",
+        "Daily settlement reports",
+        "Named compliance contact"
+      ],
+      "form": {
+        "honeypot": "Leave this empty",
+        "name": "Full name",
+        "company": "Company",
+        "email": "Work email",
+        "volume": "Monthly volume",
+        "message": "What are you building?",
+        "submit": "Request access",
+        "volumes": [
+          "Under 5M XAF",
+          "5M - 50M XAF",
+          "50M - 500M XAF",
+          "Above 500M XAF"
+        ]
+      }
+    },
+    "root": {
+      "title": "Bizik - Secure escrow for everyone",
+      "description": "Bizik holds the money in secure escrow until the work is delivered or the goods arrive, then pays the seller. Create a deal on the web, in the app or on WhatsApp - MTN MoMo, Orange Money and cards.",
+      "ogDescription": "Deal with strangers safely. Bizik holds the money in escrow until the goods arrive or the work is delivered - then the seller is paid.",
+      "twitterDescription": "Deal with strangers safely. Bizik holds the money in escrow until delivery is approved - then the seller is paid."
+    },
+    "notFound": {
+      "metaTitle": "Page not found",
+      "code": "Error 404",
+      "title": "This page doesn't exist.",
+      "text": "The link may be broken, or the page may have moved. Nothing has happened to your money or your deals.",
+      "back": "Go back",
+      "home": "Go to homepage",
+      "suggestions": "Or try one of these"
+    },
+    "sendMoney": {
+      "meta": {
+        "title": "Send money in Cameroon - free, instant wallet transfers",
+        "description": "Send money to anyone on Bizik with their @handle or phone number. Free, instant and confirmed by name before it leaves. Top up with MTN MoMo or Orange Money."
+      },
+      "crumb": "Send money",
+      "eyebrow": "Send money",
+      "title": "Send money in Cameroon, free and instantly",
+      "text": "Pay a friend, a relative or a colleague from your Bizik wallet using their @handle or phone number. The money arrives in seconds, Bizik charges nothing for the transfer, and you see the recipient's name before you confirm.",
+      "ctaPrimary": "Create your free account",
+      "ctaSecondary": "How to receive money",
+      "mock": {
+        "label": "Send to",
+        "recipient": "@maxime.b · Maxime B.",
+        "amount": "Amount",
+        "fee": "Bizik fee",
+        "feeValue": "0 XAF",
+        "arrives": "Arrives",
+        "arrivesValue": "Instantly",
+        "confirmed": "Recipient checked by name"
+      },
+      "factsTitle": "Why send with Bizik",
+      "facts": [
+        {
+          "title": "No transfer fee",
+          "text": "Bizik does not charge for sending money from one wallet to another, whatever the amount."
+        },
+        {
+          "title": "Instant",
+          "text": "The recipient's balance updates the moment you confirm. Both of you are notified straight away."
+        },
+        {
+          "title": "No wrong number",
+          "text": "You send to a @handle or a phone number, and Bizik shows you the account holder's name before anything moves."
+        },
+        {
+          "title": "Protected by your PIN",
+          "text": "Only a verified account can send, and every transfer needs your confirmation. On WhatsApp it also needs your PIN."
+        }
+      ],
+      "stepsEyebrow": "How it works",
+      "stepsTitle": "Three steps to send money",
+      "steps": [
+        {
+          "title": "Top up your wallet",
+          "text": "Add money with MTN Mobile Money or Orange Money. Your balance updates as soon as your operator confirms the payment."
+        },
+        {
+          "title": "Enter a @handle or phone number",
+          "text": "Type the recipient's Bizik handle, like @maxime.b, or their phone number. Bizik finds the account and shows the name."
+        },
+        {
+          "title": "Confirm and it arrives",
+          "text": "Check the name and the amount, add a note if you like, and confirm. The money is in their wallet immediately."
+        }
+      ],
+      "detailTitle": "Everything you need to know before you send",
+      "details": [
+        {
+          "title": "Who you can send to",
+          "text": "Anyone with a Bizik account. If the person you want to pay is not on Bizik yet, they can create a free account in a few minutes with just their phone number, and you can send as soon as they have. Transfers go wallet to wallet, in your wallet's currency (XAF in Cameroon)."
+        },
+        {
+          "title": "Top up with MTN MoMo or Orange Money",
+          "text": "Your wallet is funded from the mobile money you already use. You approve the payment on your phone, and the balance is available to send as soon as the operator confirms it. Your operator may charge its own fees on its side."
+        },
+        {
+          "title": "Verify once, then send",
+          "text": "To protect everyone, sending money needs a verified account. Verification is a one-time identity check done from the app. Receiving never needs it."
+        },
+        {
+          "title": "Send from the web, the app or WhatsApp",
+          "text": "Use the Send button in your wallet on the web or in the app, or write to the Bizik assistant on WhatsApp, for example \"send 5,000 to @maxime.b\". WhatsApp always asks you to confirm and enter your PIN."
+        },
+        {
+          "title": "A receipt for every transfer",
+          "text": "Every transfer appears in your wallet history, and you can download a PDF receipt for it. The recipient is told by notification, email and WhatsApp or SMS."
+        }
+      ],
+      "compareTitle": "A direct transfer or a secure deal?",
+      "compareText": "A transfer is final: once it arrives it cannot be reversed. That is exactly right for paying people you know. When you pay for goods or work you have not received yet, use a secure deal instead, so Bizik holds the money until you approve.",
+      "compareCols": [
+        "",
+        "Direct transfer",
+        "Secure deal (escrow)"
+      ],
+      "compareRows": [
+        [
+          "Best for",
+          "Family, friends, colleagues, repaying someone",
+          "Buying from strangers, paying for work or delivery"
+        ],
+        [
+          "When the money moves",
+          "Immediately",
+          "When you approve the delivery"
+        ],
+        [
+          "Can it be undone?",
+          "No, a transfer is final",
+          "Yes, disputes can end in a refund"
+        ],
+        [
+          "Bizik fee",
+          "Free",
+          "Escrow fee paid by the buyer (see pricing)"
+        ]
+      ],
+      "compareCta": "See how secure deals work",
+      "faqTitle": "Questions about sending money",
+      "faq": [
+        {
+          "q": "How much does it cost to send money with Bizik?",
+          "a": "Nothing. Bizik does not charge a fee for sending money from your wallet to another Bizik wallet. Your mobile-money operator may charge its own fee when you top up your wallet."
+        },
+        {
+          "q": "How long does a transfer take?",
+          "a": "It is instant. The money is in the recipient's wallet as soon as you confirm, and both of you are notified."
+        },
+        {
+          "q": "Can I send money to someone who does not have Bizik?",
+          "a": "Not directly. The recipient needs a Bizik account, which is free and takes a few minutes to open with a phone number. Once they have one, you can send to their @handle or phone number."
+        },
+        {
+          "q": "Can I cancel or reverse a transfer?",
+          "a": "No. A transfer is final once confirmed, which is why Bizik shows you the recipient's name first. If you are paying for something you have not received, use a secure deal so the money is only released when you approve."
+        },
+        {
+          "q": "Can the person I pay withdraw to MTN MoMo or Orange Money?",
+          "a": "Yes. The money lands in their Bizik wallet, and once their account is verified they can withdraw it to a verified MTN Mobile Money or Orange Money number."
+        },
+        {
+          "q": "Do I need to verify my identity to send money?",
+          "a": "Yes. Sending money needs a verified account. It is a one-time check done in the app. Receiving money does not need verification."
+        }
+      ],
+      "relatedTitle": "Keep reading",
+      "related": [
+        {
+          "title": "Receive money",
+          "text": "Share your @handle and get paid straight into your wallet.",
+          "href": "/receive-money"
+        },
+        {
+          "title": "Pricing",
+          "text": "Every Bizik fee in one table, with a calculator.",
+          "href": "/pricing"
+        },
+        {
+          "title": "MTN MoMo or Orange Money?",
+          "text": "How to pay safely online with either one.",
+          "href": "/blog/mtn-momo-vs-orange-money-paying-safely-online"
+        }
+      ]
+    },
+    "receiveMoney": {
+      "meta": {
+        "title": "Receive money in Cameroon - get paid with your Bizik handle",
+        "description": "Share one @handle and get paid into your Bizik wallet, instantly and for free. Cash out to MTN MoMo or Orange Money whenever you like."
+      },
+      "crumb": "Receive money",
+      "eyebrow": "Receive money",
+      "title": "Receive money with one simple handle",
+      "text": "Give people your Bizik @handle instead of your phone number. Anyone on Bizik can pay you in seconds, for free, and you cash out to MTN Mobile Money or Orange Money whenever you like.",
+      "ctaPrimary": "Get your handle",
+      "ctaSecondary": "How to send money",
+      "mock": {
+        "label": "Money received",
+        "from": "From",
+        "fromValue": "@aline.n · Aline N.",
+        "amount": "Amount",
+        "fee": "Bizik fee",
+        "feeValue": "0 XAF",
+        "handleLabel": "Your handle",
+        "handleValue": "@yourname",
+        "share": "Copy · Share"
+      },
+      "factsTitle": "Why get paid with Bizik",
+      "facts": [
+        {
+          "title": "Free to receive",
+          "text": "Bizik charges nothing when someone sends money to your wallet."
+        },
+        {
+          "title": "Instant",
+          "text": "Money lands in your balance the moment the sender confirms, and you are notified right away."
+        },
+        {
+          "title": "Keep your number private",
+          "text": "Share a @handle instead of your phone number. People can still find you by number if you give it to them."
+        },
+        {
+          "title": "No verification to receive",
+          "text": "You can receive money as soon as you sign up. Verification is only needed when you withdraw or send."
+        }
+      ],
+      "stepsEyebrow": "How it works",
+      "stepsTitle": "Three steps to get paid",
+      "steps": [
+        {
+          "title": "Create your free account",
+          "text": "Sign up with your phone number. Your Bizik handle is ready straight away, on the web, in the app and on WhatsApp."
+        },
+        {
+          "title": "Share your @handle",
+          "text": "Copy it from your wallet and send it on WhatsApp, put it on your status or your business card. The sender sees your name before they confirm."
+        },
+        {
+          "title": "Get paid, then cash out",
+          "text": "The money arrives instantly. Keep it in your wallet or withdraw it to your MTN Mobile Money or Orange Money number."
+        }
+      ],
+      "detailTitle": "From your wallet to your mobile money",
+      "details": [
+        {
+          "title": "Withdraw to MTN MoMo or Orange Money",
+          "text": "Add your mobile-money number once and confirm it with a code sent by SMS. After that, withdrawals go to that number. A standard withdrawal has no Bizik fee; your operator may charge its own."
+        },
+        {
+          "title": "Large withdrawals are checked by a person",
+          "text": "Withdrawals of 500,000 XAF or more to mobile money are reviewed by the Bizik team before they are paid out. It adds a little time and protects your money if your account is ever misused."
+        },
+        {
+          "title": "Verify once to withdraw",
+          "text": "You can receive without verifying, but withdrawing needs a verified account. It is a one-time identity check done in the app, and it also lets you send money."
+        },
+        {
+          "title": "Hold more than one currency",
+          "text": "Your wallet can hold XAF, USD, EUR, GBP, NGN and GHS. You can convert between them at the live mid-market rate plus a {{fxPct}}% margin, shown before you confirm."
+        },
+        {
+          "title": "Know exactly what came in",
+          "text": "Every payment shows in your wallet history with the sender and their note, and you can download a PDF receipt. You are told by notification, email and WhatsApp or SMS."
+        }
+      ],
+      "compareTitle": "Getting paid by someone you do not know?",
+      "compareText": "A transfer is final and there is no protection if something goes wrong on either side. If you are selling goods or doing work for someone new, ask them to pay through a secure deal: the money is locked for you before you deliver, and released when they approve.",
+      "compareCols": [
+        "",
+        "Direct transfer",
+        "Secure deal (escrow)"
+      ],
+      "compareRows": [
+        [
+          "Best for",
+          "People you know, repayments, gifts",
+          "New customers and clients, deliveries, projects"
+        ],
+        [
+          "You see the money",
+          "When it arrives",
+          "Before you ship or start work"
+        ],
+        [
+          "If there is a problem",
+          "Settle it between yourselves",
+          "A Bizik mediator decides on evidence"
+        ],
+        [
+          "Bizik fee for you",
+          "Free",
+          "Free for the seller; the buyer pays the escrow fee"
+        ]
+      ],
+      "compareCta": "See how sellers use Bizik",
+      "faqTitle": "Questions about receiving money",
+      "faq": [
+        {
+          "q": "How do I receive money on Bizik?",
+          "a": "Share your Bizik @handle, or the phone number on your account, with the person paying you. When they send, the money arrives in your wallet instantly and you are notified."
+        },
+        {
+          "q": "Does it cost anything to receive money?",
+          "a": "No. Bizik does not charge you to receive a transfer. A standard withdrawal to mobile money has no Bizik fee either; your operator may charge its own."
+        },
+        {
+          "q": "Do I need to verify my identity to receive money?",
+          "a": "No. You can receive as soon as you create an account. You need to verify your identity once before you can withdraw or send money."
+        },
+        {
+          "q": "How do I withdraw to MTN MoMo or Orange Money?",
+          "a": "Add your mobile-money number in your wallet and confirm it with the code sent by SMS, then choose Withdraw. Withdrawals of 500,000 XAF or more are reviewed by a person before they are paid out."
+        },
+        {
+          "q": "Can someone pay me without a Bizik account?",
+          "a": "They need a Bizik account to send you money. It is free and takes a few minutes with a phone number. They can top up their wallet with MTN Mobile Money or Orange Money and then pay your @handle."
+        },
+        {
+          "q": "Can I request money or share a payment link?",
+          "a": "Not yet. Today you receive money by sharing your @handle. To be paid for goods or work by someone new, create a secure deal and invite them by phone number."
+        }
+      ],
+      "relatedTitle": "Keep reading",
+      "related": [
+        {
+          "title": "Send money",
+          "text": "Free, instant transfers to any @handle or phone number.",
+          "href": "/send-money"
+        },
+        {
+          "title": "For business",
+          "text": "Get paid safely by customers who have never met you.",
+          "href": "/for-business"
+        },
+        {
+          "title": "Selling on WhatsApp",
+          "text": "How to get strangers to trust you and pay.",
+          "href": "/blog/selling-on-whatsapp-how-to-get-strangers-to-trust-you"
+        }
+      ]
+    }
+  },
+  "notFound": {
+    "code": "Error 404",
+    "title": "We can't find that page",
+    "text": "The link may be broken or the page may have moved. Your money and your deals are not affected.",
+    "back": "Go back",
+    "dashboard": "Go to dashboard",
+    "home": "Bizik homepage"
+  },
+  "walkthrough": {
+    "next": "Next",
+    "finish": "Start using Bizik",
+    "skip": "Skip for now",
+    "welcome": {
+      "title": "Welcome to Bizik, {{name}}",
+      "body": "Bizik holds money safely while two people complete a deal. The buyer pays in, the money waits in escrow, and it is only released when the work is done - so neither side has to trust the other first.",
+      "done": "Bizik holds money safely while two people complete a deal."
+    },
+    "verify": {
+      "title": "Verify your identity",
+      "body": "A photo of your ID and a selfie. It is required before you can send money, withdraw, or start a deal - it is what keeps the person on the other side of a deal accountable.",
+      "done": "Your identity is verified. You can send, withdraw and start deals.",
+      "cta": "Verify now"
+    },
+    "wallet": {
+      "title": "Your wallet",
+      "body": "Add money from MTN or Orange Money, hold it, send it to another Bizik user for free, or withdraw it back to your phone. Money in your wallet is yours - it is separate from anything held in escrow.",
+      "done": "Your wallet holds your money, separate from anything in escrow.",
+      "cta": "Open my wallet"
+    },
+    "send": {
+      "title": "Send money to someone",
+      "body": "Pay anyone on Bizik by their @handle or their phone number. It arrives instantly and costs nothing - we do not charge for sending between Bizik accounts. You need to be verified to send; you can receive without it. Your own handle is on your wallet screen, and that is what people use to pay you.",
+      "done": "You can send money to any Bizik user by their @handle or phone number, free.",
+      "cta": "Send money"
+    },
+    "deal": {
+      "title": "Start a deal",
+      "body": "Agree what is being delivered and for how much, then invite the other person by phone number. The money is held until you confirm delivery. If something goes wrong, either side can open a dispute.",
+      "done": "You already know how deals work.",
+      "cta": "Create a deal"
+    },
+    "help": {
+      "title": "If you get stuck",
+      "body": "Support is in the app, and you can also reach us on WhatsApp. If a deal goes wrong, open a dispute from the deal itself and a mediator will look at the evidence from both sides.",
+      "done": "Support is in the app whenever you need it.",
+      "cta": "See help"
+    }
+  }
+}

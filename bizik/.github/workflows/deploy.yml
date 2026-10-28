@@ -1,0 +1,107 @@
+name: Deploy
+
+# Build the three service images, push them to GHCR, then SSH to the Contabo VPS
+# and roll the stack forward. Runs on pushes to `main` (after CI passes) or when
+# dispatched manually. Requires the repo secrets/variables documented in
+# DEPLOYMENT.md (SSH_* secrets; the NEXT_PUBLIC_API_URL variable).
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  REGISTRY: ghcr.io
+  OWNER: lyftsoft-technologies
+
+jobs:
+  build:
+    name: Build & push images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        include:
+          - name: backend
+            context: backend
+          - name: web-user
+            context: web/user
+            build_args: |
+              NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
+          - name: web-admin
+            context: web/admin
+            build_args: |
+              NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
+          - name: kyc-analyzer
+            context: kyc-analyzer
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & push ${{ matrix.name }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          push: true
+          build-args: ${{ matrix.build_args }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.OWNER }}/qatiqa-${{ matrix.name }}:latest
+            ${{ env.REGISTRY }}/${{ env.OWNER }}/qatiqa-${{ matrix.name }}:${{ github.sha }}
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
+
+  deploy:
+    name: Deploy to VPS
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH deploy
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /opt/bizik
+            IMAGE_TAG=${{ github.sha }} ./deploy.sh
+
+  indexnow:
+    name: Notify search engines (IndexNow)
+    needs: deploy
+    runs-on: ubuntu-latest
+    # Best effort: a failed ping must never mark a good deploy as failed.
+    continue-on-error: true
+    steps:
+      - name: Submit sitemap URLs
+        env:
+          INDEXNOW_KEY: e90c9159b182eb60ad1baa5e6c89c562
+        run: |
+          # Give the new containers a moment, then send every URL in the live
+          # sitemap to IndexNow (shared by Bing, Yandex, Seznam, Naver and
+          # others). The key file is served from web/user/public.
+          sleep 30
+          curl -fsS https://bizik.cm/sitemap.xml \
+            | grep -o '<loc>[^<]*</loc>' | sed -e 's#<loc>##' -e 's#</loc>##' \
+            | head -n 10000 \
+            | jq -R . \
+            | jq -s --arg key "$INDEXNOW_KEY" \
+                '{host: "bizik.cm", key: $key, keyLocation: ("https://bizik.cm/" + $key + ".txt"), urlList: .}' \
+            > payload.json
+          echo "Submitting $(jq '.urlList | length' payload.json) URLs"
+          curl -sS -o /dev/null -w "IndexNow HTTP %{http_code}\n" \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            --data @payload.json https://api.indexnow.org/indexnow

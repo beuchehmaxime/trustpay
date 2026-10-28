@@ -1,0 +1,8 @@
+# A researcher who finds a flaw in a payments platform needs somewhere to send
+# it. Without this file they have a choice between guessing an address and
+# telling someone else.
+Contact: mailto:security@bizik.cm
+Expires: 2027-10-01T00:00:00.000Z
+Preferred-Languages: en, fr
+Canonical: https://bizik.cm/.well-known/security.txt
+Policy: https://github.com/lyftsoft-technologies/qatiqa/blob/main/SECURITY.md

@@ -1,0 +1,12 @@
+; /etc/pgbouncer/userlist.txt
+; -----------------------------------------------------------------------------
+; One line per role, with the password stored as a SCRAM-SHA-256 verifier (NOT
+; the plaintext). Generate the verifier from the running Postgres AFTER you set
+; the role's password:
+;
+;   sudo -u postgres psql -Atqc \
+;     "SELECT rolname, rolpassword FROM pg_authid WHERE rolname='bizik';"
+;
+; Copy the full "SCRAM-SHA-256$..." string as the second field. Example:
+;
+"bizik" "SCRAM-SHA-256$4096:base64salt$base64storedkey:base64serverkey"

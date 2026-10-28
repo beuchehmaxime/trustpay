@@ -1,0 +1,138 @@
+# =============================================================================
+# Bizik — PRODUCTION docker-compose (Contabo VPS)
+# -----------------------------------------------------------------------------
+# Differences from the local dev compose:
+#   * NO postgres service — PostgreSQL runs NATIVELY on the host, fronted by
+#     PgBouncer. Containers reach it via `host.docker.internal` (host-gateway).
+#   * Images are PULLED from GHCR (built by CI), not built here.
+#   * nginx terminates TLS with a Let's Encrypt cert (NO CDN in front) and serves
+#     the 3 subdomains. Certs live on the host at /etc/letsencrypt (mounted RO).
+#
+# Usage on the server:
+#   docker compose -f docker-compose.prod.yml --env-file .env.production pull
+#   docker compose -f docker-compose.prod.yml --env-file .env.production up -d
+# =============================================================================
+
+x-logging: &default-logging
+  driver: json-file
+  options: { max-size: "10m", max-file: "5" }
+
+x-restart: &restart unless-stopped
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: bizik-redis
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "256mb", "--maxmemory-policy", "noeviction"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    restart: *restart
+    logging: *default-logging
+    networks: [bizik]
+
+  kyc-analyzer:
+    image: ${REGISTRY}/qatiqa-kyc-analyzer:${IMAGE_TAG:-latest}
+    container_name: bizik-kyc-analyzer
+    env_file: [.env.production]
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    restart: *restart
+    logging: *default-logging
+    networks: [bizik]
+
+  backend:
+    image: ${REGISTRY}/qatiqa-backend:${IMAGE_TAG:-latest}
+    container_name: bizik-backend
+    env_file: [.env.production]
+    # Reach the host's native PgBouncer / Postgres from inside the container.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - uploads:/app/uploads
+    expose: ["3000"]
+    depends_on:
+      redis: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 45s
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    restart: *restart
+    logging: *default-logging
+    networks: [bizik]
+
+  web-user:
+    image: ${REGISTRY}/qatiqa-web-user:${IMAGE_TAG:-latest}
+    container_name: bizik-web-user
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      HOSTNAME: "0.0.0.0"
+      API_INTERNAL_URL: http://backend:3000/api/v1
+      NEXT_PUBLIC_SITE_URL: https://bizik.cm
+      NEXT_PUBLIC_WHATSAPP_URL: ${PUBLIC_WHATSAPP_URL:-}
+    expose: ["3000"]
+    depends_on:
+      backend: { condition: service_started }
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    restart: *restart
+    logging: *default-logging
+    networks: [bizik]
+
+  web-admin:
+    image: ${REGISTRY}/qatiqa-web-admin:${IMAGE_TAG:-latest}
+    container_name: bizik-web-admin
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      HOSTNAME: "0.0.0.0"
+      API_INTERNAL_URL: http://backend:3000/api/v1
+      NEXT_PUBLIC_SITE_URL: https://admin.bizik.cm
+    expose: ["3000"]
+    depends_on:
+      backend: { condition: service_started }
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    restart: *restart
+    logging: *default-logging
+    networks: [bizik]
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: bizik-nginx
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro          # site configs
+      - ./certbot/www:/var/www/certbot:ro            # ACME challenge webroot (renewals)
+      - /etc/letsencrypt:/etc/letsencrypt:ro         # Let's Encrypt certs (host)
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      backend: { condition: service_started }
+      web-user: { condition: service_started }
+      web-admin: { condition: service_started }
+    cap_drop: ["ALL"]
+    cap_add: ["NET_BIND_SERVICE", "CHOWN", "SETUID", "SETGID"]
+    security_opt: ["no-new-privileges:true"]
+    restart: *restart
+    logging: *default-logging
+    networks: [bizik]
+
+volumes:
+  redisdata:
+  uploads:
+
+networks:
+  bizik:
+    name: bizik

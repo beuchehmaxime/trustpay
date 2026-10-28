@@ -1,0 +1,255 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* BiZik brand palette - mirrors application/mobile/src/theme/colors.ts.
+   Enables mobile-parity utilities like `bg-brand-500`, `text-ink`, `text-positive`. */
+@theme {
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-200: #bfdbfe;
+  --color-brand-300: #93c5fd;
+  --color-brand-400: #60a5fa;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2f74e8;
+  --color-brand-700: #2563eb;
+  --color-brand-800: #1e51c4;
+  --color-brand-900: #1b3e86;
+  --color-cyan-400: #38bdf8;
+  --color-cyan-500: #22b8d9;
+  --color-cyan-600: #0e9cc0;
+  --color-ink: #2b3a4f;
+  --color-ink-card: #16263f;
+  --color-body: #475569; /* paragraph prose */
+  --color-subtle: #94a3b8; /* placeholders, inactive tab icons */
+  --color-brand-border: #d6e6fe; /* info-banner / emphasis borders */
+  --color-positive: #16a34a;
+  --color-positive-text: #15803d;
+  --color-positive-bg: #dcfce7;
+  --color-negative: #e11d48;
+  --color-negative-text: #be123c;
+  --color-negative-bg: #ffe4e6;
+  --color-negative-bg-soft: #fff1f2;
+  --color-warning: #f59e0b;
+  --color-warning-text: #b45309;
+  --color-warning-bg: #fef3c7;
+  --color-warning-bg-soft: #fffbeb;
+  --color-cyan-text: #0e7490;
+  --color-cyan-bg: #e0f7fc;
+  --color-pending-bg: #f1f5fa;
+  --color-surface: #ffffff;
+  --color-hairline: #e7ecf3;
+  --color-field: #cbd5e1;
+
+  /* Elevation - matches the handoff shadow tokens (shadow-card, shadow-fab, …). */
+  --shadow-card: 0 10px 20px rgba(11, 31, 58, 0.05);
+  --shadow-card-raised: 0 12px 24px rgba(11, 31, 58, 0.06);
+  --shadow-brand: 0 10px 20px rgba(37, 99, 235, 0.22);
+  --shadow-fab: 0 12px 22px rgba(37, 99, 235, 0.34);
+  --shadow-dialog: 0 24px 48px rgba(11, 31, 58, 0.28);
+  --shadow-sheet: 0 -12px 32px rgba(11, 31, 58, 0.2);
+}
+
+/* Brand gradients from the handoff (auth hero + dark wallet card). */
+@layer components {
+  .bg-hero-gradient {
+    background-image: linear-gradient(150deg, #5b9bf7 0%, #3b82f6 52%, #38bdf8 100%);
+  }
+  .bg-wallet-gradient {
+    background-image: linear-gradient(160deg, #1e3153 0%, #16263f 60%, #101d33 100%);
+  }
+}
+
+/* Light theme (the only theme - see forcedTheme in providers.tsx). Values map
+   the shadcn semantic tokens onto the BiZik mobile palette. */
+:root {
+  --radius: 0.75rem;
+  --background: #f5f8fc; /* bg */
+  --foreground: #2b3a4f; /* ink */
+  --card: #ffffff; /* surface */
+  --card-foreground: #2b3a4f;
+  --popover: #ffffff;
+  --popover-foreground: #2b3a4f;
+  --primary: #3b82f6; /* brand-500 */
+  --primary-foreground: #ffffff;
+  --secondary: #eff6ff; /* brand-50 tint */
+  --secondary-foreground: #1b3e86; /* brand-900 */
+  --muted: #eef3f9; /* soft neutral surface */
+  --muted-foreground: #64748b; /* mobile muted text */
+  --accent: #eff6ff; /* brand-50 */
+  --accent-foreground: #2563eb; /* brand-700 */
+  --destructive: #e11d48; /* negative */
+  --border: #e7ecf3; /* hairline */
+  --input: #cbd5e1; /* field */
+  --ring: #3b82f6; /* brand */
+  --chart-1: #3b82f6;
+  --chart-2: #22b8d9;
+  --chart-3: #16a34a;
+  --chart-4: #f59e0b;
+  --chart-5: #6366f1;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #2b3a4f;
+  --sidebar-primary: #3b82f6;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eff6ff;
+  --sidebar-accent-foreground: #2563eb;
+  --sidebar-border: #e7ecf3;
+  --sidebar-ring: #3b82f6;
+}
+
+/* Kept identical to :root so nothing renders dark even if `.dark` is ever set. */
+.dark {
+  --background: #f5f8fc;
+  --foreground: #2b3a4f;
+  --card: #ffffff;
+  --card-foreground: #2b3a4f;
+  --popover: #ffffff;
+  --popover-foreground: #2b3a4f;
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --secondary: #eff6ff;
+  --secondary-foreground: #1b3e86;
+  --muted: #eef3f9;
+  --muted-foreground: #64748b;
+  --accent: #eff6ff;
+  --accent-foreground: #2563eb;
+  --destructive: #e11d48;
+  --border: #e7ecf3;
+  --input: #cbd5e1;
+  --ring: #3b82f6;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #2b3a4f;
+  --sidebar-primary: #3b82f6;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eff6ff;
+  --sidebar-accent-foreground: #2563eb;
+  --sidebar-border: #e7ecf3;
+  --sidebar-ring: #3b82f6;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+
+  /* Desktop (mouse / fine pointer): modern, slim scrollbars - thin rail,
+     rounded slate thumb, no track. Transparent border + background-clip
+     makes the visible thumb ~4px. */
+  @media (pointer: fine) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 transparent;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 999px;
+      border: 2px solid transparent;
+      background-clip: content-box;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: #94a3b8;
+    }
+    ::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+  }
+
+  /* Installed PWA + touch devices: no visible scrollbars at all
+     (scrolling still works - the bars are simply hidden). */
+  @media (display-mode: standalone), (pointer: coarse) {
+    * {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    ::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+  }
+}
+
+@layer base {
+  /*
+   * Nothing may push the page wider than the screen.
+   *
+   * A single overflowing child - a toast sized for a desktop, a row of code
+   * boxes, a long unbroken string - drags the whole layout sideways on a phone,
+   * so every card ends up clipped at the right edge rather than just the thing
+   * at fault. Clamping here means one mistake cannot disfigure a whole screen.
+   */
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /*
+   * Sonner sizes toasts at a fixed 356px, which is wider than the usable width
+   * of a small phone once its own 16px offsets are counted - so the toast, not
+   * the page, was the thing hanging off the right edge.
+   */
+  [data-sonner-toaster] {
+    --width: min(356px, calc(100vw - 2rem));
+    max-width: calc(100vw - 2rem);
+  }
+}

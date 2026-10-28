@@ -1,0 +1,33 @@
+{
+  "_comment": [
+    "Reviewed exceptions to the dependency gate, one entry per package that an",
+    "advisory is reported against. An entry is a decision somebody made and",
+    "signed, not a mute button: `reviewBy` is enforced, so an exception that",
+    "nobody revisits fails the build on its own once the date passes. That is",
+    "the difference between a documented risk acceptance an auditor will accept",
+    "(SOC 2 CC7.1, ISO 27001 A.8.8) and a disabled control they will not.",
+    "",
+    "Only add an entry when the advisory genuinely cannot be reached in what we",
+    "deploy. If it can be reached, fix it."
+  ],
+  "backend": [
+    {
+      "package": "deepmerge-ts",
+      "advisory": "Stack exhaustion when merging recursive object graphs",
+      "reason": "Reached only through the Prisma CLI's config loader, which runs once at container start to read our own prisma.config and never on a request path. The input is a file we wrote, not anything a user can send. npm's suggested fix is prisma@6.12.0, which is OLDER than the 6.19.3 we run, so taking it would be a downgrade rather than a fix.",
+      "reviewBy": "2027-01-31"
+    },
+    {
+      "package": "prisma",
+      "advisory": "Inherited from @prisma/config -> deepmerge-ts",
+      "reason": "Already a devDependency. It is still counted because @prisma/client declares it as a peer, and it is genuinely present in the image because the entrypoint runs `prisma db push` on start. Same reachability argument as deepmerge-ts above.",
+      "reviewBy": "2027-01-31"
+    },
+    {
+      "package": "@prisma/config",
+      "advisory": "Inherited from deepmerge-ts",
+      "reason": "Transitive carrier of the entry above; no separate defect of its own.",
+      "reviewBy": "2027-01-31"
+    }
+  ]
+}

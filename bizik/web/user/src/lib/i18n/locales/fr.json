@@ -1,0 +1,2565 @@
+{
+  "common": {
+    "retry": "Réessayer",
+    "error": "Une erreur est survenue",
+    "processing": "Traitement en cours…",
+    "close": "Fermer"
+  },
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "wallet": "Portefeuille",
+    "addMoney": "Dépôt",
+    "withdraw": "Retirer",
+    "convert": "Convertir",
+    "transactions": "Transactions",
+    "activity": "Activité",
+    "deals": "Accords",
+    "disputes": "Litiges",
+    "settings": "Paramètres",
+    "help": "Aide et support",
+    "home": "Accueil",
+    "profile": "Profil",
+    "newDeal": "Nouvel accord"
+  },
+  "group": {
+    "overview": "Aperçu",
+    "money": "Argent",
+    "work": "Travail",
+    "settings": "Paramètres",
+    "account": "Compte"
+  },
+  "user": {
+    "profile": "Profil",
+    "signOut": "Se déconnecter"
+  },
+  "lang": {
+    "title": "Langue",
+    "en": "English",
+    "fr": "Français"
+  },
+  "offline": {
+    "title": "Vous êtes hors ligne",
+    "subtitle": "Les pages déjà ouvertes fonctionnent toujours. Nous synchroniserons dès votre reconnexion.",
+    "retry": "Réessayer",
+    "cached": "Les transactions et le portefeuille sont en cache"
+  },
+  "dashboard": {
+    "loadError": "Impossible de charger votre tableau de bord.",
+    "welcomeBack": "Bon retour",
+    "walletBalance": "Solde du portefeuille",
+    "lockedInEscrow": "Bloqué sous séquestre",
+    "fundsProtected": "Fonds protégés",
+    "inEscrow": "Sous séquestre",
+    "activeDeals": "Accords actifs",
+    "noActiveDeals": "Aucun accord actif",
+    "noActiveDealsSub": "Les accords que vous créez ou auxquels vous êtes invité apparaîtront ici.",
+    "completed": "Terminés",
+    "needAction": "{{count}} à traiter",
+    "onTime": "{{pct}} % à temps",
+    "dealsCount": "{{count}} accords",
+    "needsAttention": "Nécessite votre attention",
+    "seeAll": "Tout voir",
+    "escrowFlow": "Flux du séquestre",
+    "escrowFlowSub": "Versé vs encore sous séquestre",
+    "lastMonths": "6 derniers mois",
+    "escrowByDeal": "Séquestre par accord",
+    "activity": "Activité",
+    "youGetPaid": "vous êtes payé",
+    "milestonesShort": "{{done}}/{{total}} étapes",
+    "install": {
+      "title": "Ajouter BiZik à votre écran d'accueil",
+      "subtitle": "Plein écran, fonctionne hors ligne.",
+      "dismiss": "Fermer"
+    },
+    "table": {
+      "deal": "Accord",
+      "escrowValue": "Valeur séquestrée",
+      "status": "Statut",
+      "nextStep": "Prochaine étape"
+    },
+    "quick": {
+      "startDeal": "Nouvel accord",
+      "wallet": "Portefeuille",
+      "disputes": "Litiges",
+      "activities": "Activités",
+      "transactions": "Transactions"
+    },
+    "noActivity": "Aucune activité récente pour le moment.",
+    "completedNote": "Fonds libérés"
+  },
+  "wallet": {
+    "loadError": "Impossible de charger votre portefeuille.",
+    "availableBalance": "Solde disponible",
+    "addMoney": "Ajouter de l'argent",
+    "withdraw": "Retirer",
+    "convert": "Convertir",
+    "inEscrow": "Sous séquestre",
+    "payoutProcessing": "Versement en cours",
+    "completed": "Terminé",
+    "escrowFlow": "Flux du séquestre",
+    "lastMonths": "6 derniers mois",
+    "holdings": "Avoirs par devise",
+    "yourCurrencies": "Vos devises",
+    "payoutMethods": "Méthodes de versement",
+    "manage": "Gérer",
+    "addMethod": "Ajouter une méthode",
+    "noPayoutMethods": "Aucun moyen de versement pour l’instant",
+    "transactions": "Transactions",
+    "seeAll": "Tout voir",
+    "badge": {
+      "default": "Par défaut",
+      "verified": "Vérifié",
+      "pending": "En attente"
+    },
+    "table": {
+      "description": "Description",
+      "deal": "Accord",
+      "amount": "Montant",
+      "status": "Statut"
+    },
+    "status": {
+      "completed": "Terminé",
+      "processing": "En cours",
+      "pending": "En attente",
+      "failed": "Échoué"
+    },
+    "tx": {
+      "release": "Séquestre versé",
+      "topup": "Rechargement du portefeuille",
+      "withdrawal": "Retrait",
+      "fee": "Frais de service",
+      "fx": "Conversion de devise"
+    }
+  },
+  "deposit": {
+    "title": "Ajouter de l'argent",
+    "subtitle": "Rechargez votre portefeuille pour financer le séquestre instantanément.",
+    "amountToAdd": "Montant à ajouter",
+    "payFrom": "Payer depuis",
+    "instant": "Instantané",
+    "arrives1h": "Arrive sous 1 heure",
+    "feeLabel": "{{pct}} % de frais BiZik",
+    "methodMomo": "MTN Mobile Money",
+    "methodCard": "Carte ou virement bancaire",
+    "beforeConfirm": "Avant de confirmer",
+    "amount": "Montant",
+    "bizikFeePct": "Frais BiZik ({{pct}} %)",
+    "bizikFee": "Frais BiZik",
+    "totalCharged": "Total débité",
+    "creditedNote": "Crédité sur votre solde {{currency}} dès validation.",
+    "cta": "Ajouter · {{total}}",
+    "cancel": "Annuler",
+    "recentTopups": "Rechargements récents",
+    "successToast": "Argent ajouté à votre portefeuille",
+    "noTopups": "Aucune recharge pour le moment",
+    "chargeAmount": "{{amount}} seront débités",
+    "noMethods": "Aucun moyen de paiement enregistré",
+    "noMethodsBody": "Ajoutez un moyen de paiement pour alimenter votre portefeuille.",
+    "addMethod": "Ajouter un moyen de paiement",
+    "successTitle": "Argent ajouté",
+    "successBody": "Crédité sur votre solde {{currency}}.",
+    "done": "Retour au portefeuille",
+    "redirecting": "Retour à votre portefeuille…"
+  },
+  "withdraw": {
+    "title": "Retirer",
+    "subtitle": "L'argent quitte votre portefeuille, pas le séquestre.",
+    "availableToWithdraw": "Disponible au retrait",
+    "availableBalanceAmount": "Solde disponible {{amount}}",
+    "lockedInEscrow": "Bloqué sous séquestre",
+    "amountToWithdraw": "Montant à retirer",
+    "max": "Max",
+    "tierLimit": "Limite Niveau 2 : {{limit}} par mois. {{left}} restant ce mois-ci.",
+    "overBalance": "Supérieur à votre solde disponible.",
+    "payTo": "Verser à",
+    "feeFlat": "{{fee}} de frais BiZik",
+    "instant": "Instantané",
+    "arrivesBank": "Arrive sous 1 à 2 jours ouvrés",
+    "methodBank": "GTBank · Ada Okafor",
+    "methodMomo": "MTN Mobile Money",
+    "addMethod": "Ajouter une méthode",
+    "beforeConfirm": "Avant de confirmer",
+    "amount": "Montant",
+    "bizikFee": "Frais BiZik",
+    "youReceive": "Vous recevez",
+    "arrivesBy": "Arrive avant le {{date}}",
+    "cta": "Retirer {{amount}}",
+    "cancel": "Annuler",
+    "escrowSafeTitle": "Le séquestre n'est jamais touché",
+    "escrowSafeBody": "Seul votre solde disponible peut être retiré. L'argent détenu pour un accord reste protégé jusqu'à l'approbation de l'étape ou la résolution d'un litige.",
+    "successToast": "Retrait demandé",
+    "transferFee": "Frais de transfert",
+    "debitedFromWallet": "Debite du portefeuille"
+  },
+  "convert": {
+    "title": "Convertir",
+    "titleFx": "Convertir (FX)",
+    "subtitle": "Le taux est bloqué pendant 60 secondes dès la confirmation.",
+    "from": "De",
+    "to": "Vers",
+    "availableBalance": "Solde disponible {{amount}}",
+    "balance": "Solde {{amount}}",
+    "rateLine": "1 {{to}} = {{rate}}",
+    "beforeConfirm": "Avant de confirmer",
+    "rate": "Taux",
+    "amount": "Montant",
+    "bizikFeePct": "Frais BiZik ({{pct}} %)",
+    "youGet": "Vous recevez",
+    "creditedNote": "Crédité sur votre solde {{currency}}",
+    "rateLocked": "Taux bloqué pendant 60 s",
+    "live": "En direct",
+    "liveUpdated": "Taux du marché en direct · mis à jour à {{time}}",
+    "cta": "Convertir {{amount}}",
+    "cancel": "Annuler",
+    "holdings": "Avoirs par devise",
+    "successToast": "Conversion effectuée"
+  },
+  "activity": {
+    "title": "Activité",
+    "subtitle": "Tout ce qui se passe sur vos accords, votre argent et votre compte.",
+    "unreadCount": "{{count}} non lus",
+    "allCaughtUp": "Vous êtes à jour",
+    "markAllRead": "Tout marquer comme lu",
+    "emptyTitle": "Rien pour l'instant",
+    "emptyBody": "Les nouvelles notifications apparaîtront ici au fur et à mesure.",
+    "filter": {
+      "all": "Tout",
+      "unread": "Non lus",
+      "deal": "Accords",
+      "money": "Argent",
+      "dispute": "Litiges",
+      "identity": "Identité",
+      "security": "Sécurité"
+    },
+    "time": {
+      "now": "À l'instant",
+      "hoursAgo": "il y a {{n}} h",
+      "dayAgo": "il y a {{n}} jour",
+      "daysAgo": "il y a {{n}} jours",
+      "minutesAgo": "{{n}}min"
+    },
+    "kind": {
+      "milestoneSubmitted": {
+        "title": "Étape soumise",
+        "body": "{{name}} a soumis l'étape {{n}}. Vérifiez-la pour verser {{amount}}."
+      },
+      "mediatorEvidence": {
+        "title": "Le médiateur a besoin de preuves",
+        "body": "Le litige {{ref}} nécessite votre page de périmètre signée avant le {{date}}."
+      },
+      "walletToppedUp": {
+        "title": "Portefeuille rechargé",
+        "body": "{{amount}} ajoutés depuis {{method}}."
+      },
+      "identityVerified": {
+        "title": "Identité vérifiée",
+        "body": "Vous êtes Niveau 2. Votre limite de retrait est maintenant de {{amount}} / mois."
+      },
+      "newSignIn": {
+        "title": "Nouvelle connexion",
+        "body": "Nouvelle connexion depuis {{device}} · {{location}}."
+      },
+      "escrowReleased": {
+        "title": "Séquestre versé",
+        "body": "{{amount}} vous ont été versés pour {{accord}}."
+      },
+      "dealInvite": {
+        "title": "Nouvelle invitation à un accord",
+        "body": "{{name}} vous a invité à un accord · {{accord}}."
+      },
+      "withdrawalSent": {
+        "title": "Retrait en cours",
+        "body": "{{amount}} sont en route vers {{method}}."
+      },
+      "revisionRequested": {
+        "title": "Révision demandée",
+        "body": "{{name}} a demandé des modifications sur {{accord}}."
+      },
+      "deliveryDue": {
+        "title": "Livraison due demain",
+        "body": "{{accord}} est due le {{date}}."
+      },
+      "conversionDone": {
+        "title": "Conversion terminée",
+        "body": "Vous avez converti {{from}} en {{amount}}."
+      },
+      "disputeResolved": {
+        "title": "Litige résolu",
+        "body": "Le litige {{ref}} a été résolu en votre faveur."
+      }
+    },
+    "detail": {
+      "notFound": "Cette notification n'est plus disponible.",
+      "viewDeal": "Voir l'accord",
+      "viewDispute": "Voir le litige",
+      "viewVerification": "Voir la vérification",
+      "viewSecurity": "Paramètres de sécurité",
+      "viewWallet": "Aller au portefeuille"
+    },
+    "category": {
+      "PAYMENT": "Paiement",
+      "CONTRACT": "Accord",
+      "KYC": "Vérification",
+      "DISPUTE": "Litige",
+      "SECURITY": "Sécurité",
+      "SYSTEM": "Système"
+    }
+  },
+  "tx": {
+    "kpi": {
+      "moneyIn": "Entrées",
+      "moneyOut": "Sorties",
+      "feesPaid": "Frais payés",
+      "count": "Transactions"
+    },
+    "searchPlaceholder": "Rechercher par référence, accord ou contrepartie",
+    "filter": {
+      "all": "Tout",
+      "escrow": "Séquestre",
+      "topup": "Rechargements",
+      "payout": "Versements",
+      "fx": "FX"
+    },
+    "exportCsv": "Exporter CSV",
+    "col": {
+      "description": "Description",
+      "deal": "Accord",
+      "method": "Méthode",
+      "amount": "Montant",
+      "status": "Statut"
+    },
+    "today": "Aujourd'hui",
+    "loading": "Chargement",
+    "view": "Voir",
+    "showing": "Affichage {{from}}-{{to}} / {{total}}",
+    "empty": "Aucune transaction ne correspond à vos filtres.",
+    "emptyHint": "Essayez un autre filtre ou terme de recherche.",
+    "status": {
+      "completed": "Terminé",
+      "pending": "En attente",
+      "processing": "En cours",
+      "failed": "Échoué",
+      "disputed": "En litige"
+    },
+    "kind": {
+      "escrowReleased": "Séquestre versé",
+      "walletTopup": "Rechargement du portefeuille",
+      "withdraw": "Retrait",
+      "escrowFunded": "Séquestre financé",
+      "currencyConversion": "Conversion de devise",
+      "escrowHeldDispute": "Séquestre bloqué - litige"
+    },
+    "detail": {
+      "eyebrow": "Détails de la transaction",
+      "about": "De quoi s'agissait-il",
+      "deal": "Accord",
+      "breakdown": "Détail",
+      "gross": "Montant brut",
+      "fee": "Frais BiZik",
+      "net": "Montant net",
+      "details": "Informations",
+      "reference": "Référence",
+      "dateTime": "Date et heure",
+      "counterparty": "Contrepartie",
+      "takenFrom": "Débité de",
+      "paidInto": "Versé sur",
+      "timeline": "Chronologie",
+      "downloadReceipt": "Télécharger le reçu",
+      "shareReceipt": "Partager le reçu",
+      "copyReference": "Copier la référence",
+      "copied": "Copié",
+      "reportProblem": "Signaler un problème"
+    },
+    "step": {
+      "requested": "Demandé",
+      "approvedByYou": "Approuvé par vous",
+      "settled": "Réglé",
+      "initiated": "Initié",
+      "processing": "En cours",
+      "held": "Fonds bloqués",
+      "underReview": "En examen"
+    },
+    "errorTitle": "Impossible de charger les transactions",
+    "errorHint": "Vérifiez votre connexion et réessayez."
+  },
+  "deals": {
+    "detailTitle": "Détail de l'accord",
+    "kpi": {
+      "active": "Accords actifs",
+      "heldInEscrow": "Sous séquestre",
+      "invited": "Invitations"
+    },
+    "tab": {
+      "mine": "Mes accords",
+      "invited": "Invitations"
+    },
+    "newDeal": "Nouvel accord",
+    "searchPlaceholder": "Rechercher des accords",
+    "forName": "{{amount}} pour {{name}}",
+    "milestones": "{{done}}/{{total}} étapes",
+    "due": "Échéance {{date}}",
+    "cardBanner": {
+      "in_progress": "Prochaine étape : approuvez la livraison pour verser l'étape suivante.",
+      "awaiting_funding": "Prochaine étape : financez le séquestre pour démarrer.",
+      "in_review": "Prochaine étape : en attente de l'approbation de l'acheteur.",
+      "disputed": "Un médiateur BiZik examine ce litige."
+    },
+    "filter": {
+      "all": "Tout",
+      "pending": "En attente",
+      "awaiting_funding": "En attente de financement",
+      "in_progress": "En cours",
+      "disputed": "En litige"
+    },
+    "filterLabel": "Filtrer",
+    "filterStatus": "Statut",
+    "col": {
+      "deal": "Accord",
+      "escrowValue": "Valeur séquestrée",
+      "progress": "Progression",
+      "status": "Statut",
+      "nextStep": "Prochaine étape"
+    },
+    "rel": {
+      "to": "à",
+      "from": "de",
+      "invitedBy": "Invité par"
+    },
+    "meta": {
+      "singlePayment": "paiement unique",
+      "youGetPaid": "vous êtes payé"
+    },
+    "status": {
+      "in_progress": "En cours",
+      "awaiting_funding": "En attente de financement",
+      "in_review": "En révision",
+      "pending": "En attente",
+      "disputed": "En litige",
+      "completed": "Terminé",
+      "cancelled": "Annulé"
+    },
+    "next": {
+      "approveMilestone": "Approuver l'étape {{n}}",
+      "fundEscrow": "Financer le séquestre",
+      "waitingApproval": "En attente d'approbation"
+    },
+    "accept": "Accepter",
+    "decline": "Refuser",
+    "declineConfirm": "Refuser cette transaction ? Cette action est irréversible.",
+    "declineSuccess": "Invitation refusée",
+    "banner": {
+      "invitesWaiting_one": "Vous avez {{count}} invitation à un accord en attente",
+      "invitesWaiting_other": "Vous avez {{count}} invitations à des accords en attente",
+      "hint": "Acceptez ou refusez pour commencer.",
+      "review": "Examiner"
+    },
+    "empty": "Aucun accord ne correspond à vos filtres.",
+    "emptyMineTitle": "Vous n'avez encore aucun accord",
+    "emptyMineSub": "Créez un accord pour garder un paiement en séquestre jusqu'à la fin du travail.",
+    "emptyInvited": "Aucune invitation pour l'instant",
+    "detail": {
+      "total": "Total",
+      "whoPays": "Qui paie",
+      "whoGetsPaid": "Qui est payé",
+      "signedBoth": "Signé par les deux · protégé par BiZik Escrow",
+      "signedPending": "En attente des deux signatures",
+      "scope": "Périmètre du travail",
+      "timeline": "Chronologie des étapes",
+      "addMilestone": "Ajouter une étape",
+      "col": {
+        "milestone": "Étape",
+        "amount": "Montant",
+        "deliveryDate": "Date de livraison",
+        "status": "Statut"
+      },
+      "mStatus": {
+        "released": "Versé",
+        "submitted": "Soumis",
+        "pending": "En attente",
+        "funded": "Financé",
+        "approved": "Approuvé",
+        "in_progress": "En cours",
+        "disputed": "En litige",
+        "cancelled": "Annulé"
+      },
+      "deliveryNote": "Note de livraison · Révision {{rev}}",
+      "deliveryNoteShort": "Note de livraison",
+      "payee": "Bénéficiaire",
+      "payer": "Payeur",
+      "totalYouPay": "Total · Vous payez",
+      "totalYouReceive": "Total · Vous recevez",
+      "approxFor": "{{approx}} pour {{name}}",
+      "dueRevision": "Échéance {{date}} · Révision {{rev}}",
+      "due": "Échéance {{date}}",
+      "whatNext": "Et ensuite",
+      "next": {
+        "review": "Prochaine étape : vérifiez la livraison, puis versez {{amount}}.",
+        "fund": "Prochaine étape : financez le séquestre pour que {{name}} puisse commencer.",
+        "waiting": "Vous avez livré. En attente que {{name}} approuve et verse {{amount}}.",
+        "invite": "{{name}} vous a invité à cet accord. Acceptez pour commencer.",
+        "awaitingDelivery": "Prochaine étape : en attente que {{name}} livre le travail.",
+        "deliver": "Le séquestre est financé - soumettez votre travail dès qu'il est prêt.",
+        "awaitingFund": "En attente que {{name}} finance le séquestre avant de commencer."
+      },
+      "autoReleases": "Versement auto dans {{time}}",
+      "approveRelease": "Approuver et verser",
+      "submitWork": "Soumettre le travail",
+      "markComplete": "Marquer terminé",
+      "requestRevision": "Demander une révision",
+      "openDispute": "Ouvrir un litige",
+      "detailsScope": "Détails et périmètre",
+      "released": "Versé",
+      "inEscrow": "Sous séquestre",
+      "requiredDate": "Date de livraison requise",
+      "bizikFee": "Frais BiZik",
+      "shareInvite": "Partager l'invitation",
+      "shareDeal": "Partager l'accord",
+      "moreOptions": "Plus d'options",
+      "copyLink": "Copier le lien",
+      "linkCopied": "Lien copié dans le presse-papiers",
+      "linkCopyFailed": "Impossible de copier le lien",
+      "shareText": "Rejoignez-moi sur BiZik pour « {{title}} » - protégé par séquestre.",
+      "escrow": "Séquestre",
+      "escrowHeld": "Sous séquestre",
+      "refunded": "Remboursé",
+      "unfunded": "Pas encore financé",
+      "protectedByEscrow": "Les fonds sont protégés par BiZik Escrow jusqu'à l'approbation du travail.",
+      "details": "Détails",
+      "dealRef": "Référence de l'accord",
+      "totalValue": "Valeur totale",
+      "milestonesLabel": "Jalons terminés",
+      "createdOn": "Créé le",
+      "revisionRequested": "Révision demandée",
+      "cancelDeal": "Annuler l'accord",
+      "cancelDealConfirm": "Annuler cet accord ? Cela y met fin pour vous deux et c'est irréversible - un accord annulé ne peut être ni relancé ni renvoyé.",
+      "cancelDealSuccess": "Accord annulé",
+      "cancelMilestone": "Annuler le jalon",
+      "cancelMilestoneConfirm": "Annuler ce jalon ? Le reste de l'accord continue et le total baisse de son montant. C'est irréversible.",
+      "cancelMilestoneSuccess": "Jalon annulé",
+      "remind": "Envoyer un rappel",
+      "remindSent": "{{name}} a été relancé au sujet de cet accord.",
+      "remindNothing": "Cet accord n'attend rien de l'autre partie pour le moment.",
+      "remindTooSoon": "Vous les avez relancés récemment - vous pourrez renvoyer un rappel dans environ {{minutes}} minutes.",
+      "remindYourMove": {
+        "accept": "Cet accord attend que vous l'acceptiez.",
+        "fund": "Cet accord attend que vous le financiez - l'autre partie ne peut pas avancer sans cela.",
+        "deliver": "Cet accord attend votre livraison.",
+        "approve": "Cet accord attend que vous examiniez la livraison et libériez le paiement."
+      },
+      "downloadRecord": "Télécharger le récapitulatif (PDF)"
+    },
+    "release": {
+      "title": "Verser {{amount}} à {{name}} ?",
+      "subtitle": "Vous confirmez la livraison de l'étape {{n}}. L'argent quitte le séquestre immédiatement.",
+      "amount": "Montant",
+      "fee": "Frais BiZik",
+      "payeeReceives": "Le bénéficiaire reçoit",
+      "cannotUndo": "Cette action est irréversible.",
+      "cancel": "Annuler",
+      "confirm": "Approuver et verser"
+    },
+    "revision": {
+      "title": "Demander une révision",
+      "subtitle": "Indiquez ce qui doit changer sur « {{title}} ». Cela réinitialise la période de vérification.",
+      "feedbackLabel": "Qu'est-ce qui doit changer ?",
+      "feedbackPlaceholder": "Soyez précis pour qu'ils puissent corriger rapidement…",
+      "minHint": "Ajoutez au moins quelques mots.",
+      "cancel": "Annuler",
+      "confirm": "Envoyer la demande de révision",
+      "successToast": "Révision demandée"
+    },
+    "submit": {
+      "title": "Soumettre votre travail",
+      "subtitle": "Ajoutez une note et des photos du travail terminé. Le payeur vérifie avant la libération des fonds.",
+      "whatToFix": "À corriger",
+      "noteLabel": "Note (facultative)",
+      "notePlaceholder": "Décrivez ce que vous avez livré…",
+      "photosLabel": "Photos",
+      "addPhotos": "Ajouter des photos",
+      "removePhoto": "Retirer la photo",
+      "photosHint": "Jusqu'à {{max}} images.",
+      "cancel": "Annuler",
+      "confirm": "Soumettre le travail",
+      "successToast": "Livraison soumise"
+    }
+  },
+  "newDeal": {
+    "step": "Étape {{n}} / {{total}}",
+    "cancel": "Annuler",
+    "basics": {
+      "title": "L'essentiel",
+      "subtitle": "Avec qui vous traitez, et combien est protégé.",
+      "dealType": "Type d'accord",
+      "simple": "Simple",
+      "simpleDesc": "Paiement unique",
+      "milestones": "Étapes",
+      "milestonesDesc": "Paiements échelonnés",
+      "dealTitle": "Titre de l'accord",
+      "dealTitlePlaceholder": "ex. Identité de marque et packaging",
+      "counterpartyPhone": "Numéro de la contrepartie",
+      "phonePlaceholder": "24 812 5566",
+      "alreadyOnBiZik": "Déjà sur BiZik",
+      "willInvite": "Nouveau sur BiZik - nous l'inviterons par SMS",
+      "roleQuestion": "Votre rôle dans cet accord",
+      "roleGettingPaid": "Je suis le Vendeur",
+      "rolePaying": "Je suis l'Acheteur",
+      "rolePayingHint": "Acheteur : vous payez dans le séquestre ; le vendeur livre et est payé une fois chaque étape approuvée.",
+      "roleGettingPaidHint": "Vendeur : vous livrez les biens/le travail et êtes payé depuis le séquestre une fois chaque étape approuvée.",
+      "amount": "Montant",
+      "amountNote": "Saisi dans votre devise ({{currency}}). La contrepartie voit l'équivalent dans la sienne.",
+      "deliveryDate": "Date de livraison requise",
+      "selectDate": "Choisir une date",
+      "scope": "Périmètre du travail",
+      "scopePlaceholder": "Que faut-il livrer ?",
+      "continue": "Continuer",
+      "counterpartyName": "Son nom (facultatif)",
+      "counterpartyNamePlaceholder": "Un nom que vous reconnaîtrez (facultatif)",
+      "lookupChecking": "Vérification de son compte BiZik…",
+      "lookupSelf": "C'est votre propre numéro - choisissez un autre contact."
+    },
+    "milestones": {
+      "title": "Étapes",
+      "subtitle": "Répartissez le total en étapes. Chacune est financée et versée séparément.",
+      "milestoneN": "Étape {{n}}",
+      "deliverablePlaceholder": "Que livre cette étape ?",
+      "amountPlaceholder": "0,00",
+      "date": "Date",
+      "addMilestone": "Ajouter une étape",
+      "runningTotal": "Total en cours",
+      "toAllocate": "{{amount}} encore à répartir entre les étapes.",
+      "overAllocated": "{{amount}} au-dessus du montant de l'accord.",
+      "allocated": "Tous les fonds répartis entre les étapes.",
+      "back": "Retour",
+      "continue": "Continuer"
+    },
+    "review": {
+      "title": "Vérification",
+      "subtitle": "Vérifiez les chiffres. Rien ne bouge avant votre confirmation.",
+      "dealSummary": "Résumé de l'accord",
+      "counterparty": "Contrepartie",
+      "whoPays": "Qui paie",
+      "youPay": "Vous payez",
+      "theyPay": "Ils paient",
+      "role": "Votre rôle",
+      "roleBuyer": "Acheteur - vous payez",
+      "roleSeller": "Vendeur - vous recevez",
+      "dealType": "Type d'accord",
+      "simpleType": "Simple",
+      "milestonesType": "{{count}} étapes",
+      "deliveryDate": "Date de livraison requise",
+      "escrowValue": "Valeur séquestrée",
+      "bizikFee": "Frais BiZik ({{pct}} %)",
+      "total": "Vous payez",
+      "totalThem": "Ils paient",
+      "counterpartySees": "{{name}} voit ≈ {{amount}}",
+      "infoMilestones": "L'argent reste sous séquestre jusqu'à ce que vous approuviez chaque étape. {{name}} est notifié par SMS une fois financé.",
+      "infoSimple": "L'argent reste sous séquestre jusqu'à ce que vous approuviez la livraison. {{name}} est notifié par SMS une fois financé.",
+      "back": "Retour",
+      "create": "Créer et financer",
+      "creating": "Création…",
+      "created": "Accord créé",
+      "createdBody": "{{name}} a été notifié par SMS."
+    },
+    "gate": {
+      "title": "Vérifiez votre compte pour créer un accord",
+      "body": "Une vérification d'identité rapide (KYC) - téléphone, pays et une pièce d'identité - est nécessaire avant de pouvoir créer des accords et être payé.",
+      "cta": "Vérifier mon compte",
+      "footer": "Vous pouvez toujours payer et suivre les accords auxquels on vous invite."
+    }
+  },
+  "disputes": {
+    "title": "Litiges",
+    "detailTitle": "Détail du litige",
+    "subtitle": "Un médiateur BiZik examine chaque litige. Les fonds restent sous séquestre entre-temps.",
+    "searchPlaceholder": "Rechercher des litiges",
+    "disputedAmount": "Montant en litige",
+    "filterLabel": "Filtrer",
+    "filterStatus": "Statut",
+    "filterAll": "Tout",
+    "filedByMeOnly": "Ouverts par moi uniquement",
+    "resultsNone": "Aucun litige ne correspond à vos filtres.",
+    "col": {
+      "milestone": "Étape",
+      "deal": "Accord",
+      "amount": "Montant",
+      "status": "Statut",
+      "nextStep": "Prochaine étape"
+    },
+    "status": {
+      "under_review": "En examen",
+      "resolved": "Résolu",
+      "open": "Ouvert"
+    },
+    "filedByYou": "Ouvert par vous",
+    "next": {
+      "addEvidence": "Ajouter une preuve",
+      "awaitingMediator": "En attente du médiateur"
+    },
+    "outcomePrefix": "Résultat :",
+    "empty": {
+      "title": "Aucun litige",
+      "body": "Tous vos accords sont en bonne voie. Nous intervenons si cela change."
+    },
+    "detail": {
+      "evidence": "Preuves et messages",
+      "you": "Vous",
+      "mediator": "Médiateur BiZik",
+      "composerPlaceholder": "Écrire un message…",
+      "addEvidence": "Ajouter une preuve",
+      "send": "Envoyer",
+      "now": "À l'instant",
+      "summary": "Résumé de l'accord",
+      "disputedAmount": "Montant en litige",
+      "deal": "Accord",
+      "counterparty": "Contrepartie",
+      "filedByYou": "Ouvert par vous",
+      "filed": "Ouvert",
+      "nextStep": "Prochaine étape",
+      "nextLine": "Prochaine étape : {{text}} avant le {{deadline}}.",
+      "uploadFile": "Téléverser un fichier",
+      "withdrawDispute": "Retirer le litige",
+      "resolved": "Résolu",
+      "outcome": "Résultat"
+    }
+  },
+  "settings": {
+    "hubTitle": "Profil et paramètres",
+    "nav": {
+      "personal": "Informations personnelles",
+      "kyc": "Identité et KYC",
+      "security": "Sécurité et biométrie",
+      "payouts": "Méthodes de versement",
+      "language": "Langue",
+      "languageTitle": "Langue"
+    },
+    "tierLine": "Niveau {{tier}} · {{status}}",
+    "verified": "Vérifié",
+    "hero": {
+      "dealsDone": "Accords réalisés",
+      "onTime": "À temps",
+      "rating": "Note",
+      "active": "Actifs",
+      "total": "Total"
+    },
+    "cards": {
+      "personalSub": "Numéro de téléphone · E-mail (facultatif) · Pays",
+      "kycSub": "Niveau {{tier}} · Limite mensuelle {{limit}}",
+      "securitySub": "Authentification à deux facteurs · Sessions actives",
+      "payoutsSub": "{{list}}",
+      "payoutsEmpty": "Aucun moyen de paiement"
+    },
+    "personal": {
+      "title": "Informations personnelles",
+      "fullName": "Nom complet",
+      "emailOptional": "E-mail (facultatif)",
+      "phoneLogin": "Numéro de téléphone · votre identifiant",
+      "phoneHint": "Le modifier change votre façon de vous connecter. Nous enverrons un code au nouveau numéro.",
+      "companyOptional": "Entreprise (facultatif)",
+      "country": "Pays",
+      "fromId": "Depuis votre pièce",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "saved": "Modifications enregistrées"
+    },
+    "kyc": {
+      "title": "Votre identité",
+      "step": "Étape {{n}} / {{total}}",
+      "subtitle": "Cela débloque le financement, les versements et les retraits.",
+      "country": "Pays",
+      "idType": "Type de pièce",
+      "idNational": "Carte nationale (NIN)",
+      "idPassport": "Passeport",
+      "idDrivers": "Permis de conduire",
+      "idNumber": "Numéro de la pièce",
+      "captureTitle": "Photographiez votre pièce",
+      "captureSubtitle": "Photographiez le recto et le verso, puis prenez un selfie.",
+      "idFront": "Pièce - recto",
+      "idBack": "Pièce - verso",
+      "selfie": "Selfie",
+      "captured": "Capturé",
+      "retake": "Reprendre",
+      "tapToCapture": "Appuyez pour capturer",
+      "openCamera": "Ouvrir la caméra",
+      "uploadFile": "Importer un fichier",
+      "selfieHint": "Regardez la caméra avec un bon éclairage",
+      "reviewTitle": "Vérifier et envoyer",
+      "reviewSubtitle": "Vérifiez que tout correspond à votre document.",
+      "rowCountry": "Pays",
+      "rowIdType": "Type de pièce",
+      "rowIdNumber": "Numéro de la pièce",
+      "rowPhone": "Numéro de téléphone",
+      "encryptedNote": "Vos documents sont chiffrés et utilisés uniquement pour vérifier votre identité.",
+      "submit": "Envoyer pour examen",
+      "statusTitle": "Statut de vérification",
+      "statusSubtitle": "La plupart des examens se terminent en 10 minutes.",
+      "verifiedTitle": "Identité vérifiée",
+      "verifiedBody": "Vous pouvez désormais financer un séquestre et retirer sans contrôle supplémentaire.",
+      "tier": "Niveau",
+      "tierValue": "Niveau {{n}}",
+      "monthlyLimit": "Plafond mensuel",
+      "underReview": "Autres états · En cours d'examen",
+      "rejected": "Rejeté - photo floue. Reprenez et renvoyez.",
+      "restart": "Recommencer l'assistant",
+      "back": "Retour",
+      "continue": "Continuer",
+      "loadError": "Impossible de charger votre statut de vérification.",
+      "submitError": "Impossible d'envoyer vos documents. Veuillez réessayer.",
+      "submitted": "Documents envoyés pour examen",
+      "reviewTitleStatus": "Vérification en cours d'examen",
+      "reviewBody": "Nous vérifions vos documents. La plupart des examens se terminent en 10 minutes.",
+      "rejectedTitle": "Vérification rejetée",
+      "rejectedBody": "Votre soumission n'a pas pu être vérifiée. Consultez la raison et renvoyez.",
+      "notStarted": "Non commencé",
+      "documentsRequired": "Veuillez capturer le recto{{back}} et un selfie avant d'envoyer.",
+      "andBack": " et le verso",
+      "countryPlaceholder": "Choisissez votre pays",
+      "countryRequired": "Choisissez le pays de votre piece d'identite avant de continuer.",
+      "countryLoadFailed": "Impossible de charger la liste des pays. Verifiez votre connexion et reessayez.",
+      "countryLoading": "Chargement des pays..."
+    },
+    "security": {
+      "title": "Sécurité et biométrie",
+      "changePassword": "Changer le mot de passe",
+      "lastChanged": "Modifié le {{date}}",
+      "twoFactor": "Authentification à deux facteurs",
+      "smsTo": "SMS vers •••• {{last}}",
+      "biometrics": "Face ID / empreinte",
+      "mobileOnly": "Application mobile uniquement",
+      "comingSoon": "Bientôt disponible",
+      "activeSessions": "Sessions actives",
+      "thisDevice": "Cet appareil",
+      "revoke": "Révoquer",
+      "sessionRevoked": "Session déconnectée",
+      "revokeConfirm": "Déconnecter cette session ?",
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmer le nouveau mot de passe",
+      "passwordUpdate": "Mettre à jour",
+      "cancel": "Annuler",
+      "passwordMismatch": "Les nouveaux mots de passe ne correspondent pas",
+      "passwordTooShort": "Le mot de passe doit comporter au moins 8 caractères",
+      "passwordSaved": "Mot de passe modifié",
+      "enable": "Activer",
+      "disable": "Désactiver",
+      "on": "Activé",
+      "off": "Désactivé",
+      "twoFactorPromptEnable": "Saisissez le code à 6 chiffres de votre application d'authentification pour activer la double authentification",
+      "twoFactorPromptDisable": "Saisissez votre code actuel à 6 chiffres pour désactiver la double authentification",
+      "twoFactorEnabled": "Double authentification activée",
+      "twoFactorDisabled": "Double authentification désactivée",
+      "twoFactorSetupHint": "Scannez ce secret dans votre application d'authentification, puis saisissez le code : {{secret}}",
+      "sessionsError": "Impossible de charger les sessions",
+      "noSessions": "Aucune session active",
+      "whatsapp": {
+        "title": "Assistant WhatsApp",
+        "statusActive": "Actif sur ce numéro",
+        "statusLocked": "Verrouillé",
+        "lockedHelp": "Ce canal est verrouillé : sur WhatsApp, BiZik n'affichera plus votre compte et n'agira plus dessus tant que vous ne le déverrouillez pas ici.",
+        "lockedOutHelp": "Trop de codes PIN erronés ont bloqué les opérations d'argent sur WhatsApp. Le déverrouillage les rétablit.",
+        "lock": "Verrouiller WhatsApp",
+        "unlock": "Déverrouiller WhatsApp",
+        "locked": "Canal WhatsApp verrouillé",
+        "unlocked": "Canal WhatsApp déverrouillé",
+        "resetPin": "Réinitialiser le PIN WhatsApp",
+        "pinReset": "PIN effacé - vous en définirez un nouveau à la prochaine opération",
+        "optIn": "Messages sur WhatsApp",
+        "optInHint": "Invitations, résultats de vérification et mises à jour de paiement.",
+        "optedIn": "Messages WhatsApp activés",
+        "optedOut": "Messages WhatsApp désactivés"
+      }
+    },
+    "payouts": {
+      "title": "Méthodes de versement",
+      "addMethod": "Ajouter une méthode",
+      "badge": {
+        "default": "Par défaut",
+        "verified": "Vérifié",
+        "pending": "En attente"
+      },
+      "addTitle": "Ajouter une méthode de versement",
+      "addSubtitle": "Où BiZik doit-il envoyer l'argent lors de vos retraits ?",
+      "methodType": "Type de méthode",
+      "typeMomo": "Mobile money",
+      "typeMomoSub": "Instantané · 0,2 % de frais",
+      "typeBank": "Compte bancaire",
+      "typeBankSub": "1 à 2 jours ouvrés · forfait 2 500 ₦",
+      "typePayoneer": "Payoneer",
+      "typePayoneerSub": "International · USD uniquement",
+      "details": "Détails",
+      "provider": "Fournisseur",
+      "phone": "Numéro de téléphone",
+      "bankName": "Nom de la banque",
+      "bankNamePlaceholder": "ex. GTBank",
+      "accountNumber": "Numéro de compte",
+      "accountNumberPlaceholder": "ex. 0142XXXXXX",
+      "email": "E-mail Payoneer",
+      "emailPlaceholder": "vous@exemple.com",
+      "accountName": "Nom du compte",
+      "matchesVerified": "Correspond à votre nom vérifié",
+      "nickname": "Surnom (facultatif)",
+      "nicknamePlaceholder": "ex. Compte salaire",
+      "useDefault": "Utiliser comme méthode de versement par défaut",
+      "whatNext": "Ce qui se passe ensuite",
+      "next1": "Nous vérifions le nom du compte par rapport à votre identité vérifiée.",
+      "next2": "Un crédit test de 50 ₦ confirme que le compte est joignable - remboursé aussitôt.",
+      "next3": "Les méthodes vérifiées peuvent être utilisées immédiatement pour les retraits.",
+      "addVerify": "Ajouter et vérifier",
+      "setDefault": "Définir par défaut",
+      "remove": "Supprimer",
+      "empty": "Aucune méthode de paiement. Ajoutez-en une pour retirer vos fonds.",
+      "loadError": "Impossible de charger vos méthodes de paiement.",
+      "retry": "Réessayer",
+      "added": "Méthode de paiement ajoutée",
+      "removed": "Méthode de paiement supprimée",
+      "defaultSet": "Méthode de paiement par défaut mise à jour",
+      "actionError": "Une erreur s'est produite. Veuillez réessayer.",
+      "otpTitle": "Vérifiez votre numéro",
+      "otpSubtitle": "Saisissez le code envoyé au {{phone}}",
+      "otpHint": "Nous avons envoyé un code à 6 chiffres pour confirmer ce numéro mobile money.",
+      "otpResendIn": "Renvoyer le code dans {{seconds}}s",
+      "otpResent": "Code envoyé",
+      "limitReached": "Limite atteinte"
+    },
+    "language": {
+      "title": "Langue",
+      "subtitle": "Choisissez la langue de votre application BiZik."
+    },
+    "notVerified": "Non vérifié"
+  },
+  "support": {
+    "title": "Aide et support",
+    "subtitle": "Trouvez une réponse ou contactez l'équipe BiZik.",
+    "popularArticles": "Articles populaires",
+    "searchPlaceholder": "Rechercher des articles d'aide",
+    "articles": {
+      "escrow": "Comment le séquestre protège les deux parties",
+      "dispute": "Que se passe-t-il quand j'ouvre un litige",
+      "fx": "Conversion de devises et frais expliqués"
+    },
+    "myTickets": "Mes tickets",
+    "newTicket": "Nouveau ticket",
+    "status": {
+      "open": "Ouvert",
+      "resolved": "Résolu"
+    },
+    "lastReply": "Dernière réponse {{by}} · {{time}}",
+    "closedBy": "Fermé par {{by}}",
+    "noArticles": "Aucun article d'aide pour le moment.",
+    "noArticleMatches": "Aucun article ne correspond à votre recherche.",
+    "empty": "Aucun ticket pour le moment",
+    "emptySub": "Ouvrez un ticket et notre équipe vous répondra.",
+    "newRequest": "Nouvelle demande",
+    "newSubtitle": "Expliquez-nous votre problème et nous vous aiderons à le résoudre.",
+    "replyFromSupport": "Réponse du support",
+    "subject": "Objet",
+    "subjectPlaceholder": "Décrivez brièvement votre problème",
+    "category": "Catégorie",
+    "categories": {
+      "PAYMENTS": "Paiements",
+      "KYC": "Vérification",
+      "DISPUTES": "Litiges",
+      "ACCOUNT": "Compte",
+      "TECHNICAL": "Technique",
+      "OTHER": "Autre"
+    },
+    "message": "Message",
+    "messagePlaceholder": "Donnez-nous le plus de détails possible",
+    "send": "Envoyer",
+    "ticketCreated": "Ticket créé",
+    "actionError": "Une erreur est survenue. Veuillez réessayer.",
+    "notFound": "Ticket introuvable",
+    "noMessages": "Aucun message pour le moment.",
+    "supportLabel": "Support",
+    "you": "Vous",
+    "resolvedHint": "Ce ticket a été résolu. Ouvrez-en un nouveau si vous avez encore besoin d'aide.",
+    "replyPlaceholder": "Écrire une réponse…",
+    "replyClosed": "Cette conversation est fermée."
+  },
+  "auth": {
+    "heroTitle": "L'argent qui attend que le travail soit fait.",
+    "heroSubtitle": "Séquestre pour tout accord, chez vous ou à l'international.",
+    "loginSubtitle": "Utilisez le numéro de téléphone avec lequel vous vous êtes inscrit.",
+    "trustFooter": "Chiffrement de niveau bancaire · fonds détenus sur des comptes séparés",
+    "phone": "Numéro de téléphone",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Saisissez votre mot de passe",
+    "forgot": "Mot de passe oublié ?",
+    "login": "Se connecter",
+    "orContinue": "ou continuer avec",
+    "google": "Google",
+    "facebook": "Facebook",
+    "comingSoon": "Bientôt disponible",
+    "providerSoon": "La connexion {{provider}} n'est pas encore activée - utilisez votre téléphone pour l'instant.",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "createAccount": "Créer un compte",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "back": "Retour",
+    "register": {
+      "title": "Créer un compte",
+      "subtitle": "Votre numéro de téléphone est votre compte. Cela prend une minute.",
+      "fullName": "Nom complet",
+      "fullNamePlaceholder": "Ada Okafor",
+      "phoneHint": "Votre pays et votre devise proviennent de ce drapeau.",
+      "passwordPlaceholder": "Créez un mot de passe fort",
+      "rule8": "Au moins 8 caractères",
+      "ruleUpper": "Une lettre majuscule",
+      "ruleNumber": "Un chiffre",
+      "ruleSymbol": "Un symbole",
+      "agreePrefix": "J'accepte les",
+      "terms": "Conditions",
+      "and": "et la",
+      "privacy": "Politique de confidentialité",
+      "cta": "Créer un compte"
+    },
+    "verify": {
+      "title": "Vérifier le code",
+      "sentSms": "Nous avons envoyé un code à 6 chiffres au",
+      "twoFactor": "Saisissez le code à 6 chiffres de votre application d'authentification.",
+      "cta": "Vérifier le code",
+      "resendIn": "Renvoyer le code dans {{time}}",
+      "resend": "Renvoyer le code",
+      "codeSent": "Code envoyé",
+      "codeSentBody": "Nous avons envoyé un nouveau code à votre numéro.",
+      "notReceived": "Rien reçu ? Vérifiez votre réseau, puis renvoyez après le minuteur.",
+      "noNewCode": "Aucun nouveau code n'a été envoyé - un code vient de partir. Saisissez ce code, ou redemandez à la fin du minuteur."
+    },
+    "errors": {
+      "signInTitle": "Connexion impossible",
+      "createTitle": "Création du compte impossible",
+      "verifyTitle": "Échec de la vérification",
+      "unexpected": "Réponse inattendue du serveur. Veuillez réessayer."
+    },
+    "forgotPassword": {
+      "title": "Réinitialiser le mot de passe",
+      "subtitle": "Saisissez votre numéro de téléphone et nous vous enverrons un code sécurisé par SMS.",
+      "phoneLabel": "Numéro de téléphone",
+      "sendCode": "Envoyer le code",
+      "sendResetLink": "Envoyer le lien de réinitialisation",
+      "checkInbox": "Consultez vos messages",
+      "sentBody": "Si un compte existe pour {{phone}}, un lien de réinitialisation est en route.",
+      "thatPhone": "ce numéro",
+      "backToLogin": "Retour à la connexion"
+    },
+    "resetPassword": {
+      "title": "Nouveau mot de passe",
+      "subtitle": "Choisissez un mot de passe fort pour sécuriser votre compte.",
+      "newPasswordLabel": "Nouveau mot de passe",
+      "newPasswordPlaceholder": "8 caractères ou plus",
+      "confirmLabel": "Confirmer le mot de passe",
+      "confirmPlaceholder": "Ressaisissez le mot de passe",
+      "mismatch": "Les mots de passe ne correspondent pas",
+      "tooShort": "Le mot de passe doit contenir au moins 8 caractères",
+      "updatePassword": "Mettre à jour le mot de passe",
+      "updatedTitle": "Mot de passe mis à jour",
+      "updatedToast": "Mot de passe mis à jour. Veuillez vous connecter.",
+      "invalidLink": "Ce lien de réinitialisation est invalide ou a expiré. Demandez-en un nouveau.",
+      "backToLogin": "Retour à la connexion",
+      "requestNewLink": "Demander un nouveau lien"
+    },
+    "panel": {
+      "tag": "Plateforme de séquestre",
+      "intro": "Bizik conserve le paiement pendant que le travail se fait et le libère dès que vous approuvez.",
+      "feature1Title": "Des fonds conservés, pas transférés",
+      "feature1Body": "L'argent reste sur un compte séparé jusqu'à ce que vous approuviez la livraison.",
+      "feature2Title": "Paiement par étape",
+      "feature2Body": "Découpez un accord en étapes et libérez-les une par une.",
+      "feature3Title": "Litiges arbitrés",
+      "feature3Body": "Un médiateur examine les deux parties avant tout mouvement d'argent.",
+      "stat1Label": "XAF conservés en sécurité",
+      "stat2Label": "Accords réalisés",
+      "stat3Label": "Pour une décision"
+    }
+  },
+  "profile": {
+    "yourAccount": "Votre compte",
+    "accountDetails": "Détails du compte",
+    "fullName": "Nom complet",
+    "phone": "Numéro de téléphone",
+    "loginIdentity": "Votre identifiant de connexion",
+    "email": "E-mail",
+    "notAdded": "Non ajouté",
+    "country": "Pays",
+    "verification": "Vérification",
+    "notifications": "Notifications",
+    "previewOffline": "Aperçu du mode hors ligne",
+    "signOut": "Se déconnecter"
+  },
+  "kyc": {
+    "unverified": "Non vérifié",
+    "basic": "Basique",
+    "verified": "Vérifié",
+    "enhanced": "Renforcé"
+  },
+  "fundFlow": {
+    "title": "Financer le séquestre",
+    "subtitle": "Choisissez votre moyen de paiement. Les fonds sont conservés en séquestre jusqu'à l'approbation du travail.",
+    "choosePayment": "Choisir la source de paiement",
+    "walletName": "Portefeuille BiZik",
+    "walletBalance": "Solde {{amount}}",
+    "insufficient": "Solde insuffisant - rechargez ou utilisez un autre moyen",
+    "charged": "Débité {{amount}}",
+    "confirmCta": "Payer {{total}}",
+    "addMethod": "Ajouter un moyen de paiement",
+    "noMethods": "Vous n'avez pas encore de moyen de paiement pouvant couvrir ce montant.",
+    "successTitle": "Séquestre financé",
+    "successReassure": "Votre paiement est conservé en toute sécurité et protégé par le séquestre BiZik jusqu'à l'approbation du travail.",
+    "backToDeal": "Retour à la transaction",
+    "redirecting": "Retour à la transaction…",
+    "notFound": "Transaction ou jalon à financer introuvable.",
+    "selectSource": "Sélectionnez une source de paiement pour continuer",
+    "payeeTitle": "Vous êtes le vendeur sur cet accord",
+    "payeeMessage": "C'est {{name}} qui paie dans le séquestre. Vous serez payé depuis le séquestre après la livraison et son approbation.",
+    "promptTitle": "Approuvez le paiement sur votre téléphone",
+    "promptBody": "Nous avons envoyé une demande de {{amount}} à votre numéro Mobile Money. Approuvez-la sur ce téléphone pour placer l'argent sous séquestre.",
+    "promptPinWarning": "Saisissez votre code Mobile Money sur votre propre téléphone - ne le partagez avec personne, pas même BiZik."
+  },
+  "payments": {
+    "approveTitle": "Approuvez sur votre téléphone",
+    "approveDeposit": "Nous avons envoyé une demande sur votre téléphone. Approuvez-la pour ajouter {{amount}} à votre portefeuille.",
+    "approveWithdraw": "Nous avons envoyé une demande sur votre téléphone. Approuvez-la pour envoyer {{amount}} vers votre compte.",
+    "waitingHint": "En attente de votre approbation… cela peut prendre jusqu'à une minute.",
+    "withdrawProcessingTitle": "Traitement de votre retrait",
+    "withdrawProcessingBody": "Nous envoyons {{amount}} vers votre compte. Cela prend généralement moins d'une minute.",
+    "withdrawProcessingHint": "Aucune action requise - vous serez notifié dès la réception.",
+    "cancel": "Annuler",
+    "failedDeposit": "Nous n'avons pas pu effectuer votre dépôt. Aucun montant n'a été prélevé.",
+    "failedWithdraw": "Nous n'avons pas pu effectuer votre retrait. Votre solde n'a pas été modifié.",
+    "timeout": "Toujours en attente de votre approbation. Vérifiez votre portefeuille dans un instant pour voir si l'opération a abouti."
+  },
+  "transfer": {
+    "send": {
+      "navTitle": "Envoyer de l'argent",
+      "toLabel": "Envoyer à",
+      "toPlaceholder": "@identifiant ou numéro",
+      "toHint": "Son identifiant BiZik (comme @maxime.b) ou son numéro de téléphone.",
+      "notFound": "Aucun compte BiZik ne correspond. Vérifiez l'identifiant ou le numéro.",
+      "self": "C'est votre propre identifiant.",
+      "amountLabel": "Montant ({{currency}})",
+      "available": "{{amount}} disponible",
+      "insufficient": "Cela dépasse le solde de votre portefeuille.",
+      "noteLabel": "Note (facultatif)",
+      "notePlaceholder": "C'est pour quoi ?",
+      "warnTitle": "Ceci est un transfert direct",
+      "warnBody": "L'argent arrive immédiatement et ne peut pas être annulé. Si vous payez des biens ou un travail que vous n'avez pas encore reçus, créez plutôt un accord sécurisé : BiZik garde l'argent jusqu'à ce que vous approuviez la livraison.",
+      "useEscrow": "Créer plutôt un accord sécurisé",
+      "cta": "Envoyer l'argent",
+      "sending": "Envoi…",
+      "confirmMessage": "Envoyer {{amount}} à {{name}} ({{handle}}) ? Il le reçoit immédiatement et un transfert est irréversible.",
+      "sentTitle": "Argent envoyé",
+      "sentBody": "{{name}} ({{handle}}) l'a bien reçu.",
+      "done": "Retour au portefeuille"
+    },
+    "receive": {
+      "title": "Recevoir de l'argent",
+      "yourHandle": "Votre identifiant BiZik",
+      "body": "Partagez cet identifiant : n'importe qui sur BiZik peut envoyer de l'argent directement dans votre portefeuille, sans numéro de téléphone.",
+      "copy": "Copier l'identifiant",
+      "copied": "Identifiant copié"
+    }
+  },
+  "marketing": {
+    "chrome": {
+      "skipToContent": "Aller au contenu",
+      "homeAria": "Accueil {{name}}",
+      "primaryNav": "Principale",
+      "language": "Langue",
+      "logIn": "Se connecter",
+      "getStarted": "Commencer",
+      "menu": "Menu",
+      "startOnWhatsApp": "Démarrer sur WhatsApp",
+      "readMore": "Lire la suite",
+      "seeAll": "Tout voir",
+      "backTo": "Retour à {{name}}",
+      "minRead": "{{count}} min de lecture",
+      "published": "Publié le {{date}}",
+      "updated": "Mis à jour le {{date}}"
+    },
+    "nav": {
+      "home": "Accueil",
+      "howItWorks": "Comment ça marche",
+      "forFreelancers": "Cas d'usage",
+      "forBusiness": "Pour les entreprises",
+      "pricing": "Tarifs",
+      "security": "Sécurité",
+      "blog": "Blog",
+      "helpCentre": "Centre d’aide",
+      "about": "À propos",
+      "contact": "Contact",
+      "termsOfService": "Conditions d’utilisation",
+      "privacyPolicy": "Politique de confidentialité",
+      "cookiePolicy": "Politique relative aux cookies",
+      "amlKycPolicy": "Politique LBC / KYC",
+      "disputePolicy": "Politique de litiges",
+      "sendMoney": "Envoyer de l’argent",
+      "receiveMoney": "Recevoir de l’argent",
+      "forFreelancersPlain": "Pour les freelances"
+    },
+    "footer": {
+      "about": "Le séquestre sécurisé pour tous. Bizik garde l’argent jusqu’à ce que le travail soit livré ou que la marchandise arrive, puis paie le vendeur - sur le web, mobile et WhatsApp.",
+      "tagline": "Le séquestre sécurisé pour tous",
+      "marks": [
+        "Sécurité de niveau bancaire",
+        "Identité vérifiée (KYC)",
+        "Séquestre ségrégué"
+      ],
+      "columns": {
+        "product": "Produit",
+        "useCases": "Cas d'usage",
+        "company": "Entreprise",
+        "legalSupport": "Mentions légales & assistance"
+      }
+    },
+    "home": {
+      "meta": {
+        "title": "Bizik - Paiement sécurisé sous séquestre au Cameroun",
+        "description": "Bizik garde l'argent de l'acheteur sous séquestre jusqu'à la livraison de la marchandise ou du travail, puis paie le vendeur. Payez avec MTN MoMo ou Orange Money, sur le web, dans l'application ou sur WhatsApp.",
+        "ogTitle": "Bizik - Le séquestre sécurisé pour tous",
+        "ogDescription": "Traitez avec des inconnus en toute sécurité. Bizik garde l’argent sous séquestre jusqu’à l’arrivée de la marchandise ou la livraison du travail - puis le vendeur est payé."
+      },
+      "hero": {
+        "badge": "Bizik fonctionne désormais entièrement dans WhatsApp",
+        "badgeDot": "Nouveau",
+        "titleLead": "Traitez avec des inconnus",
+        "titleAccent": "en sécurité.",
+        "text": "Bizik garde l’argent sous séquestre jusqu’à ce que le travail soit livré ou que la marchandise arrive. Le vendeur est ensuite payé. Créez l’accord en quelques secondes - sur le web, dans l’application, ou simplement en discutant avec Bizik sur WhatsApp.",
+        "trustFunds": "Fonds protégés",
+        "trustCameroon": "Conçu pour le Cameroun",
+        "trustDisputes": "Litiges neutres",
+        "statHeldLabel": "gardés en sécurité",
+        "statDealsValue": "9 200+",
+        "statDealsLabel": "accords finalisés",
+        "statRulingValue": "48 h",
+        "statRulingLabel": "pour une décision",
+        "imgAlt": "L’application Bizik : un solde de portefeuille gardé sous séquestre",
+        "ussdTitle": "Invite USSD",
+        "ussdText": "Confirmez 450 000 XAF vers <strong>BIZIK ESCROW</strong>. Saisissez votre code.",
+        "chatBar": "Bizik sur WhatsApp",
+        "chatHeld": "Argent gardé en sécurité sous séquestre -",
+        "chatDelivered": "Livré et approuvé -",
+        "chatPaid": "vendeur payé"
+      },
+      "rail": {
+        "label": "Payez et encaissez avec",
+        "note": "Sécurité de niveau bancaire · Identité vérifiée · Séquestre ségrégué"
+      },
+      "steps": {
+        "eyebrow": "Comment ça marche",
+        "title": "Quatre étapes. L’argent est protégé à chacune.",
+        "cta": "Voir le parcours complet →",
+        "items": [
+          {
+            "n": "01",
+            "title": "Convenez de l’accord",
+            "text": "Une partie crée l’accord - article ou service, prix, jalons. L’autre reçoit une invitation sur WhatsApp et par SMS."
+          },
+          {
+            "n": "02",
+            "title": "Payez sous séquestre",
+            "text": "L’acheteur approvisionne depuis MTN MoMo, Orange Money ou son portefeuille Bizik. Les deux parties voient que l’argent est là."
+          },
+          {
+            "n": "03",
+            "title": "Livrez",
+            "text": "Le vendeur expédie ou livre le travail et dépose une preuve. Personne ne peut encore toucher à l’argent."
+          },
+          {
+            "n": "04",
+            "title": "Libérez",
+            "text": "L’acheteur approuve et le vendeur est payé sur Mobile Money ou en banque. Pas satisfait ? Ouvrez plutôt un litige."
+          }
+        ]
+      },
+      "whatsapp": {
+        "badge": "Assistant WhatsApp · Nouveau",
+        "title": "Faites tout l’accord dans WhatsApp.",
+        "text": "Aucune application à installer. Écrivez à Bizik comme à un ami - au clavier ou par note vocale - et créez, financez, suivez et libérez vos accords sans quitter la discussion. Même la vérification d’identité s’y déroule.",
+        "cta": "Écrire à Bizik sur WhatsApp",
+        "imgAlt": "Un accord Bizik qui se déroule dans WhatsApp",
+        "rows": [
+          {
+            "title": "Parlez ou écrivez - français et anglais",
+            "text": "Dites « crée un accord pour acheter une télé à 500 000 chez Mike » dans une note vocale. L’assistant fait le reste."
+          },
+          {
+            "title": "Rien ne bouge sans votre code",
+            "text": "L’assistant ne peut que proposer. Chaque paiement exige votre confirmation et un code de 4 à 6 chiffres, exécuté par le même système audité que les applications."
+          },
+          {
+            "title": "Invitations et rappels, envoyés pour vous",
+            "text": "L’autre partie reçoit une invitation WhatsApp avec les boutons Accepter / Refuser - par SMS si elle n’est pas sur WhatsApp. Un refus annule l’accord."
+          },
+          {
+            "title": "Vérifiez votre identité dans la discussion",
+            "text": "Tout le parcours KYC - pièce recto, verso, selfie - se fait via WhatsApp, et vous êtes prévenu dès qu’un vérificateur décide."
+          }
+        ]
+      },
+      "product": {
+        "eyebrow": "Le produit",
+        "title": "Chaque accord, chaque franc - un seul tableau de bord.",
+        "sub": "Portefeuille, séquestre, accords en cours et litiges dans une seule vue - avec la prochaine action précise pour chacun, pour que rien ne traîne.",
+        "trustSameAccount": "Même compte sur mobile et web",
+        "trustInstallable": "Installable - fonctionne hors ligne",
+        "trustNextStep": "Une prochaine action claire sur chaque accord"
+      },
+      "why": {
+        "title": "Pourquoi Bizik",
+        "sub": "Un séquestre conçu pour la façon dont l’argent circule vraiment ici - pas un produit bancaire occidental avec une étiquette africaine.",
+        "items": [
+          {
+            "title": "Pensé pour le mobile money",
+            "text": "Payez avec MTN MoMo et Orange Money, et encaissez sur votre mobile money ou votre banque."
+          },
+          {
+            "title": "Argent gardé en sécurité",
+            "text": "Les fonds restent sous séquestre ségrégué - visibles par les deux parties, dépensables par aucune."
+          },
+          {
+            "title": "Médiation neutre",
+            "text": "Les litiges sont tranchés sur preuves par un médiateur Bizik. Libération, remboursement ou partage."
+          },
+          {
+            "title": "Portefeuille multidevise",
+            "text": "Le XAF d’abord, plus USD, EUR, GBP, NGN et GHS avec conversion en temps réel."
+          },
+          {
+            "title": "Vit dans WhatsApp",
+            "text": "Créez, financez et libérez des accords par message ou note vocale - en français et en anglais, sans rien installer."
+          },
+          {
+            "title": "Un compte, deux rôles",
+            "text": "Achetez et vendez, recrutez et travaillez - même compte, même portefeuille, application et web."
+          }
+        ]
+      },
+      "useCases": {
+        "title": "Qui utilise Bizik",
+        "cardTitle": "Vous ne savez pas où se situe votre accord ? Deux personnes peuvent en lancer un en moins de deux minutes.",
+        "cardCta": "Lancer un accord sécurisé",
+        "items": [
+          {
+            "alt": "indépendant devant un ordinateur portable",
+            "title": "Indépendants et clients",
+            "text": "Des jalons pour les projets plus lourds. Ne courez plus jamais après un client."
+          },
+          {
+            "alt": "vendeuse au marché avec un téléphone",
+            "title": "Acheteurs et vendeurs en ligne",
+            "text": "Achetez auprès des vendeurs WhatsApp et Instagram sans risque d’arnaque."
+          },
+          {
+            "alt": "remise des clés d’une voiture",
+            "title": "Véhicules et biens de valeur",
+            "text": "Délais d’inspection et contrôle manuel sur les gros versements."
+          },
+          {
+            "alt": "appel vidéo avec la diaspora",
+            "title": "Transfrontalier et diaspora",
+            "text": "Envoyez de l’argent au pays pour un service - et sachez qu’il a bien été rendu."
+          },
+          {
+            "alt": "équipe d’une place de marché",
+            "title": "Places de marché",
+            "text": "Le séquestre en marque blanche et une API pour protéger vos propres clients."
+          }
+        ]
+      },
+      "protection": {
+        "eyebrow": "Protection",
+        "title": "Comment votre argent est protégé",
+        "text": "Trois garanties derrière chaque accord sur Bizik - les mêmes trois qu’il s’agisse d’une coque de téléphone à 20 000 XAF ou d’une voiture à 12 000 000 XAF.",
+        "cta": "Lire notre page sécurité →",
+        "items": [
+          {
+            "title": "Séquestre ségrégué",
+            "text": "Les fonds des accords sont séparés de l’argent propre de Bizik. Nous ne pouvons pas les dépenser, et l’autre partie non plus."
+          },
+          {
+            "title": "Libération sur approbation seulement",
+            "text": "Rien ne part vers le vendeur tant que l’acheteur n’a pas approuvé la livraison - ou qu’un médiateur n’a pas jugé qu’il devait être payé."
+          },
+          {
+            "title": "Remboursement intégral en cas de non-livraison",
+            "text": "Si la marchandise ou le travail n’arrive jamais, ouvrez un litige. Les preuves tranchent, et l’argent revient."
+          }
+        ]
+      },
+      "proof": {
+        "statHeldLabel": "gardés sous séquestre à ce jour",
+        "statDealsLabel": "accords finalisés sans litige",
+        "statRulingLabel": "délai médian pour trancher un litige",
+        "quotes": [
+          {
+            "text": "Un client à Paris me payait avec deux mois de retard, à chaque fois. Maintenant l’argent est sous séquestre avant que j’ouvre Figma.",
+            "name": "Aïcha N.",
+            "role": "Designer produit · Douala"
+          },
+          {
+            "text": "Je vends des téléphones sur WhatsApp. Les acheteurs disparaissaient par méfiance. Bizik m’a conclu quatre ventes en une semaine.",
+            "name": "Emmanuel T.",
+            "role": "Vendeur d’électronique · Yaoundé"
+          },
+          {
+            "text": "J’ai acheté une voiture à 6 000 km de distance. L’argent n’a quitté le séquestre qu’après l’inspection de mon frère.",
+            "name": "Sylvie M.",
+            "role": "Acheteuse de la diaspora · Bruxelles"
+          }
+        ]
+      },
+      "calc": {
+        "title": "Des frais clairs. Aucune surprise.",
+        "text": "Vous voyez les frais de séquestre avant de vous engager. L’acheteur les paie en plus du montant de l’accord, et le vendeur reçoit le montant complet.",
+        "cta": "Voir les tarifs →",
+        "amountLabel": "Montant de l’accord",
+        "currencyAria": "Devise",
+        "rowFee": "Frais de séquestre ({{pct}} %)",
+        "rowBuyer": "L’acheteur paie",
+        "rowSeller": "Le vendeur reçoit"
+      },
+      "blog": {
+        "eyebrow": "Du blog",
+        "title": "Connaissez les arnaques avant qu’elles ne vous atteignent",
+        "cta": "Tous les articles →",
+        "photoPlaceholder": "photo : vendeur consultant son téléphone au marché",
+        "teasers": [
+          {
+            "tag": "Alertes arnaques",
+            "title": "Le faux livreur est de retour - ce qu’il faut surveiller",
+            "excerpt": "Un troisième numéro rejoint votre discussion et réclame des frais de livraison. Ce n’est jamais un coursier. Comment l’arnaque fonctionne, les signaux d’alerte, et comment le séquestre l’élimine.",
+            "meta": "Alertes arnaques · 4 min de lecture"
+          },
+          {
+            "tag": "Guides",
+            "title": "Qu’est-ce que le séquestre, en clair ?",
+            "excerpt": "Qui garde l’argent, quand il bouge, et ce qui se passe si l’accord tourne mal. Le séquestre expliqué sans jargon, avec un exemple camerounais.",
+            "meta": "Guides · 4 min de lecture"
+          },
+          {
+            "tag": "Freelance",
+            "title": "Indépendants : comment être sûr d’être toujours payé",
+            "excerpt": "Des jalons, des étapes financées, un brief écrit et la bonne façon de demander un séquestre à un nouveau client. Un guide pratique pour les indépendants au Cameroun.",
+            "meta": "Freelance · 4 min de lecture"
+          }
+        ]
+      },
+      "faq": {
+        "title": "Les questions que l’on pose en premier",
+        "text": "La plupart des gens n’ont jamais utilisé de séquestre. C’est normal.",
+        "cta": "Visiter le centre d’aide",
+        "items": [
+          {
+            "q": "Qu’est-ce que le séquestre, en clair ?",
+            "a": "Le séquestre est un lieu neutre où l’argent est gardé. L’acheteur paie Bizik au lieu de payer directement le vendeur. Nous gardons les fonds - visibles par vous deux, dépensables par aucun - jusqu’à ce que la marchandise arrive ou que le travail soit livré et approuvé. L’argent va ensuite au vendeur."
+          },
+          {
+            "q": "Mon argent est-il vraiment en sécurité ?",
+            "a": "Les fonds des accords sont sur des comptes ségrégués, séparés de l’argent propre de Bizik, chez des partenaires agréés. Nous ne pouvons pas les dépenser, et aucune partie ne peut les retirer unilatéralement. Chaque mouvement exige votre confirmation et votre code."
+          },
+          {
+            "q": "Comment suis-je payé ?",
+            "a": "Directement sur MTN Mobile Money, Orange Money ou un compte bancaire, dans la devise de votre choix. La plupart des versements arrivent en quelques minutes ; les montants plus élevés passent d’abord par un contrôle manuel, qui prend en général quelques heures."
+          },
+          {
+            "q": "Quels sont les frais ?",
+            "a": "Des frais de séquestre uniques par accord, payés par l’acheteur et affichés avant tout engagement. Le vendeur ne paie aucun frais sur l’accord, et il n’y a ni abonnement ni frais de compte. Utilisez le calculateur de cette page pour un montant exact."
+          },
+          {
+            "q": "Et si le vendeur ne livre pas ?",
+            "a": "Ouvrez un litige avant la fin du délai d’approbation. Les deux parties déposent leurs preuves - photos, bons de livraison, historiques de discussion - et un médiateur Bizik tranche sur ces preuves. L’issue est la libération, le remboursement ou un partage."
+          },
+          {
+            "q": "Quels pays et quelles devises ?",
+            "a": "Le Cameroun et la zone CEMAC d’abord, en XAF. Votre portefeuille Bizik peut aussi contenir des USD, EUR, GBP, NGN et GHS, avec une conversion en temps réel affichée avant de confirmer."
+          }
+        ]
+      },
+      "appCta": {
+        "eyebrow": "Application mobile",
+        "title": "Bizik dans votre poche",
+        "text": "Financez un accord, approuvez une livraison ou ouvrez un litige depuis votre téléphone. Même compte sur Android, iOS et le web - et ça marche sur une connexion lente.",
+        "qrAlt": "Scannez pour ouvrir bizik.cm sur votre téléphone",
+        "imgAlt": "L’application mobile Bizik : solde du portefeuille et création d’un accord"
+      },
+      "closing": {
+        "title": "Prêt à conclure sans le risque ?",
+        "text": "La création de compte est gratuite. Vous ne payez que lorsqu’un accord est financé.",
+        "ctaPrimary": "Créer votre compte gratuit",
+        "ctaSecondary": "Parlez-nous"
+      },
+      "mockup": {
+        "newDeal": "+ Nouvel accord",
+        "groupOverview": "Aperçu",
+        "groupMoney": "Argent",
+        "groupWork": "Travail",
+        "dashboard": "Tableau de bord",
+        "wallet": "Portefeuille",
+        "addMoney": "Ajouter de l’argent",
+        "withdraw": "Retirer",
+        "convert": "Convertir",
+        "transactions": "Transactions",
+        "deals": "Accords",
+        "disputes": "Litiges",
+        "walletBalance": "Solde du portefeuille",
+        "inEscrow": "Sous séquestre",
+        "escrowDeals": "4 accords",
+        "activeDeals": "Accords en cours",
+        "activeMeta": "2 à traiter",
+        "completed": "Terminés",
+        "completedMeta": "100 % dans les délais",
+        "attention": "À traiter",
+        "tagAwaiting": "En attente de financement",
+        "tagSubmitted": "Soumis",
+        "tagUnderReview": "En cours d’examen",
+        "dealLamps": "200 lampes solaires - commande en gros",
+        "dealBrand": "Identité de marque et packaging",
+        "dealDispute": "Litige n° D-2041",
+        "dealPhotography": "Photographie d’aménagement de bureau",
+        "metaTo": "à {{name}}",
+        "metaMilestone": "Jalon 3",
+        "nextFund": "Prochaine action : financer le séquestre pour que {{name}} puisse démarrer.",
+        "nextReview": "Prochaine action : vérifier la livraison, puis libérer {{amount}}.",
+        "nextEvidence": "Prochaine action : déposer vos preuves avant le ven. 14 août.",
+        "btnFund": "Financer le séquestre",
+        "btnApprove": "Approuver et libérer",
+        "btnEvidence": "Déposer des preuves",
+        "panelActive": "Accords en cours",
+        "colDeal": "Accord",
+        "colValue": "Montant sous séquestre",
+        "colStatus": "Statut",
+        "colNext": "Prochaine action",
+        "statusInProgress": "En cours",
+        "statusAwaiting": "En attente de financement",
+        "statusInReview": "En vérification",
+        "nextApproveMilestone": "Approuver le jalon 3",
+        "nextFundEscrow": "Financer le séquestre",
+        "nextWaiting": "En attente d’approbation",
+        "youGetPaid": "vous êtes payé",
+        "panelEscrowBy": "Séquestre par accord",
+        "legendBrand": "Identité de marque",
+        "legendLamps": "Lampes solaires",
+        "legendPhoto": "Photographie",
+        "legendOther": "Autres",
+        "panelActivity": "Activité",
+        "seeAll": "Tout voir",
+        "actSubmitted": "Jalon soumis",
+        "actEvidence": "Le médiateur demande des preuves",
+        "agoHours": "il y a {{count}} h",
+        "agoDay": "il y a 1 jour"
+      }
+    },
+    "howItWorks": {
+      "meta": {
+        "title": "Comment fonctionne le séquestre",
+        "description": "Créez un accord, financez-le avec MTN MoMo ou Orange Money, livrez, inspectez et libérez. Comment un accord sous séquestre Bizik protège acheteurs et vendeurs au Cameroun, étape par étape."
+      },
+      "crumbHome": "Accueil",
+      "eyebrow": "Comment ça marche",
+      "title": "Comment Bizik protège votre argent",
+      "text": "Suivez l’argent du portefeuille de l’acheteur jusqu’au versement au vendeur. À chaque étape, vous voyez exactement où il est et qui le contrôle.",
+      "flow": {
+        "walletTitle": "Dans votre portefeuille",
+        "walletMeta": "L’acheteur le contrôle",
+        "escrowTitle": "Sous séquestre",
+        "escrowMeta": "Personne ne peut le dépenser",
+        "releasedTitle": "Libéré",
+        "releasedMeta": "Le vendeur est payé",
+        "stateLabel": "État en direct :",
+        "stateValue": "Libéré au vendeur"
+      },
+      "steps": [
+        {
+          "num": "01",
+          "title": "Convenez de l’accord",
+          "text": "L’une ou l’autre partie crée l’accord : ce qui est vendu ou construit, le prix, la devise, la date de livraison, et des jalons si c’est un gros projet. Vous invitez l’autre partie par numéro de téléphone - elle n’a pas encore besoin de compte.",
+          "label": "Protégé :",
+          "note": "rien n’est débité tant que les deux parties n’ont pas accepté les termes par écrit.",
+          "cap": "App · Nouvel accord"
+        },
+        {
+          "num": "02",
+          "title": "Payez sous séquestre",
+          "text": "L’acheteur finance l’accord depuis MTN Mobile Money, Orange Money ou son portefeuille Bizik. La confirmation est en général immédiate - les deux parties sont notifiées dès l’arrivée.",
+          "label": "Protégé :",
+          "note": "les fonds vont sur un compte de séquestre ségrégué, pas au vendeur et pas dans l’argent d’exploitation de Bizik.",
+          "cap": "App · Financer le séquestre"
+        },
+        {
+          "num": "03",
+          "title": "Livrez",
+          "text": "Le vendeur expédie la marchandise ou soumet le travail, preuve à l’appui - photos, suivi, fichiers. L’acheteur dispose d’un délai d’inspection pour vérifier et approuver ou demander une révision.",
+          "label": "Protégé :",
+          "note": "la livraison, la preuve et chaque message sont horodatés - ils deviennent les preuves en cas de litige.",
+          "cap": "App · Suivi des jalons"
+        },
+        {
+          "num": "04",
+          "title": "Libérez",
+          "text": "L’acheteur approuve et l’argent part. Le vendeur reçoit le montant complet sur son portefeuille Bizik, le retire vers MTN Mobile Money ou Orange Money, et les deux parties reçoivent un reçu PDF.",
+          "label": "Libération automatique :",
+          "note": "si l’acheteur ne se manifeste plus après la livraison, les fonds sont libérés automatiquement à la fin du délai d’inspection - les vendeurs ne sont jamais bloqués.",
+          "cap": "App · Libération"
+        }
+      ],
+      "mockup": {
+        "sellingLabel": "Que vendez-vous ?",
+        "sellingValue": "Identité de marque + site web",
+        "amountLabel": "Montant",
+        "milestonesLabel": "Jalons",
+        "inviteLabel": "Inviter par téléphone",
+        "cardLabel": "Portefeuille",
+        "ussd": "Confirmez 450 000 XAF vers BIZIK ESCROW. Saisissez votre code Mobile Money.",
+        "ms1": "Cadrage et wireframes",
+        "ms1State": "Libéré",
+        "ms2": "Design visuel",
+        "ms2State": "Sous séquestre",
+        "ms3": "Développement et livraison",
+        "ms3State": "Non financé",
+        "payingOut": "Versement vers",
+        "rowAmount": "Montant de l’accord",
+        "rowFee": "Frais vendeur",
+        "rowReceive": "Vous recevez"
+      },
+      "disputes": {
+        "eyebrow": "Litiges",
+        "title": "Et si quelque chose tourne mal ?",
+        "text": "Alors l’argent cesse de bouger. Chaque partie peut ouvrir un litige à tout moment avant la libération - vous n’êtes jamais laissé seul avec le problème.",
+        "items": [
+          {
+            "step": "Étape 01",
+            "title": "Gel",
+            "text": "Les fonds sont bloqués immédiatement. Ni libération, ni remboursement, ni versement tant que le dossier est ouvert."
+          },
+          {
+            "step": "Étape 02",
+            "title": "Preuves",
+            "text": "Les deux parties déposent leurs preuves : photos, bons de livraison, fichiers, historique de discussion. 72 heures chacune."
+          },
+          {
+            "step": "Étape 03",
+            "title": "Médiateur",
+            "text": "Un médiateur Bizik neutre examine le dossier. Nous ne prenons jamais parti ni une part du résultat."
+          },
+          {
+            "step": "Étape 04",
+            "title": "Décision contraignante",
+            "text": "Libération, remboursement ou partage. La décision est définitive et exécutée le jour même."
+          }
+        ]
+      },
+      "buyersTitle": "Pour les acheteurs",
+      "buyers": [
+        "Votre argent n’est jamais chez le vendeur avant la livraison",
+        "Un délai d’inspection avant de libérer",
+        "Des demandes de révision plutôt qu’une dispute",
+        "Une voie de remboursement si rien n’arrive"
+      ],
+      "sellersTitle": "Pour les vendeurs",
+      "sellers": [
+        "La preuve que l’argent existe avant de commencer",
+        "Des jalons pour que les longs projets paient au fil de l’eau",
+        "La libération automatique si l’acheteur disparaît",
+        "Versement sur MoMo, banque ou Payoneer"
+      ],
+      "faq": [
+        {
+          "q": "Combien de temps l’argent peut-il rester sous séquestre ?",
+          "a": "Aussi longtemps que les termes de l’accord le permettent. La plupart des accords fixent une date de livraison et un délai d’inspection de 3 à 7 jours. Si aucune partie n’agit, les fonds sont libérés automatiquement au vendeur à la fin du délai, ou reviennent à l’acheteur si rien n’a jamais été livré."
+        },
+        {
+          "q": "Qui paie les frais de séquestre ?",
+          "a": "L’acheteur. Les frais de séquestre s’ajoutent au montant de l’accord au moment du financement, et les deux parties les voient avant tout engagement. Le vendeur reçoit le montant complet, sans frais Bizik déduits."
+        },
+        {
+          "q": "Puis-je ne libérer qu’une partie de l’argent ?",
+          "a": "Oui. Les accords à jalons se libèrent étape par étape : un designer peut être payé pour le cadrage pendant que le développement reste sous séquestre. Vous pouvez aussi convenir d’une libération partielle sur un accord à une seule étape."
+        },
+        {
+          "q": "Que se passe-t-il si l’acheteur disparaît après la livraison ?",
+          "a": "La libération automatique protège le vendeur. Dès que le délai d’inspection se termine sans approbation ni litige, les fonds sont libérés automatiquement et versés selon le calendrier habituel du vendeur."
+        }
+      ]
+    },
+    "shared": {
+      "breadcrumb": "Fil d'Ariane",
+      "home": "Accueil",
+      "minRead": "min de lecture",
+      "legalEyebrow": "Mentions légales",
+      "legalVersion": "Version {{version}} · En vigueur le {{date}}",
+      "contents": "Sommaire",
+      "documentContents": "Sommaire du document",
+      "print": "Imprimer",
+      "months": [
+        "janv.",
+        "févr.",
+        "mars",
+        "avr.",
+        "mai",
+        "juin",
+        "juil.",
+        "août",
+        "sept.",
+        "oct.",
+        "nov.",
+        "déc."
+      ]
+    },
+    "pricing": {
+      "meta": {
+        "title": "Tarifs et frais",
+        "description": "Des frais de séquestre uniques, payés par l'acheteur et affichés avant tout engagement. Le vendeur ne paie rien sur l'accord, sans abonnement ni frais de compte. Tous les frais Bizik et le calculateur."
+      },
+      "crumb": "Tarifs",
+      "eyebrow": "Tarifs",
+      "title": "Des frais uniques. Annoncés d’avance. Aucune surprise.",
+      "text": "{{pct}} % du montant de l’accord, payés par l’acheteur et prélevés une seule fois au financement du séquestre. Le vendeur ne paie rien sur l’accord. Ouvrir un compte est gratuit, créer un accord est gratuit, ouvrir un litige aussi.",
+      "calcCta": "Créer votre compte gratuit",
+      "tableTitle": "Tous les frais, dans un seul tableau",
+      "tableNote": "Votre opérateur de mobile money peut facturer ses propres frais de dépôt ou de retrait ; ce sont les siens, pas les nôtres. Les retraits de 500 000 XAF ou plus vers le mobile money sont vérifiés par une personne avant d’être versés, sans frais supplémentaires.",
+      "plansTitle": "Ce que {{pct}} % vous apportent",
+      "planDirect": {
+        "title": "Envoyer directement",
+        "price": "0 %",
+        "text": "Gratuit - et totalement sans protection. Si l’accord échoue, il vous reste une capture d’écran et un numéro de téléphone."
+      },
+      "planBizik": {
+        "badge": "Recommandé",
+        "title": "Bizik",
+        "text": "Pensé pour le mobile money, le téléphone d’abord, en FCFA. Médiation, KYC et remboursements inclus. Opérationnel en quelques minutes.",
+        "cta": "Lancer un accord"
+      },
+      "planTraditional": {
+        "title": "Séquestre traditionnel",
+        "price": "3-5 %",
+        "per": "+ frais fixes",
+        "text": "Banque uniquement, centré sur le dollar, des jours de paperasse, et souvent tout simplement indisponible en zone CEMAC."
+      },
+      "faqTitle": "Questions sur les frais",
+      "faq": [
+        {
+          "q": "Y a-t-il un abonnement mensuel ?",
+          "a": "Non. Aucun abonnement, aucun frais de compte et aucun volume minimum. Vous payez les frais de séquestre une fois, au financement d’un accord, et rien d’autre."
+        },
+        {
+          "q": "Quand les frais sont-ils exactement prélevés ?",
+          "a": "Au financement. Les frais sont calculés et affichés avant que l’une ou l’autre partie s’engage, ajoutés à ce que paie l’acheteur au financement du séquestre, et détaillés sur le reçu PDF."
+        },
+        {
+          "q": "Comment le taux de change est-il fixé ?",
+          "a": "Nous utilisons le taux interbancaire en temps réel au moment de la conversion et ajoutons une marge de 1,2 %. Le taux et la marge apparaissent à l’écran avant votre confirmation : le montant que vous voyez est le montant qui part."
+        },
+        {
+          "q": "Les gros accords ont-ils un tarif différent ?",
+          "a": "Non. Le même taux s’applique à tous les accords, quelle que soit leur taille, pour que les frais soient toujours faciles à vérifier. Les retraits de 500 000 XAF ou plus vers le mobile money bénéficient d’un contrôle manuel supplémentaire avant versement, sans frais supplémentaires."
+        }
+      ],
+      "colFee": "Frais",
+      "colRate": "Taux",
+      "colWho": "Qui paie",
+      "feeRows": {
+        "funding": "Financement d’un accord sous séquestre",
+        "fundingWho": "L’acheteur, en plus du montant de l’accord",
+        "release": "Libération d’un accord",
+        "releaseFree": "Gratuit",
+        "releaseFreeWho": "Personne. Le vendeur reçoit le montant complet",
+        "releaseWho": "Le vendeur, déduit à la libération",
+        "fx": "Conversion de devise",
+        "fxRate": "+{{pct}} % au-dessus du taux interbancaire",
+        "fxWho": "Celui qui convertit",
+        "minWithdrawal": "Retrait minimum",
+        "minWithdrawalRate": "Équivalent de {{amount}} USD"
+      }
+    },
+    "content": {
+      "blogCrumb": "Blog",
+      "blogTitle": "Le blog Bizik",
+      "blogText": "Connaissez les arnaques avant qu’elles ne vous atteignent. Des guides en langage clair sur le séquestre, les paiements et les transactions sûres - écrits pour le Cameroun et l’ensemble de la zone CEMAC.",
+      "blogMetaTitle": "Blog - arnaques, guides et paiements sécurisés",
+      "blogMetaDescription": "Des guides pratiques sur le séquestre, la prévention des arnaques en ligne, le freelance et les paiements sécurisés par Mobile Money au Cameroun et en zone CEMAC. Par l’équipe Bizik.",
+      "blogOgTitle": "Le blog Bizik",
+      "blogOgDescription": "Connaissez les arnaques avant qu’elles ne vous atteignent.",
+      "all": "Tout",
+      "emptyTitle": "Rien ici pour l’instant",
+      "emptyText": "De nouveaux articles arrivent - revenez bientôt.",
+      "categoryMetaTitle": "{{label}} - Blog",
+      "categoryMetaDescription": "Articles sur {{label}} du blog Bizik - séquestre, arnaques et paiements sécurisés.",
+      "helpCrumb": "Centre d’aide",
+      "relatedTitle": "Articles liés",
+      "legal": {
+        "termsTitle": "Conditions d’utilisation",
+        "termsDescription": "Les conditions qui régissent votre utilisation de Bizik - le séquestre sécurisé pour tous.",
+        "privacyTitle": "Politique de confidentialité",
+        "privacyDescription": "Comment Bizik collecte, utilise et protège vos données personnelles.",
+        "cookieTitle": "Politique relative aux cookies",
+        "cookieDescription": "Comment Bizik utilise les cookies et technologies similaires.",
+        "amlTitle": "Politique LBC / KYC",
+        "amlDescription": "Comment Bizik vérifie l’identité et prévient le blanchiment d’argent.",
+        "disputeTitle": "Politique de litiges",
+        "disputeDescription": "Comment les litiges entre un payeur et un bénéficiaire sont tranchés sur Bizik."
+      }
+    },
+    "article": {
+      "notFound": "Article introuvable",
+      "share": "Partager cet article",
+      "shareX": "Partager sur X",
+      "shareLinkedIn": "Partager sur LinkedIn",
+      "shareWhatsApp": "Partager sur WhatsApp",
+      "onThisPage": "Sur cette page",
+      "articleContents": "Sommaire de l’article",
+      "asideTitle": "Traitez avec des inconnus, en sécurité",
+      "asideText": "Bizik garde l’argent jusqu’à ce que les deux parties soient satisfaites.",
+      "asideCta": "Lancer un accord",
+      "related": "À lire aussi",
+      "helpNotFound": "Article introuvable",
+      "helpAsideTitle": "Toujours bloqué ?",
+      "helpAsideText": "Notre équipe répond en français et en anglais.",
+      "helpAsideCta": "Contacter l’assistance"
+    },
+    "help": {
+      "metaTitle": "Centre d’aide - comment fonctionnent les accords sous séquestre",
+      "metaDescription": "Des réponses sur les accords sous séquestre, le financement, la vérification, les litiges, les frais, la sécurité et l’assistant WhatsApp. Cherchez dans le centre d’aide Bizik ou parcourez par thème.",
+      "ogTitle": "Centre d’aide Bizik",
+      "crumb": "Centre d’aide",
+      "title": "Comment pouvons-nous vous aider ?",
+      "searchOne": "Cherchez parmi {{count}} article, ou parcourez par thème ci-dessous.",
+      "searchMany": "Cherchez parmi {{count}} articles, ou parcourez par thème ci-dessous.",
+      "searchLabel": "Rechercher dans le centre d’aide",
+      "searchPlaceholder": "Rechercher",
+      "popular": "Populaire :",
+      "popularTerms": [
+        "libération automatique",
+        "mauvaise personne",
+        "vérifier mon compte",
+        "en attente"
+      ],
+      "browseTitle": "Parcourir par thème",
+      "filterAria": "Filtrer les articles par thème",
+      "all": "Tout",
+      "readArticle": "Lire l’article →",
+      "noMatch": "Aucun résultat pour cette recherche. Essayez un autre mot, ou contactez l’assistance ci-dessous.",
+      "stillTitle": "Toujours besoin d’aide ?",
+      "stillText": "Notre équipe répond en français et en anglais, de 7h à 21h WAT, sept jours sur sept.",
+      "contactCta": "Contacter l’assistance",
+      "articleNotFound": "Article d’aide introuvable",
+      "articleMetaTitle": "{{title}} - Centre d’aide",
+      "minRead": "{{count}} min de lecture",
+      "allArticles": "← Tous les articles d’aide",
+      "helpful": "Cet article vous a-t-il aidé ? Dites à l’assistance ce qui manquait.",
+      "moreIn": "Plus dans {{topic}}",
+      "relatedAria": "Articles d’aide liés",
+      "asideText": "Notre équipe répond en français et en anglais. Indiquez votre référence d’accord ou de transaction.",
+      "topics": {
+        "getting-started": "Premiers pas",
+        "deals": "Accords et séquestre",
+        "money": "Argent et portefeuille",
+        "verification": "Vérification",
+        "fees": "Frais",
+        "disputes": "Litiges",
+        "security": "Sécurité",
+        "whatsapp": "WhatsApp",
+        "troubleshooting": "Dépannage",
+        "contact": "Contact"
+      }
+    },
+    "about": {
+      "meta": {
+        "title": "À propos - le séquestre conçu au Cameroun",
+        "description": "Bizik est un service de séquestre conçu au Cameroun par Lyftsoft Technologies, pour que des personnes qui ne se connaissent pas puissent acheter, vendre et travailler en ligne sans que personne ne prenne le risque."
+      },
+      "crumb": "À propos",
+      "eyebrow": "À propos de Bizik",
+      "title": "Nous rendons sûr chaque accord en ligne en Afrique.",
+      "text": "Bizik est une entreprise camerounaise qui construit la couche de confiance du commerce africain - en commençant par un séquestre qui fonctionne sur les circuits d’argent que les gens utilisent vraiment.",
+      "whyEyebrow": "Pourquoi nous avons commencé",
+      "whyImgAlt": "Le commerce local au Cameroun - une vendeuse avec un téléphone",
+      "whyP1": "L’un de nos fondateurs a vendu un ordinateur portable sur Facebook Marketplace et a passé trois semaines à débattre de qui devait envoyer en premier. L’autre a vu un cousin perdre 400 000 XAF au profit d’un « vendeur » disparu le jour même.",
+      "whyP2": "Chaque accord en ligne ici commence par le même bras de fer, et cela coûte de l’argent et des opportunités bien réels. Le séquestre résout déjà ce problème - mais les services existants exigent un compte bancaire, une devise occidentale et une semaine de paperasse.",
+      "whyP3": "Nous avons donc construit un séquestre pour téléphone, en FCFA, en français et en anglais, qui fonctionne avec MTN MoMo et Orange Money.",
+      "surfacesTitle": "Nous allons là où sont les gens",
+      "surfacesSub": "Le même séquestre, le même compte, sur trois supports - parce que la confiance ne devrait rien exiger d’installer.",
+      "newTag": "Nouveau",
+      "surfaces": [
+        {
+          "title": "Assistant WhatsApp",
+          "text": "Zéro installation. Par écrit ou par la voix, en FR/EN - créez, financez, vérifiez et libérez directement dans la conversation, avec des paiements confirmés par code."
+        },
+        {
+          "title": "Application mobile",
+          "text": "Complète sur Android et iOS, tolérante au hors-ligne, avec des notifications push pour chaque événement d’un accord."
+        },
+        {
+          "title": "Web",
+          "text": "Une application web installable pour les accords, le portefeuille et la vérification - rien à télécharger, fonctionne sur tout navigateur."
+        }
+      ],
+      "missionEyebrow": "Mission",
+      "mission": "Rendre normal le fait que deux inconnus en Afrique fassent affaire sans qu’aucun ne prenne le risque seul.",
+      "visionEyebrow": "Vision",
+      "vision": "Un continent où la confiance est une infrastructure - et où chaque place de marché, indépendant et commerçant peut s’y brancher.",
+      "valuesTitle": "Ce à quoi nous nous tenons",
+      "values": [
+        {
+          "title": "Confiance",
+          "text": "Nous ne sommes utiles que si les deux parties nous croient."
+        },
+        {
+          "title": "Équité",
+          "text": "Ce sont les preuves qui tranchent les litiges, jamais celui qui crie le plus fort."
+        },
+        {
+          "title": "Simplicité",
+          "text": "Si votre tante ne sait pas s’en servir, nous n’avons pas fini."
+        },
+        {
+          "title": "Le local d’abord",
+          "text": "FCFA, mobile money, FR/EN - pas une arrière-pensée."
+        },
+        {
+          "title": "Sécurité",
+          "text": "L’argent des autres n’est pas un endroit où aller vite."
+        }
+      ],
+      "whereTitle": "Où nous en sommes",
+      "teamImgAlt": "L’équipe Bizik",
+      "timeline": [
+        {
+          "year": "2024",
+          "text": "Fondée à Douala. Premier prototype construit autour des encaissements MTN MoMo."
+        },
+        {
+          "year": "2025",
+          "text": "Bêta privée avec 200 indépendants et vendeurs du commerce social. Orange Money et la médiation des litiges entrent en service."
+        },
+        {
+          "year": "2026",
+          "text": "Lancement public au Cameroun, portefeuille multidevise, applications mobiles, assistant WhatsApp - tout le parcours de séquestre dans une discussion - et les premiers partenaires en séquestre en marque blanche."
+        }
+      ]
+    },
+    "contact": {
+      "meta": {
+        "title": "Nous contacter",
+        "description": "Contactez l'équipe Bizik pour l'assistance, les partenariats, la presse ou les signalements de sécurité, par e-mail ou sur WhatsApp."
+      },
+      "crumb": "Contact",
+      "eyebrow": "Contact",
+      "title": "Nous sommes là pour vous aider.",
+      "text": "Choisissez la bonne équipe ci-dessous et vous aurez une réponse plus rapide. Si votre accord est en cours et que quelque chose ne va pas, passez par l’assistance - c’est ce qui est surveillé en premier.",
+      "supportTitle": "Assistance",
+      "supportSla": "~2 heures",
+      "supportText": "Accords en cours, versements, litiges, vérification.",
+      "businessTitle": "Entreprises & API",
+      "businessSla": "1 jour ouvré",
+      "businessText": "Places de marché, séquestre en marque blanche, tarifs au volume.",
+      "pressTitle": "Presse & partenariats",
+      "pressSla": "2 jours ouvrés",
+      "pressText": "Interviews, éléments de marque, co-marketing.",
+      "officeTitle": "Bureau",
+      "officeCity": "Douala, Cameroun",
+      "officeHours": "Lun-ven, 8h-18h WAT",
+      "mapTitle": "Carte du bureau Bizik au 1117 Rue 5.056, Douala",
+      "formTitle": "Envoyez-nous un message",
+      "form": {
+        "honeypot": "Laissez ce champ vide",
+        "name": "Nom complet",
+        "phone": "Téléphone",
+        "email": "E-mail",
+        "topic": "Sujet",
+        "message": "Message",
+        "consent": "J’accepte que Bizik me contacte au sujet de cette demande et traite mes informations conformément à la politique de confidentialité.",
+        "submit": "Envoyer le message",
+        "sending": "Envoi…",
+        "pinWarning": "Nous ne demandons jamais votre code Mobile Money. Personne chez Bizik ne le fera jamais.",
+        "error": "Une erreur est survenue lors de l’envoi de votre message. Écrivez-nous à {{email}} et nous vous répondrons aussitôt.",
+        "sentTitle": "Merci - votre message est en route. ✅",
+        "sentText": "Notre équipe répond en français et en anglais, de 7h à 21h WAT. Nous répondrons à l’adresse que vous avez indiquée. Si c’est urgent, écrivez-nous sur WhatsApp.",
+        "sentAgain": "Envoyer un autre message",
+        "topics": [
+          "Un problème sur un accord en cours",
+          "Versements & mobile money",
+          "Litiges & médiation",
+          "Vérification / KYC",
+          "Entreprises & API",
+          "Autre chose"
+        ]
+      }
+    },
+    "security": {
+      "meta": {
+        "title": "Sécurité - comment nous protégeons votre argent",
+        "description": "Fonds sous séquestre séparés, identités vérifiées, paiements confirmés par code PIN, contrôle manuel des gros retraits et médiation neutre des litiges. Comment Bizik protège l'argent des accords."
+      },
+      "crumb": "Sécurité",
+      "eyebrow": "Sécurité et confiance",
+      "title": "Comment nous protégeons votre argent et vos données",
+      "text": "Le séquestre ne fonctionne que si vous croyez que l’intermédiaire est solide. Voici exactement ce qui se trouve au milieu : des fonds ségrégués, un chiffrement de niveau bancaire, des identités vérifiées et une médiation neutre.",
+      "fundsTitle": "Comment les fonds sont protégés",
+      "funds": [
+        {
+          "title": "Comptes de séquestre ségrégués",
+          "text": "Les fonds des clients sont détenus sur des comptes de séquestre dédiés chez nos partenaires de paiement agréés, séparés de l’argent d’exploitation de Bizik. Ils ne servent jamais à faire tourner l’entreprise."
+        },
+        {
+          "title": "Libération sur approbation seulement",
+          "text": "Une libération exige l’approbation de l’acheteur, l’expiration du délai d’inspection, ou la décision d’un médiateur. Il n’existe pas de quatrième façon pour l’argent de quitter le séquestre."
+        },
+        {
+          "title": "Contrôle manuel des gros versements",
+          "text": "Les versements au-dessus de notre seuil sont examinés par un humain avant exécution, et rapprochés quotidiennement du registre de séquestre."
+        }
+      ],
+      "flowEyebrow": "Circuit des fonds",
+      "flowInTitle": "MoMo / banque de l’acheteur",
+      "flowInMeta": "Encaissement via un prestataire agréé",
+      "flowEscrowTitle": "Compte de séquestre ségrégué",
+      "flowEscrowMeta": "Cloisonné · rapproché chaque jour",
+      "flowOutTitle": "Versement au vendeur",
+      "flowOutMeta": "Sur approbation ou décision seulement",
+      "platformTitle": "Sécurité de la plateforme, de l’identité et du compte",
+      "platform": [
+        {
+          "title": "Chiffrement partout",
+          "text": "TLS en transit, chiffrement au repos des données personnelles et KYC, gestion isolée des secrets."
+        },
+        {
+          "title": "Vérifications d’identité KYC",
+          "text": "Pièce d’identité officielle et détection du vivant pour les vendeurs vérifiés et pour tout accord au-dessus du seuil de vérification."
+        },
+        {
+          "title": "Filtrage LBC et sanctions",
+          "text": "Chaque partie et chaque versement sont filtrés contre les listes de sanctions et de PPE, avec une surveillance des schémas suspects."
+        },
+        {
+          "title": "Contrôles anti-fraude",
+          "text": "Limites de vélocité, empreinte d’appareil, et blocage des transactions interdites et des tentatives de paiement hors plateforme."
+        },
+        {
+          "title": "Votre compte",
+          "text": "Connexion par code SMS, gestion des sessions et des appareils, et alertes à chaque mise sous séquestre, libération et versement."
+        },
+        {
+          "title": "Médiation neutre",
+          "text": "Les médiateurs sont payés pareil quelle que soit leur décision. Nous n’avons aucun intérêt dans l’issue de votre litige."
+        }
+      ],
+      "vulnTitle": "Vous avez trouvé une faille ?",
+      "vulnText": "Nous accueillons la divulgation responsable et répondons à tout signalement crédible sous deux jours ouvrés. Merci de ne pas faire de tests sur de vrais accords d’utilisateurs.",
+      "reportTo": "Signaler à",
+      "contactTeam": "Contacter l’équipe"
+    },
+    "freelancers": {
+      "meta": {
+        "title": "Séquestre pour les freelances au Cameroun",
+        "description": "Soyez payé pour chaque mission : le client finance chaque jalon sous séquestre avant que vous commenciez, et l'argent est libéré quand le travail est validé. Retrait vers MTN MoMo ou Orange Money."
+      },
+      "crumb": "Pour les indépendants",
+      "eyebrow": "Pour les indépendants",
+      "title": "Soyez payé pour chaque mission que vous terminez.",
+      "text": "Le client finance le projet d’avance, Bizik le garde, et l’argent arrive sur votre Mobile Money dès que votre travail est approuvé. Plus de factures à relancer, plus de « la semaine prochaine » qui n’arrive jamais.",
+      "ctaPrimary": "Créer un accord financé",
+      "ctaSecondary": "Voir comment ça marche",
+      "imgAlt": "Une indépendante qui travaille sur son ordinateur portable à Douala",
+      "floatTitle": "Jalon 2 sur 3 · approuvé",
+      "floatTag": "Versé",
+      "problemEyebrow": "Le problème",
+      "problemTitle": "Vous avez déjà fait le travail. C’est le pire moment pour commencer à négocier.",
+      "problemText": "Un client rencontré en ligne promet 50 % d’avance et en paie 20 %. Les livrables partent. Puis les messages s’espacent, « le comptable est en déplacement », et vous voilà seul face à quelqu’un dans un autre pays, sans aucun moyen de pression.",
+      "steps": [
+        {
+          "title": "1 · Le client finance avant que vous commenciez",
+          "text": "Vous envoyez un lien d’accord. Il paie sous séquestre. Vous voyez que l’argent est confirmé avant d’ouvrir le moindre fichier."
+        },
+        {
+          "title": "2 · Livrez jalon par jalon",
+          "text": "Découpez un long projet en étapes. Chaque étape est financée et libérée séparément, vous ne portez donc jamais des mois de travail impayé."
+        },
+        {
+          "title": "3 · Approuvé, puis payé",
+          "text": "Le client approuve, ou le délai d’inspection expire et la libération se fait automatiquement. L’argent arrive sur MTN, Orange, votre banque ou Payoneer."
+        }
+      ],
+      "benefits": [
+        {
+          "title": "Ayez l’air professionnel",
+          "text": "Un accord financé sous séquestre inspire plus de sérieux qu’une facture PDF."
+        },
+        {
+          "title": "Travaillez avec n’importe qui",
+          "text": "Prenez des clients à Paris, Lagos ou Montréal sans vous demander s’ils paieront."
+        },
+        {
+          "title": "Facturez dans leur devise",
+          "text": "Devisez en EUR ou en USD, soyez payé en FCFA à un taux affiché d’avance."
+        },
+        {
+          "title": "Protection du périmètre",
+          "text": "Les demandes de révision sont enregistrées. Les tours gratuits sans fin cessent d’être invisibles."
+        }
+      ],
+      "quote": "J’ai arrêté de demander des acomptes et j’envoie des accords Bizik à la place. Deux clients m’ont dit que ça me donnait l’air plus sérieuse. Personne n’a discuté depuis.",
+      "quoteName": "Aïcha N.",
+      "quoteRole": "Designer produit · Douala",
+      "otherTitle": "Les autres façons d’utiliser Bizik",
+      "other": [
+        {
+          "title": "Acheteurs et vendeurs",
+          "text": "Le commerce social, en sécurité."
+        },
+        {
+          "title": "Véhicules",
+          "text": "Inspectez avant de libérer."
+        },
+        {
+          "title": "Transfrontalier",
+          "text": "Les accords de la diaspora au pays."
+        },
+        {
+          "title": "Places de marché",
+          "text": "Le séquestre en marque blanche."
+        }
+      ]
+    },
+    "business": {
+      "meta": {
+        "title": "Séquestre pour les vendeurs en ligne et les entreprises",
+        "description": "Vendez à des clients qui ne vous connaissent pas. Bizik garde le paiement sous séquestre jusqu'à la livraison : l'acheteur paie en confiance et vous n'expédiez jamais sur une fausse capture de paiement."
+      },
+      "crumb": "Pour les entreprises",
+      "eyebrow": "Le séquestre en marque blanche",
+      "title": "Ajoutez la confiance à votre plateforme.",
+      "text": "Une seule API pour les comptes de séquestre, les encaissements mobile money, le KYC, la gestion des litiges et les versements au Cameroun et en zone CEMAC. Votre place de marché garde la relation client ; nous gardons l’argent.",
+      "ctaTalk": "Parlez-nous",
+      "ctaDocs": "Lire la documentation API",
+      "capEyebrow": "Fonctionnalités",
+      "capTitle": "Tout ce qu’il faut côté argent",
+      "capabilities": [
+        {
+          "title": "API de séquestre",
+          "text": "Créer, financer, jalonner, libérer, rembourser. REST + clés d’idempotence."
+        },
+        {
+          "title": "Portefeuilles",
+          "text": "Des soldes multidevises par utilisateur, avec change en temps réel et export du registre."
+        },
+        {
+          "title": "Encaissement et versement",
+          "text": "MTN MoMo et Orange Money en entrée ; mobile money, banque ou Payoneer en sortie - une seule interface."
+        },
+        {
+          "title": "KYC hébergé",
+          "text": "Des parcours pièce d’identité + détection du vivant intégrables, avec filtrage LBC et sanctions."
+        },
+        {
+          "title": "Moteur de litiges",
+          "text": "Collecte des preuves, compteurs de délais et médiateurs Bizik en recours."
+        },
+        {
+          "title": "Webhooks",
+          "text": "Des événements signés pour chaque changement d’état, avec rejeu et bac à sable."
+        }
+      ],
+      "pipelineTitle": "Comment tout s’assemble",
+      "pipeYouTitle": "Votre plateforme",
+      "pipeYouMeta": "Annonces, discussion, paiement",
+      "pipeUsTitle": "Séquestre Bizik",
+      "pipeUsMeta": "Garder, arbitrer, rapprocher",
+      "pipeOutTitle": "Versement au vendeur",
+      "pipeOutMeta": "MoMo, banque, Payoneer",
+      "formTitle": "Parlez-nous de votre plateforme",
+      "formText": "Nous revenons vers vous sous un jour ouvré avec un tarif adapté à votre volume, une clé de bac à sable, et un aperçu du règlement et de la conformité pour votre équipe juridique.",
+      "checklist": [
+        "Des tarifs au volume à partir de 1,2 %",
+        "Des rapports de règlement quotidiens",
+        "Un contact conformité attitré"
+      ],
+      "form": {
+        "honeypot": "Laissez ce champ vide",
+        "name": "Nom complet",
+        "company": "Entreprise",
+        "email": "E-mail professionnel",
+        "volume": "Volume mensuel",
+        "message": "Que construisez-vous ?",
+        "submit": "Demander un accès",
+        "volumes": [
+          "Moins de 5M XAF",
+          "5M - 50M XAF",
+          "50M - 500M XAF",
+          "Plus de 500M XAF"
+        ]
+      }
+    },
+    "root": {
+      "title": "Bizik - Le séquestre sécurisé pour tous",
+      "description": "Bizik garde l’argent sous séquestre jusqu’à ce que le travail soit livré ou que la marchandise arrive, puis paie le vendeur. Créez un accord sur le web, dans l’application ou sur WhatsApp - MTN MoMo, Orange Money et cartes.",
+      "ogDescription": "Traitez avec des inconnus en toute sécurité. Bizik garde l’argent sous séquestre jusqu’à l’arrivée de la marchandise ou la livraison du travail - puis le vendeur est payé.",
+      "twitterDescription": "Traitez avec des inconnus en toute sécurité. Bizik garde l’argent sous séquestre jusqu’à l’approbation de la livraison - puis le vendeur est payé."
+    },
+    "notFound": {
+      "metaTitle": "Page introuvable",
+      "code": "Erreur 404",
+      "title": "Cette page n'existe pas.",
+      "text": "Le lien est peut-être cassé, ou la page a été déplacée. Rien n'est arrivé à votre argent ni à vos accords.",
+      "back": "Retour",
+      "home": "Aller à l'accueil",
+      "suggestions": "Ou essayez l'une de ces pages"
+    },
+    "sendMoney": {
+      "meta": {
+        "title": "Envoyer de l’argent au Cameroun - transferts gratuits et instantanés",
+        "description": "Envoyez de l’argent à un @identifiant ou un numéro sur Bizik. Gratuit, instantané, vérifié par le nom. Rechargez avec MTN MoMo ou Orange Money."
+      },
+      "crumb": "Envoyer de l’argent",
+      "eyebrow": "Envoyer de l’argent",
+      "title": "Envoyez de l’argent au Cameroun, gratuitement et instantanément",
+      "text": "Payez un ami, un proche ou un collègue depuis votre portefeuille Bizik avec son @identifiant ou son numéro de téléphone. L’argent arrive en quelques secondes, Bizik ne facture rien pour le transfert, et vous voyez le nom du destinataire avant de confirmer.",
+      "ctaPrimary": "Créer votre compte gratuit",
+      "ctaSecondary": "Comment recevoir de l’argent",
+      "mock": {
+        "label": "Envoyer à",
+        "recipient": "@maxime.b · Maxime B.",
+        "amount": "Montant",
+        "fee": "Frais Bizik",
+        "feeValue": "0 XAF",
+        "arrives": "Arrivée",
+        "arrivesValue": "Immédiate",
+        "confirmed": "Destinataire vérifié par son nom"
+      },
+      "factsTitle": "Pourquoi envoyer avec Bizik",
+      "facts": [
+        {
+          "title": "Aucun frais de transfert",
+          "text": "Bizik ne facture rien pour envoyer de l’argent d’un portefeuille à un autre, quel que soit le montant."
+        },
+        {
+          "title": "Instantané",
+          "text": "Le solde du destinataire est mis à jour dès que vous confirmez. Vous êtes tous les deux prévenus immédiatement."
+        },
+        {
+          "title": "Fini les erreurs de numéro",
+          "text": "Vous envoyez à un @identifiant ou à un numéro, et Bizik affiche le nom du titulaire du compte avant que l’argent ne parte."
+        },
+        {
+          "title": "Protégé par votre code",
+          "text": "Seul un compte vérifié peut envoyer, et chaque transfert demande votre confirmation. Sur WhatsApp, il demande aussi votre code PIN."
+        }
+      ],
+      "stepsEyebrow": "Comment ça marche",
+      "stepsTitle": "Trois étapes pour envoyer de l’argent",
+      "steps": [
+        {
+          "title": "Rechargez votre portefeuille",
+          "text": "Ajoutez de l’argent avec MTN Mobile Money ou Orange Money. Votre solde est mis à jour dès que votre opérateur confirme le paiement."
+        },
+        {
+          "title": "Saisissez un @identifiant ou un numéro",
+          "text": "Tapez l’identifiant Bizik du destinataire, comme @maxime.b, ou son numéro de téléphone. Bizik trouve le compte et affiche le nom."
+        },
+        {
+          "title": "Confirmez, c’est arrivé",
+          "text": "Vérifiez le nom et le montant, ajoutez une note si vous voulez, et confirmez. L’argent est immédiatement sur son portefeuille."
+        }
+      ],
+      "detailTitle": "Tout ce qu’il faut savoir avant d’envoyer",
+      "details": [
+        {
+          "title": "À qui pouvez-vous envoyer",
+          "text": "À toute personne qui a un compte Bizik. Si la personne à payer n’est pas encore sur Bizik, elle peut créer un compte gratuit en quelques minutes avec son seul numéro de téléphone, et vous pouvez envoyer dès que c’est fait. Les transferts vont de portefeuille à portefeuille, dans la devise de votre portefeuille (XAF au Cameroun)."
+        },
+        {
+          "title": "Rechargez avec MTN MoMo ou Orange Money",
+          "text": "Votre portefeuille se recharge avec le mobile money que vous utilisez déjà. Vous validez le paiement sur votre téléphone, et le solde est disponible dès que l’opérateur le confirme. Votre opérateur peut facturer ses propres frais de son côté."
+        },
+        {
+          "title": "Vérifiez-vous une fois, puis envoyez",
+          "text": "Pour protéger tout le monde, envoyer de l’argent demande un compte vérifié. C’est une vérification d’identité unique, faite depuis l’application. Recevoir ne la demande jamais."
+        },
+        {
+          "title": "Envoyez depuis le web, l’application ou WhatsApp",
+          "text": "Utilisez le bouton Envoyer de votre portefeuille sur le web ou dans l’application, ou écrivez à l’assistant Bizik sur WhatsApp, par exemple « envoyer 5 000 à @maxime.b ». WhatsApp vous demande toujours de confirmer et de saisir votre code PIN."
+        },
+        {
+          "title": "Un reçu pour chaque transfert",
+          "text": "Chaque transfert apparaît dans l’historique de votre portefeuille, avec un reçu PDF téléchargeable. Le destinataire est prévenu par notification, e-mail et WhatsApp ou SMS."
+        }
+      ],
+      "compareTitle": "Transfert direct ou accord sécurisé ?",
+      "compareText": "Un transfert est définitif : une fois arrivé, il ne peut pas être annulé. C’est parfait pour payer des personnes que vous connaissez. Quand vous payez une marchandise ou un travail que vous n’avez pas encore reçu, utilisez plutôt un accord sécurisé : Bizik garde l’argent jusqu’à votre validation.",
+      "compareCols": [
+        "",
+        "Transfert direct",
+        "Accord sécurisé (séquestre)"
+      ],
+      "compareRows": [
+        [
+          "Idéal pour",
+          "Famille, amis, collègues, rembourser quelqu’un",
+          "Acheter à un inconnu, payer un travail ou une livraison"
+        ],
+        [
+          "Quand l’argent part",
+          "Immédiatement",
+          "Quand vous validez la livraison"
+        ],
+        [
+          "Peut-on annuler ?",
+          "Non, un transfert est définitif",
+          "Oui, un litige peut aboutir à un remboursement"
+        ],
+        [
+          "Frais Bizik",
+          "Gratuit",
+          "Frais de séquestre payés par l’acheteur (voir les tarifs)"
+        ]
+      ],
+      "compareCta": "Découvrir les accords sécurisés",
+      "faqTitle": "Questions sur l’envoi d’argent",
+      "faq": [
+        {
+          "q": "Combien coûte un envoi d’argent avec Bizik ?",
+          "a": "Rien. Bizik ne facture aucun frais pour envoyer de l’argent de votre portefeuille vers un autre portefeuille Bizik. Votre opérateur de mobile money peut facturer ses propres frais quand vous rechargez."
+        },
+        {
+          "q": "Combien de temps prend un transfert ?",
+          "a": "Il est instantané. L’argent est sur le portefeuille du destinataire dès que vous confirmez, et vous êtes tous les deux prévenus."
+        },
+        {
+          "q": "Puis-je envoyer de l’argent à quelqu’un qui n’a pas Bizik ?",
+          "a": "Pas directement. Le destinataire doit avoir un compte Bizik, gratuit et ouvert en quelques minutes avec un numéro de téléphone. Ensuite, vous pouvez envoyer à son @identifiant ou à son numéro."
+        },
+        {
+          "q": "Puis-je annuler un transfert ?",
+          "a": "Non. Un transfert confirmé est définitif, c’est pourquoi Bizik vous montre d’abord le nom du destinataire. Si vous payez quelque chose que vous n’avez pas encore reçu, utilisez un accord sécurisé : l’argent n’est libéré qu’à votre validation."
+        },
+        {
+          "q": "La personne que je paie peut-elle retirer vers MTN MoMo ou Orange Money ?",
+          "a": "Oui. L’argent arrive sur son portefeuille Bizik et, une fois son compte vérifié, elle peut le retirer vers un numéro MTN Mobile Money ou Orange Money vérifié."
+        },
+        {
+          "q": "Dois-je vérifier mon identité pour envoyer de l’argent ?",
+          "a": "Oui. Envoyer de l’argent demande un compte vérifié. C’est une vérification unique, faite dans l’application. Recevoir de l’argent ne la demande pas."
+        }
+      ],
+      "relatedTitle": "À lire aussi",
+      "related": [
+        {
+          "title": "Recevoir de l’argent",
+          "text": "Partagez votre @identifiant et soyez payé directement sur votre portefeuille.",
+          "href": "/receive-money"
+        },
+        {
+          "title": "Tarifs",
+          "text": "Tous les frais Bizik dans un tableau, avec un calculateur.",
+          "href": "/pricing"
+        },
+        {
+          "title": "MTN MoMo ou Orange Money ?",
+          "text": "Comment payer en ligne en sécurité avec l’un ou l’autre.",
+          "href": "/blog/mtn-momo-ou-orange-money-payer-en-ligne-en-securite"
+        }
+      ]
+    },
+    "receiveMoney": {
+      "meta": {
+        "title": "Recevoir de l’argent au Cameroun - soyez payé avec votre identifiant Bizik",
+        "description": "Partagez votre @identifiant et recevez l’argent sur votre portefeuille Bizik, gratuitement et instantanément. Retrait vers MTN MoMo ou Orange Money."
+      },
+      "crumb": "Recevoir de l’argent",
+      "eyebrow": "Recevoir de l’argent",
+      "title": "Recevez de l’argent avec un simple identifiant",
+      "text": "Donnez votre @identifiant Bizik au lieu de votre numéro de téléphone. Toute personne sur Bizik peut vous payer en quelques secondes, gratuitement, et vous retirez vers MTN Mobile Money ou Orange Money quand vous voulez.",
+      "ctaPrimary": "Obtenir mon identifiant",
+      "ctaSecondary": "Comment envoyer de l’argent",
+      "mock": {
+        "label": "Argent reçu",
+        "from": "De",
+        "fromValue": "@aline.n · Aline N.",
+        "amount": "Montant",
+        "fee": "Frais Bizik",
+        "feeValue": "0 XAF",
+        "handleLabel": "Votre identifiant",
+        "handleValue": "@votrenom",
+        "share": "Copier · Partager"
+      },
+      "factsTitle": "Pourquoi être payé avec Bizik",
+      "facts": [
+        {
+          "title": "Gratuit à la réception",
+          "text": "Bizik ne facture rien quand quelqu’un envoie de l’argent sur votre portefeuille."
+        },
+        {
+          "title": "Instantané",
+          "text": "L’argent arrive sur votre solde dès que l’expéditeur confirme, et vous êtes prévenu tout de suite."
+        },
+        {
+          "title": "Gardez votre numéro privé",
+          "text": "Partagez un @identifiant plutôt que votre numéro. On peut toujours vous trouver par votre numéro si vous le donnez."
+        },
+        {
+          "title": "Aucune vérification pour recevoir",
+          "text": "Vous pouvez recevoir de l’argent dès votre inscription. La vérification n’est demandée que pour retirer ou envoyer."
+        }
+      ],
+      "stepsEyebrow": "Comment ça marche",
+      "stepsTitle": "Trois étapes pour être payé",
+      "steps": [
+        {
+          "title": "Créez votre compte gratuit",
+          "text": "Inscrivez-vous avec votre numéro de téléphone. Votre identifiant Bizik est prêt tout de suite, sur le web, dans l’application et sur WhatsApp."
+        },
+        {
+          "title": "Partagez votre @identifiant",
+          "text": "Copiez-le depuis votre portefeuille et envoyez-le sur WhatsApp, mettez-le dans votre statut ou sur votre carte de visite. L’expéditeur voit votre nom avant de confirmer."
+        },
+        {
+          "title": "Soyez payé, puis retirez",
+          "text": "L’argent arrive instantanément. Gardez-le sur votre portefeuille ou retirez-le vers votre numéro MTN Mobile Money ou Orange Money."
+        }
+      ],
+      "detailTitle": "De votre portefeuille à votre mobile money",
+      "details": [
+        {
+          "title": "Retirez vers MTN MoMo ou Orange Money",
+          "text": "Ajoutez votre numéro de mobile money une fois et confirmez-le avec un code reçu par SMS. Ensuite, vos retraits vont vers ce numéro. Un retrait standard n’a pas de frais Bizik ; votre opérateur peut facturer les siens."
+        },
+        {
+          "title": "Les gros retraits sont vérifiés par une personne",
+          "text": "Les retraits de 500 000 XAF ou plus vers le mobile money sont contrôlés par l’équipe Bizik avant d’être versés. Cela prend un peu plus de temps et protège votre argent si votre compte était un jour détourné."
+        },
+        {
+          "title": "Vérifiez-vous une fois pour retirer",
+          "text": "Vous pouvez recevoir sans vérification, mais retirer demande un compte vérifié. C’est une vérification d’identité unique, faite dans l’application, qui vous permet aussi d’envoyer de l’argent."
+        },
+        {
+          "title": "Plusieurs devises dans un portefeuille",
+          "text": "Votre portefeuille peut contenir des XAF, USD, EUR, GBP, NGN et GHS. Vous pouvez convertir de l’une à l’autre au taux interbancaire en temps réel plus une marge de {{fxPct}} %, affichée avant de confirmer."
+        },
+        {
+          "title": "Sachez exactement ce qui est arrivé",
+          "text": "Chaque paiement apparaît dans votre historique avec l’expéditeur et sa note, et vous pouvez télécharger un reçu PDF. Vous êtes prévenu par notification, e-mail et WhatsApp ou SMS."
+        }
+      ],
+      "compareTitle": "Payé par quelqu’un que vous ne connaissez pas ?",
+      "compareText": "Un transfert est définitif et n’offre aucune protection si quelque chose tourne mal. Si vous vendez une marchandise ou faites un travail pour un nouveau client, demandez-lui de payer par un accord sécurisé : l’argent est bloqué pour vous avant la livraison, et libéré à sa validation.",
+      "compareCols": [
+        "",
+        "Transfert direct",
+        "Accord sécurisé (séquestre)"
+      ],
+      "compareRows": [
+        [
+          "Idéal pour",
+          "Proches, remboursements, cadeaux",
+          "Nouveaux clients, livraisons, projets"
+        ],
+        [
+          "Vous voyez l’argent",
+          "À son arrivée",
+          "Avant d’expédier ou de commencer"
+        ],
+        [
+          "En cas de problème",
+          "À régler entre vous",
+          "Un médiateur Bizik tranche sur preuves"
+        ],
+        [
+          "Frais Bizik pour vous",
+          "Gratuit",
+          "Gratuit pour le vendeur ; l’acheteur paie les frais de séquestre"
+        ]
+      ],
+      "compareCta": "Découvrir Bizik pour les vendeurs",
+      "faqTitle": "Questions sur la réception d’argent",
+      "faq": [
+        {
+          "q": "Comment recevoir de l’argent sur Bizik ?",
+          "a": "Donnez votre @identifiant Bizik, ou le numéro de téléphone de votre compte, à la personne qui vous paie. Quand elle envoie, l’argent arrive instantanément sur votre portefeuille et vous êtes prévenu."
+        },
+        {
+          "q": "Recevoir de l’argent coûte-t-il quelque chose ?",
+          "a": "Non. Bizik ne vous facture rien pour recevoir un transfert. Un retrait standard vers le mobile money n’a pas non plus de frais Bizik ; votre opérateur peut facturer les siens."
+        },
+        {
+          "q": "Dois-je vérifier mon identité pour recevoir de l’argent ?",
+          "a": "Non. Vous pouvez recevoir dès la création de votre compte. Vous devez vérifier votre identité une fois avant de pouvoir retirer ou envoyer de l’argent."
+        },
+        {
+          "q": "Comment retirer vers MTN MoMo ou Orange Money ?",
+          "a": "Ajoutez votre numéro de mobile money dans votre portefeuille et confirmez-le avec le code reçu par SMS, puis choisissez Retirer. Les retraits de 500 000 XAF ou plus sont vérifiés par une personne avant d’être versés."
+        },
+        {
+          "q": "Quelqu’un peut-il me payer sans compte Bizik ?",
+          "a": "Il lui faut un compte Bizik pour vous envoyer de l’argent. C’est gratuit et prend quelques minutes avec un numéro de téléphone. Il peut recharger son portefeuille avec MTN Mobile Money ou Orange Money, puis payer votre @identifiant."
+        },
+        {
+          "q": "Puis-je demander de l’argent ou partager un lien de paiement ?",
+          "a": "Pas encore. Aujourd’hui, vous recevez de l’argent en partageant votre @identifiant. Pour être payé une marchandise ou un travail par un nouveau client, créez un accord sécurisé et invitez-le par numéro de téléphone."
+        }
+      ],
+      "relatedTitle": "À lire aussi",
+      "related": [
+        {
+          "title": "Envoyer de l’argent",
+          "text": "Des transferts gratuits et instantanés vers un @identifiant ou un numéro.",
+          "href": "/send-money"
+        },
+        {
+          "title": "Pour les entreprises",
+          "text": "Soyez payé en sécurité par des clients qui ne vous connaissent pas.",
+          "href": "/for-business"
+        },
+        {
+          "title": "Vendre sur WhatsApp",
+          "text": "Comment gagner la confiance des inconnus et être payé.",
+          "href": "/blog/vendre-sur-whatsapp-gagner-la-confiance-des-inconnus"
+        }
+      ]
+    }
+  },
+  "notFound": {
+    "code": "Erreur 404",
+    "title": "Page introuvable",
+    "text": "Le lien est peut-être cassé ou la page a été déplacée. Votre argent et vos accords ne sont pas concernés.",
+    "back": "Retour",
+    "dashboard": "Aller au tableau de bord",
+    "home": "Accueil Bizik"
+  },
+  "walkthrough": {
+    "next": "Suivant",
+    "finish": "Commencer",
+    "skip": "Plus tard",
+    "welcome": {
+      "title": "Bienvenue sur Bizik, {{name}}",
+      "body": "Bizik garde l'argent en securite pendant que deux personnes concluent un accord. L'acheteur paie, l'argent attend sous sequestre, et il n'est libere qu'une fois le travail fait - personne n'a besoin de faire confiance en premier.",
+      "done": "Bizik garde l'argent en securite pendant un accord."
+    },
+    "verify": {
+      "title": "Verifiez votre identite",
+      "body": "Une photo de votre piece d'identite et un selfie. C'est obligatoire avant d'envoyer de l'argent, de retirer ou de creer un accord - c'est ce qui rend l'autre partie responsable.",
+      "done": "Votre identite est verifiee. Vous pouvez envoyer, retirer et creer des accords.",
+      "cta": "Verifier maintenant"
+    },
+    "wallet": {
+      "title": "Votre portefeuille",
+      "body": "Ajoutez de l'argent depuis MTN ou Orange Money, gardez-le, envoyez-le gratuitement a un autre utilisateur Bizik, ou retirez-le sur votre telephone. L'argent du portefeuille est le votre - il est separe de ce qui est sous sequestre.",
+      "done": "Votre portefeuille est separe de ce qui est sous sequestre.",
+      "cta": "Ouvrir mon portefeuille"
+    },
+    "send": {
+      "title": "Envoyez de l'argent",
+      "body": "Payez n'importe qui sur Bizik avec son @identifiant ou son numero de telephone. L'argent arrive instantanement et ne coute rien - nous ne prenons aucun frais entre comptes Bizik. Vous devez etre verifie pour envoyer ; vous pouvez recevoir sans l'etre. Votre propre identifiant est sur votre portefeuille, c'est ce que les gens utilisent pour vous payer.",
+      "done": "Vous pouvez envoyer de l'argent a tout utilisateur Bizik, gratuitement.",
+      "cta": "Envoyer de l'argent"
+    },
+    "deal": {
+      "title": "Creez un accord",
+      "body": "Mettez-vous d'accord sur ce qui est livre et pour combien, puis invitez l'autre personne par numero de telephone. L'argent est retenu jusqu'a ce que vous confirmiez la livraison. En cas de probleme, chacun peut ouvrir un litige.",
+      "done": "Vous savez deja comment fonctionnent les accords.",
+      "cta": "Creer un accord"
+    },
+    "help": {
+      "title": "Si vous etes bloque",
+      "body": "L'assistance est dans l'application, et vous pouvez aussi nous joindre sur WhatsApp. Si un accord tourne mal, ouvrez un litige depuis l'accord et un mediateur examinera les preuves des deux cotes.",
+      "done": "L'assistance est dans l'application quand vous en avez besoin.",
+      "cta": "Voir l'aide"
+    }
+  }
+}

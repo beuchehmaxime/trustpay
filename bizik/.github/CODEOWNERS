@@ -1,0 +1,22 @@
+# Every change to this repository needs a review.
+#
+# Code reached production by a direct push to `main` with no second pair of
+# eyes - for a system that moves customer money, that is the change-management
+# finding an auditor will not waive (SOC 2 CC8.1, ISO 27001 A.8.32).
+#
+# CODEOWNERS only has teeth once branch protection requires an owner's review.
+# Turning that on is a GitHub settings change: see docs/compliance-audit.md H-5.
+
+* @lyftsoft-technologies
+
+# Paths where a mistake is measured in customer money or in regulatory
+# exposure. Called out separately so a future team can give them stricter
+# reviewers than the rest of the tree.
+/backend/src/payments/    @lyftsoft-technologies
+/backend/src/wallet/      @lyftsoft-technologies
+/backend/src/escrow/      @lyftsoft-technologies
+/backend/src/aml/         @lyftsoft-technologies
+/backend/src/lib/ledger.ts @lyftsoft-technologies
+/backend/prisma/          @lyftsoft-technologies
+/deploy/                  @lyftsoft-technologies
+/.github/workflows/       @lyftsoft-technologies

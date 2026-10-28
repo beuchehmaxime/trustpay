@@ -1,0 +1,2210 @@
+// =============================================================================
+// BiZik - Complete Database Schema
+// Escrow & Cross-Border Payment Platform (SRS-BIZIK-2026-v1.0)
+// -----------------------------------------------------------------------------
+// Modeled from the SRS (§6.1 Core Data Entities) and the Modularization &
+// Dev-Phases document (per-service table inventory).
+//
+// ARCHITECTURE NOTE
+// BiZik is a DDD microservices system where each service owns an isolated
+// PostgreSQL database (auth_db, kyc_db, user_db, contract_db, escrow_db,
+// wallet_db, dispute_db, notification_db, compliance/reporting). This single
+// Prisma schema is the *unified logical model* of every table across those
+// services - useful for a monolith-first build, prototyping, and as the
+// canonical data dictionary. When split into services later, each section
+// below maps to one service database.
+//
+// Because services do not share databases in production, cross-context links
+// are modeled as INDEXED SOFT REFERENCES (a scalar `*Id` column, no foreign
+// key) rather than Prisma relations. Real Prisma relations are used only
+// WITHIN a single bounded context, where a true FK is valid.
+//
+// Conventions: money = Decimal(20,4), FX rates = Decimal(20,8), tables are
+// snake_case plural (@@map), surrogate keys are uuid() except Contract which
+// uses the human-readable QTQ id from the SRS.
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================================================
+// ENUMS (shared vocabulary)
+// =============================================================================
+
+enum UserRole {
+  FREELANCER
+  CLIENT
+  AGENCY
+  ADMIN
+  COMPLIANCE
+  MEDIATOR
+}
+
+enum UserStatus {
+  PENDING // created, phone not yet verified (verification flips it to ACTIVE)
+  ACTIVE
+  SUSPENDED
+  FROZEN // AML / sanctions hold - reversible only by Compliance
+  CLOSED
+}
+
+enum Currency {
+  USD
+  EUR
+  GBP
+  NGN
+  GHS
+  XAF
+}
+
+enum TwoFactorMethodType {
+  TOTP
+  SMS
+  EMAIL
+}
+
+enum OAuthProvider {
+  GOOGLE
+  LINKEDIN
+}
+
+// ---- KYC ----
+enum KycStatus {
+  NOT_STARTED
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum KycIdType {
+  NATIONAL_ID
+  PASSPORT
+  DRIVERS_LICENSE
+  VOTERS_CARD
+}
+
+enum KycDocumentType {
+  ID_FRONT
+  ID_BACK
+  SELFIE
+  ADDRESS_PROOF
+  BUSINESS_CERTIFICATE
+  DIRECTOR_ID
+}
+
+enum ScreeningResult {
+  CLEAR
+  MATCH
+  PEP
+}
+
+// ---- Contract ----
+enum ContractStatus {
+  DRAFT
+  INVITED
+  UNDER_REVIEW
+  SIGNED
+  FUNDED
+  IN_PROGRESS
+  IN_REVIEW
+  DISPUTED
+  COMPLETED
+  CANCELLED
+}
+
+enum MilestoneStatus {
+  PENDING // defined, not yet funded
+  FUNDED // money held in escrow
+  ACTIVE // work in progress
+  SUBMITTED // delivered, awaiting client approval
+  APPROVED // approved, release queued
+  RELEASED // paid out
+  DISPUTED
+  CANCELLED // cancelled by the creator while still unfunded - kept for history
+}
+
+enum InvitationStatus {
+  SENT
+  ACCEPTED
+  EXPIRED
+  REVOKED
+}
+
+enum SignatureRole {
+  FREELANCER
+  CLIENT
+}
+
+enum AmendmentStatus {
+  PROPOSED
+  ACCEPTED
+  REJECTED
+}
+
+// ---- Escrow / Payment ----
+enum EscrowAccountStatus {
+  OPEN
+  PARTIALLY_RELEASED
+  RELEASED
+  REFUNDED
+  FROZEN
+  CLOSED
+}
+
+enum EscrowTxType {
+  FUND
+  HOLD
+  RELEASE
+  REFUND
+  ADJUSTMENT // manual admin ledger correction
+}
+
+enum TxStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REVERSED
+}
+
+enum PaymentGateway {
+  STRIPE
+  PAYSTACK
+  FLUTTERWAVE
+  MTN_MOMO
+  ORANGE_MONEY
+  PAYONEER
+  WISE
+  PAYPAL
+  BANK_TRANSFER
+  ACH
+  INTERNAL
+}
+
+enum PaymentIntentStatus {
+  REQUIRES_PAYMENT
+  PROCESSING
+  SUCCEEDED
+  FAILED
+  CANCELLED
+}
+
+enum RefundStatus {
+  INITIATED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum FeeType {
+  CLIENT_SERVICE_FEE // 3.5% at funding
+  FREELANCER_FEE // 2.5% on release
+  EXPRESS_WITHDRAWAL // +1.5%
+  FX_MARGIN // 0.5% over mid-market
+  DISPUTE_FEE
+}
+
+// ---- Wallet ----
+enum WalletStatus {
+  ACTIVE
+  FROZEN
+  CLOSED
+}
+
+enum WalletTxType {
+  DEPOSIT // release credited from escrow
+  WITHDRAWAL
+  ESCROW_HOLD // moved from wallet into escrow when funding a milestone
+  FEE
+  REFUND
+  FX_IN
+  FX_OUT
+  TRANSFER_IN // received from another BiZik user
+  TRANSFER_OUT // sent to another BiZik user
+  ADJUSTMENT
+}
+
+enum PayoutMethodType {
+  MTN_MOMO
+  ORANGE_MONEY
+  PAYONEER
+  BANK
+}
+
+enum PayoutStatus {
+  INITIATED
+  PROCESSING
+  ON_HOLD // held by compliance/ops pending review
+  COMPLETED
+  FAILED
+}
+
+// ---- Dispute ----
+enum DisputeStatus {
+  FILED
+  AWAITING_RESPONSE
+  UNDER_REVIEW
+  ESCALATED
+  RESOLVED
+  AUTO_RULED
+}
+
+enum DisputeReason {
+  NON_DELIVERY
+  INCOMPLETE_WORK
+  QUALITY_BELOW_SPEC
+  SCOPE_CREEP
+  COMMUNICATION_BREAKDOWN
+  OTHER
+}
+
+enum DisputeRulingType {
+  FULL_RELEASE
+  FULL_REFUND
+  PARTIAL_SPLIT
+}
+
+// ---- Notifications ----
+enum NotificationCategory {
+  PAYMENT
+  CONTRACT
+  KYC
+  DISPUTE
+  SECURITY
+  SYSTEM
+}
+
+enum NotificationChannel {
+  IN_APP
+  EMAIL
+  PUSH
+  SMS
+}
+
+enum DeliveryStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+}
+
+enum DevicePlatform {
+  IOS
+  ANDROID
+  WEB
+}
+
+// ---- Reputation ----
+enum BadgeType {
+  VERIFIED // KYC complete
+  PRO // 10+ contracts, 4.5+, 0% dispute
+  ELITE // 50+ contracts, 4.8+
+}
+
+// ---- Compliance / Admin ----
+enum AmlAlertType {
+  STRUCTURING
+  SANCTIONS_MATCH
+  HIGH_RISK_FLOW
+  VELOCITY_ANOMALY
+  PEP_MATCH
+}
+
+enum AmlAlertStatus {
+  NEW
+  UNDER_REVIEW
+  CLEARED
+  ESCALATED
+}
+
+enum ReportType {
+  DAILY_TRANSACTION_SUMMARY
+  MONTHLY_AML
+  KYC_COVERAGE
+  SUSPICIOUS_ACTIVITY
+  EARNINGS_TAX
+  GMV_ANALYTICS
+}
+
+enum ReportFormat {
+  PDF
+  CSV
+  XLSX
+}
+
+enum FileScanStatus {
+  PENDING
+  CLEAN
+  INFECTED
+}
+
+// =============================================================================
+// SERVICE: auth-service  (auth_db)
+// users, sessions, refresh_tokens, 2fa_methods, login_attempts,
+// password_reset_tokens, oauth_accounts
+// =============================================================================
+
+model User {
+  id                String     @id @default(uuid(7))
+  /// Public handle (e.g. "maxime.bichenyi") used to send money to this person
+  /// without knowing their phone number. Generated from their name at signup
+  /// and unique across the platform; the user may change it to another free one.
+  username          String?    @unique
+  // Phone is the identity/login key for end users (unique, required in the app
+  // layer). Kept nullable at the DB level so existing/staff rows that predate
+  // phone-first signup don't block a migration; new signups always set it.
+  phone             String?    @unique
+  // Email is now OPTIONAL for end users (added for KYC / under personal info).
+  // Staff/operator accounts still use email to sign in.
+  email             String?    @unique
+  passwordHash      String?
+  fullName          String
+  // Unified account: everyone starts as a base CLIENT. Freelancer capability
+  // is unlocked via verification (see `freelancerEnabled`), not a signup fork.
+  role              UserRole   @default(CLIENT)
+  country           String? // optional - collected at freelancer verification
+  status            UserStatus @default(PENDING)
+  kycTier           Int        @default(0) // 0..3 (SRS FR-KYC-001)
+  /// True once the user has verified (phone + country + KYC) to create contracts.
+  freelancerEnabled Boolean    @default(false)
+  emailVerified     Boolean    @default(false)
+  phoneVerified     Boolean    @default(false)
+  twoFactorEnabled  Boolean    @default(false)
+  companyName       String? // clients / agencies
+  locale            String     @default("en") // en | fr
+  /// Platform-operator role (RBAC). Non-null = has admin-console access.
+  adminRoleId       String?
+  /// When the account holder accepted the Terms of Service + Privacy Policy
+  /// (signup checkbox in the app, explicit "I agree" tap on WhatsApp).
+  termsAcceptedAt   DateTime?
+
+  /// Where this account was created from, captured at signup: the client
+  /// ("web" | "mobile" | "whatsapp"), the address it came from and the agent
+  /// string. Without it, "is this real traffic or a bot?" can only be answered
+  /// by joining session rows, and not at all once sessions expire.
+  signupSource    String?
+  signupIp        String?
+  signupUserAgent String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  lastLoginAt     DateTime?
+
+  sessions       Session[]
+  refreshTokens  RefreshToken[]
+  twoFactor      TwoFactorMethod[]
+  backupCodes    BackupCode[]
+  passwordResets PasswordResetToken[]
+  oauthAccounts  OAuthAccount[]
+  loginAttempts  LoginAttempt[]
+  adminRole      AdminRole?           @relation("UserAdminRole", fields: [adminRoleId], references: [id])
+
+  @@index([role])
+  @@index([status])
+  @@index([country])
+  @@index([adminRoleId])
+  @@map("users")
+}
+
+/// Dynamic platform-operator role (RBAC). `permissions` are code-defined keys
+/// (see lib/permissions.ts); the super-admin role (`isSuperAdmin`) grants all.
+/// Only super admins can create/edit roles and assign them to operators.
+model AdminRole {
+  id           String   @id @default(uuid(7))
+  name         String   @unique
+  description  String?
+  permissions  String[] @default([])
+  isSuperAdmin Boolean  @default(false)
+  isSystem     Boolean  @default(false) // built-in; cannot be deleted
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  operators User[] @relation("UserAdminRole")
+
+  @@map("admin_roles")
+}
+
+model Session {
+  id        String    @id @default(uuid(7))
+  userId    String
+  userAgent String?
+  ipAddress String?
+  device    String?
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  revokedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model RefreshToken {
+  id            String    @id @default(uuid(7))
+  userId        String
+  tokenHash     String    @unique
+  rotatedFromId String?
+  /// The sign-in this token belongs to. Rotation keeps it, so revoking one
+  /// session kills exactly that device's tokens and leaves the others alone.
+  sessionId     String?
+  expiresAt     DateTime
+  revokedAt     DateTime?
+  createdAt     DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([sessionId])
+  @@map("refresh_tokens")
+}
+
+model TwoFactorMethod {
+  id        String              @id @default(uuid(7))
+  userId    String
+  method    TwoFactorMethodType
+  secret    String? // TOTP shared secret - AES-256-GCM via lib/crypto, not plaintext
+  isPrimary Boolean             @default(false)
+  verified  Boolean             @default(false)
+  createdAt DateTime            @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, method])
+  @@map("2fa_methods")
+}
+
+model BackupCode {
+  id        String    @id @default(uuid(7))
+  userId    String
+  codeHash  String
+  used      Boolean   @default(false)
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("backup_codes")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid(7))
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model OAuthAccount {
+  id                String        @id @default(uuid(7))
+  userId            String
+  provider          OAuthProvider
+  providerAccountId String
+  createdAt         DateTime      @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("oauth_accounts")
+}
+
+model LoginAttempt {
+  id         String   @id @default(uuid(7))
+  userId     String?
+  email      String
+  ipAddress  String?
+  successful Boolean
+  createdAt  DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([email])
+  @@index([userId])
+  @@map("login_attempts")
+}
+
+// =============================================================================
+// SERVICE: kyc-service  (kyc_db + S3)
+// kyc_records, kyc_documents, manual_review_queue, sanctions_screenings
+// =============================================================================
+
+model KycRecord {
+  /// True when the scores on this record came from the built-in stand-in rather
+  /// than a real identity provider - i.e. nobody actually checked the documents.
+  providerSimulated Boolean @default(true)
+  /// What the image analysis actually observed, as a list of pass/fail findings
+  /// with reasons. Shown to the reviewer so a score is never just a number.
+  providerChecks    Json?
+  /// Triage suggestion from that analysis (approve / reject / review + why).
+  /// Advisory: it speeds a reviewer up, it never decides for them.
+  providerAdvice    Json?
+
+  id              String     @id @default(uuid(7))
+  userId          String // soft ref -> users
+  tier            Int // target tier 1..3
+  idType          KycIdType?
+  idNumber        String? // encrypted
+  selfieScore     Decimal?   @db.Decimal(4, 3)
+  matchScore      Decimal?   @db.Decimal(4, 3)
+  documentScore   Decimal?   @db.Decimal(4, 3)
+  status          KycStatus  @default(SUBMITTED)
+  provider        String? // smile_identity | stripe_identity
+  providerRef     String?
+  rejectionReason String?
+  reviewedById    String? // soft ref -> users (admin)
+  reviewedAt      DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  documents   KycDocument[]
+  reviewItems ManualReviewItem[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("kyc_records")
+}
+
+model KycDocument {
+  id          String          @id @default(uuid(7))
+  kycRecordId String
+  type        KycDocumentType
+  fileId      String // soft ref -> files
+  createdAt   DateTime        @default(now())
+
+  kycRecord KycRecord @relation(fields: [kycRecordId], references: [id], onDelete: Cascade)
+
+  @@index([kycRecordId])
+  @@map("kyc_documents")
+}
+
+model ManualReviewItem {
+  id           String    @id @default(uuid(7))
+  kycRecordId  String
+  reason       String // e.g. low confidence < 0.85
+  assignedToId String? // soft ref -> users (admin)
+  resolved     Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  resolvedAt   DateTime?
+
+  kycRecord KycRecord @relation(fields: [kycRecordId], references: [id], onDelete: Cascade)
+
+  @@index([kycRecordId])
+  @@map("manual_review_queue")
+}
+
+model SanctionsScreening {
+  id         String          @id @default(uuid(7))
+  userId     String // soft ref -> users
+  provider   String          @default("complyadvantage")
+  result     ScreeningResult
+  matchData  Json?
+  screenedAt DateTime        @default(now())
+
+  @@index([userId])
+  @@map("sanctions_screenings")
+}
+
+// =============================================================================
+// SERVICE: user-service  (user_db + Elasticsearch)
+// profiles, skills, profile_skills, portfolio_items, reviews, badges,
+// score_history
+// =============================================================================
+
+model Profile {
+  id                 String   @id @default(uuid(7))
+  userId             String   @unique // soft ref -> users
+  username           String   @unique
+  displayName        String
+  bio                String? // 500 chars
+  country            String
+  avatarColor        String?
+  bizikScore         Int      @default(0) // 0..100
+  completedContracts Int      @default(0)
+  disputeRate        Decimal  @default(0) @db.Decimal(5, 2)
+  avgRating          Decimal  @default(0) @db.Decimal(3, 2)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  skills       ProfileSkill[]
+  portfolio    PortfolioItem[]
+  badges       Badge[]
+  scoreHistory ScoreHistory[]
+
+  @@map("profiles")
+}
+
+model Skill {
+  id       String         @id @default(uuid(7))
+  name     String         @unique // drawn from taxonomy
+  category String?
+  profiles ProfileSkill[]
+
+  @@map("skills")
+}
+
+model ProfileSkill {
+  profileId String
+  skillId   String
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  skill   Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([profileId, skillId])
+  @@map("profile_skills")
+}
+
+model PortfolioItem {
+  id        String   @id @default(uuid(7))
+  profileId String
+  title     String
+  url       String?
+  fileId    String? // soft ref -> files
+  createdAt DateTime @default(now())
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@map("portfolio_items")
+}
+
+model Badge {
+  id        String    @id @default(uuid(7))
+  profileId String
+  type      BadgeType
+  awardedAt DateTime  @default(now())
+  revokedAt DateTime?
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, type])
+  @@map("badges")
+}
+
+model Review {
+  id         String    @id @default(uuid(7))
+  contractId String // soft ref -> contracts
+  reviewerId String // soft ref -> users
+  revieweeId String // soft ref -> users
+  rating     Int // 1..5
+  comment    String? // 300 chars
+  visibleAt  DateTime? // double-blind release
+  reported   Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+
+  @@unique([contractId, reviewerId])
+  @@index([revieweeId])
+  @@map("reviews")
+}
+
+model ScoreHistory {
+  id        String   @id @default(uuid(7))
+  profileId String
+  score     Int
+  reason    String?
+  createdAt DateTime @default(now())
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@map("score_history")
+}
+
+// =============================================================================
+// SERVICE: contract-service  (contract_db)
+// contracts, milestones, deliverables, milestone_submissions,
+// revision_requests, contract_signatures, amendments, amendment_signatures,
+// contract_templates, template_milestones, contract_invitations
+// =============================================================================
+
+model Contract {
+  id          String  @id // QTQ-YYYYMMDD-XXXXXX
+  title       String
+  description String?
+  category    String?
+
+  // Symmetric parties - no global client/freelancer role. The creator invites a
+  // counterparty (by email); either side may be the payer (chosen per project).
+  creatorId         String // soft ref -> users (who created the project)
+  counterpartyId    String? // soft ref -> users (set once the email/phone matches an account)
+  // The name the CREATOR knows the counterparty by - an alias, private to this
+  // deal. Optional: if omitted we fall back to the counterparty's own master
+  // account name once they've joined. NOT the counterparty's account name.
+  counterpartyName  String?
+  counterpartyEmail String? // invite by email and/or phone
+  counterpartyPhone String? // invite via WhatsApp number
+  /// true if the CREATOR funds escrow (pays); false if the counterparty pays.
+  creatorIsPayer    Boolean @default(false)
+
+  currency       Currency
+  totalAmount    Decimal        @db.Decimal(20, 4)
+  status         ContractStatus @default(INVITED)
+  inspectionDays Int            @default(5) // 3..14
+  templateId     String? // soft ref -> contract_templates
+
+  /// Counterparty confirmation (they accept the project).
+  accepted   Boolean   @default(false)
+  acceptedAt DateTime?
+
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  signedByClientAt     DateTime?
+  signedByFreelancerAt DateTime?
+  fundedAt             DateTime?
+  completedAt          DateTime?
+  cancelledAt          DateTime?
+  cancellationReason   String?
+
+  milestones  Milestone[]
+  signatures  ContractSignature[]
+  amendments  ContractAmendment[]
+  invitations ContractInvitation[]
+
+  @@index([creatorId])
+  @@index([counterpartyId])
+  @@index([counterpartyEmail])
+  @@index([counterpartyPhone])
+  @@index([status])
+  @@map("contracts")
+}
+
+model Milestone {
+  id                String          @id @default(uuid(7))
+  contractId        String
+  order             Int
+  title             String
+  description       String?
+  amount            Decimal         @db.Decimal(20, 4)
+  currency          Currency
+  deadline          DateTime?
+  inspectionDays    Int             @default(5)
+  status            MilestoneStatus @default(PENDING)
+  revisionCount     Int             @default(0)
+  maxRevisions      Int             @default(3)
+  submittedAt       DateTime?
+  approvedAt        DateTime?
+  releasedAt        DateTime?
+  autoReleaseAt     DateTime? // inspection-period timeout
+  dueReminderSentAt DateTime? // set once we've reminded both parties the day before `deadline`
+
+  contract     Contract              @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  deliverables Deliverable[]
+  submissions  MilestoneSubmission[]
+  revisions    RevisionRequest[]
+
+  @@index([contractId])
+  @@index([status])
+  @@map("milestones")
+}
+
+model Deliverable {
+  id          String  @id @default(uuid(7))
+  milestoneId String
+  description String
+  fileId      String? // soft ref -> files
+
+  milestone Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+
+  @@index([milestoneId])
+  @@map("deliverables")
+}
+
+model MilestoneSubmission {
+  id            String   @id @default(uuid(7))
+  milestoneId   String
+  submittedById String // soft ref -> users
+  note          String?
+  fileIds       String[] // soft refs -> files
+  createdAt     DateTime @default(now())
+
+  milestone Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+
+  @@index([milestoneId])
+  @@map("milestone_submissions")
+}
+
+model RevisionRequest {
+  id            String   @id @default(uuid(7))
+  milestoneId   String
+  requestedById String // soft ref -> users (client)
+  feedback      String
+  createdAt     DateTime @default(now())
+
+  milestone Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+
+  @@index([milestoneId])
+  @@map("revision_requests")
+}
+
+model ContractSignature {
+  id         String        @id @default(uuid(7))
+  contractId String
+  userId     String // soft ref -> users
+  role       SignatureRole
+  ipAddress  String?
+  signedAt   DateTime      @default(now())
+
+  contract Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  @@unique([contractId, role])
+  @@map("contract_signatures")
+}
+
+model ContractAmendment {
+  id           String          @id @default(uuid(7))
+  contractId   String
+  version      Int
+  proposedById String // soft ref -> users
+  changes      Json
+  status       AmendmentStatus @default(PROPOSED)
+  createdAt    DateTime        @default(now())
+  resolvedAt   DateTime?
+
+  contract   Contract             @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  signatures AmendmentSignature[]
+
+  @@index([contractId])
+  @@map("amendments")
+}
+
+model AmendmentSignature {
+  id          String        @id @default(uuid(7))
+  amendmentId String
+  userId      String // soft ref -> users
+  role        SignatureRole
+  signedAt    DateTime      @default(now())
+
+  amendment ContractAmendment @relation(fields: [amendmentId], references: [id], onDelete: Cascade)
+
+  @@unique([amendmentId, role])
+  @@map("amendment_signatures")
+}
+
+model ContractTemplate {
+  id        String   @id @default(uuid(7))
+  ownerId   String? // soft ref -> users; null = system template
+  name      String
+  category  String
+  isSystem  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  milestones TemplateMilestone[]
+
+  @@index([ownerId])
+  @@map("contract_templates")
+}
+
+model TemplateMilestone {
+  id          String  @id @default(uuid(7))
+  templateId  String
+  order       Int
+  title       String
+  description String?
+  amountPct   Decimal @db.Decimal(5, 2) // % of contract total
+
+  template ContractTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([templateId])
+  @@map("template_milestones")
+}
+
+model ContractInvitation {
+  id         String           @id @default(uuid(7))
+  contractId String
+  email      String
+  token      String           @unique
+  status     InvitationStatus @default(SENT)
+  expiresAt  DateTime
+  createdAt  DateTime         @default(now())
+
+  contract Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  @@index([contractId])
+  @@map("contract_invitations")
+}
+
+// =============================================================================
+// SERVICE: escrow-service / payment-service  (escrow_db - strict ACID)
+// escrow_accounts, escrow_transactions, payment_intents, gateway_webhooks,
+// refunds, fee_records
+// =============================================================================
+
+model EscrowAccount {
+  id             String              @id @default(uuid(7))
+  contractId     String              @unique // soft ref -> contracts
+  subAccountRef  String              @unique // segregated banking reference
+  currency       Currency
+  heldAmount     Decimal             @default(0) @db.Decimal(20, 4)
+  releasedAmount Decimal             @default(0) @db.Decimal(20, 4)
+  refundedAmount Decimal             @default(0) @db.Decimal(20, 4)
+  status         EscrowAccountStatus @default(OPEN)
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  transactions EscrowTransaction[]
+  refunds      Refund[]
+  fees         FeeRecord[]
+
+  @@map("escrow_accounts")
+}
+
+model EscrowTransaction {
+  id              String          @id @default(uuid(7))
+  escrowAccountId String
+  milestoneId     String? // soft ref -> milestones
+  type            EscrowTxType
+  amount          Decimal         @db.Decimal(20, 4)
+  currency        Currency
+  status          TxStatus        @default(PENDING)
+  gateway         PaymentGateway?
+  gatewayRef      String?
+  idempotencyKey  String?         @unique
+  note            String? // admin note for manual actions/adjustments
+  createdAt       DateTime        @default(now())
+  completedAt     DateTime?
+
+  escrowAccount EscrowAccount @relation(fields: [escrowAccountId], references: [id], onDelete: Cascade)
+
+  @@index([escrowAccountId])
+  @@index([milestoneId])
+  @@map("escrow_transactions")
+}
+
+model PaymentIntent {
+  id              String              @id @default(uuid(7))
+  contractId      String? // soft ref -> contracts
+  milestoneId     String? // soft ref -> milestones
+  payerId         String? // soft ref -> users (client)
+  gateway         PaymentGateway
+  gatewayIntentId String?
+  amount          Decimal             @db.Decimal(20, 4)
+  currency        Currency
+  status          PaymentIntentStatus @default(REQUIRES_PAYMENT)
+  idempotencyKey  String?             @unique
+  createdAt       DateTime            @default(now())
+
+  @@index([contractId])
+  @@map("payment_intents")
+}
+
+model GatewayWebhook {
+  id         String         @id @default(uuid(7))
+  gateway    PaymentGateway
+  eventType  String
+  externalId String         @unique // dedup key
+  payload    Json
+  processed  Boolean        @default(false)
+  receivedAt DateTime       @default(now())
+
+  @@index([gateway])
+  @@map("gateway_webhooks")
+}
+
+// -----------------------------------------------------------------------------
+// Provider-agnostic payment domain (deposits & withdrawals via MTN / Orange /
+// bank adapters). BiZik's wallet + ledger stay provider-neutral; this table is
+// the audit spine that ties an external provider transaction to a wallet move.
+// -----------------------------------------------------------------------------
+
+enum PaymentProviderName {
+  MTN_MOBILE_MONEY
+  ORANGE_MONEY
+  BANK
+}
+
+enum PaymentOperation {
+  DEPOSIT
+  WITHDRAWAL
+}
+
+enum PaymentTransactionStatus {
+  PENDING // created, provider not yet called
+  PROCESSING // provider accepted the request; awaiting confirmation
+  SUCCESSFUL // confirmed (webhook / reconciliation)
+  FAILED
+  REVERSED
+}
+
+/// A wallet-to-wallet payment between two BiZik users. The money movement
+/// itself lives in the wallet ledger (two WalletTransaction rows); this row is
+/// the shared record of WHO paid WHOM and why, which the ledger alone can't say.
+model Transfer {
+  id String @id @default(uuid(7))
+
+  senderId    String // soft ref -> users
+  recipientId String // soft ref -> users
+
+  amount   Decimal  @db.Decimal(20, 4)
+  currency Currency
+  /// Optional message from the sender ("for the shoes").
+  note     String?
+
+  /// Ledger references for each side, for audit and receipts.
+  senderReference    String?
+  recipientReference String?
+
+  /// Client-supplied key so a retried send can never pay twice. Scoped to the
+  /// SENDER: a globally unique key let one user's key collide with another's,
+  /// which returned the first user's transfer details to the second and left
+  /// the second's payment silently unsent.
+  idempotencyKey String?
+
+  createdAt DateTime @default(now())
+
+  @@unique([senderId, idempotencyKey])
+  @@index([senderId])
+  @@index([recipientId])
+  @@map("transfers")
+}
+
+model PaymentTransaction {
+  id String @id @default(uuid(7))
+
+  userId String // soft ref -> users
+
+  provider  PaymentProviderName
+  operation PaymentOperation
+
+  status PaymentTransactionStatus @default(PENDING)
+
+  /**
+   * What the USER asked for: credited to their wallet on a deposit, paid to
+   * their phone on a withdrawal. Deliberately not the amount that moves through
+   * the provider - see providerFee.
+   */
+  amount   Decimal  @db.Decimal(20, 4)
+  currency Currency @default(XAF)
+
+  /**
+   * The rail's cut, charged on top of `amount` rather than absorbed: a deposit
+   * collects amount + providerFee, a withdrawal debits amount + providerFee.
+   * ESTIMATED at creation from the configured rate, because Fapshi only reports
+   * its real fee once a transaction settles.
+   */
+  providerFee Decimal? @db.Decimal(20, 4)
+
+  /**
+   * What the provider ACTUALLY took, learned at settlement (Fapshi's `amount`
+   * minus its `revenue`). Kept beside the estimate so the two can be compared:
+   * a persistent gap means the configured rate is wrong, and without recording
+   * both there is no way to notice.
+   */
+  providerFeeActual Decimal? @db.Decimal(20, 4)
+
+  /**
+   * Payer/recipient MSISDN for mobile money (never a PIN).
+   */
+  phoneNumber String?
+
+  /**
+   * BiZik-side idempotent reference, e.g. DEP-<uuid> / WD-<uuid>.
+   */
+  transactionReference String @unique
+
+  /**
+   * Provider-side correlation id (MTN X-Reference-Id, Orange pay token, …).
+   */
+  providerReference String? @unique
+
+  /**
+   * Provider's own final transaction id, if any.
+   */
+  providerTransactionId String?
+
+  failureReason    String?
+  providerResponse Json?
+
+  /**
+   * Large CEMAC (XAF) mobile-money withdrawals are held for manual approval
+   * before the disbursement is sent. Funds are reserved while held; an operator
+   * approves (→ disburse) or rejects (→ refund the reservation).
+   */
+  heldForApproval      Boolean   @default(false)
+  approvalReviewedById String?
+  approvalReviewedAt   DateTime?
+
+  /**
+   * Wallet ledger reference once the money actually moved (audit link).
+   */
+  walletReference String?
+
+  /**
+   * What this deposit was collected FOR. A plain top-up leaves these null; a
+   * "pay this deal straight from my Mobile Money number" deposit carries
+   * purpose='FUND_MILESTONE' + the milestone id, and the milestone is funded
+   * automatically the moment the money is confirmed.
+   */
+  purpose      String?
+  purposeRefId String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  completedAt DateTime?
+
+  @@index([userId])
+  @@index([provider])
+  @@index([status])
+  @@index([operation])
+  @@map("payment_transactions")
+}
+
+model Refund {
+  id              String          @id @default(uuid(7))
+  escrowAccountId String
+  transactionId   String? // soft ref -> escrow_transactions
+  amount          Decimal         @db.Decimal(20, 4)
+  currency        Currency
+  reasonCode      String
+  status          RefundStatus    @default(INITIATED)
+  gateway         PaymentGateway?
+  gatewayRef      String?
+  createdAt       DateTime        @default(now())
+  completedAt     DateTime?
+
+  escrowAccount EscrowAccount @relation(fields: [escrowAccountId], references: [id], onDelete: Cascade)
+
+  @@index([escrowAccountId])
+  @@map("refunds")
+}
+
+model FeeRecord {
+  id              String   @id @default(uuid(7))
+  escrowAccountId String?
+  contractId      String? // soft ref -> contracts
+  payerId         String? // soft ref -> users
+  type            FeeType
+  amount          Decimal  @db.Decimal(20, 4)
+  currency        Currency
+  createdAt       DateTime @default(now())
+
+  escrowAccount EscrowAccount? @relation(fields: [escrowAccountId], references: [id], onDelete: SetNull)
+
+  @@index([escrowAccountId])
+  @@index([contractId])
+  @@map("fee_records")
+}
+
+// =============================================================================
+// SERVICE: wallet-service / fx-service  (wallet_db)
+// wallets, wallet_transactions, payout_methods, payout_requests,
+// fx_conversions, fx_rates_log
+// =============================================================================
+
+model Wallet {
+  id             String       @id @default(uuid(7))
+  userId         String // soft ref -> users
+  currency       Currency
+  balance        Decimal      @default(0) @db.Decimal(20, 4)
+  pendingBalance Decimal      @default(0) @db.Decimal(20, 4)
+  status         WalletStatus @default(ACTIVE)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  transactions WalletTransaction[]
+  payouts      PayoutRequest[]
+
+  @@unique([userId, currency])
+  @@index([userId])
+  @@map("wallets")
+}
+
+model WalletTransaction {
+  id            String       @id @default(uuid(7))
+  walletId      String
+  reference     String?      @unique // human-readable txn ID, e.g. QTX-20260620-7F3A2B
+  type          WalletTxType
+  amount        Decimal      @db.Decimal(20, 4) // signed
+  currency      Currency
+  balanceAfter  Decimal      @db.Decimal(20, 4)
+  referenceType String? // contract | milestone | payout | fx | topup
+  referenceId   String?
+  description   String?
+  createdAt     DateTime     @default(now())
+
+  wallet Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  @@index([walletId])
+  @@index([referenceId])
+  @@map("wallet_transactions")
+}
+
+model PayoutMethod {
+  id            String           @id @default(uuid(7))
+  userId        String // soft ref -> users
+  type          PayoutMethodType
+  provider      String?
+  accountName   String?
+  accountDetail String // masked / encrypted
+  currency      Currency?
+  country       String?
+  verified      Boolean          @default(false)
+  isDefault     Boolean          @default(false)
+  createdAt     DateTime         @default(now())
+  /**
+   * Soft-delete: set when the user removes a method that has payout history,
+   * so financial records (PayoutRequest FKs) survive while it's hidden.
+   */
+  deletedAt     DateTime?
+
+  payouts PayoutRequest[]
+
+  @@index([userId])
+  @@map("payout_methods")
+}
+
+model PayoutRequest {
+  id             String          @id @default(uuid(7))
+  userId         String // soft ref -> users
+  walletId       String
+  payoutMethodId String
+  amount         Decimal         @db.Decimal(20, 4)
+  feeAmount      Decimal         @default(0) @db.Decimal(20, 4)
+  currency       Currency
+  status         PayoutStatus    @default(INITIATED)
+  gateway        PaymentGateway?
+  gatewayRef     String?
+  failureReason  String?
+  isExpress      Boolean         @default(false)
+  initiatedAt    DateTime        @default(now())
+  completedAt    DateTime?
+
+  wallet       Wallet       @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  payoutMethod PayoutMethod @relation(fields: [payoutMethodId], references: [id])
+
+  @@index([userId])
+  @@index([walletId])
+  @@index([status])
+  @@map("payout_requests")
+}
+
+model FxConversion {
+  id            String   @id @default(uuid(7))
+  userId        String // soft ref -> users
+  fromCurrency  Currency
+  toCurrency    Currency
+  fromAmount    Decimal  @db.Decimal(20, 4)
+  toAmount      Decimal  @db.Decimal(20, 4)
+  midMarketRate Decimal  @db.Decimal(20, 8)
+  marginPct     Decimal  @default(0.5) @db.Decimal(5, 3)
+  appliedRate   Decimal  @db.Decimal(20, 8)
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@map("fx_conversions")
+}
+
+model FxRateLog {
+  id            String   @id @default(uuid(7))
+  baseCurrency  Currency
+  quoteCurrency Currency
+  rate          Decimal  @db.Decimal(20, 8)
+  provider      String   @default("open_exchange_rates")
+  fetchedAt     DateTime @default(now())
+
+  @@index([baseCurrency, quoteCurrency])
+  @@map("fx_rates_log")
+}
+
+/// Editable platform pricing (single row) - fees & margins set by an operator.
+model PlatformSetting {
+  id                   String   @id @default("global")
+  clientServicePct     Decimal  @db.Decimal(6, 5)
+  freelancerFeePct     Decimal  @db.Decimal(6, 5)
+  expressWithdrawalPct Decimal  @db.Decimal(6, 5)
+  fxMarginPct          Decimal  @db.Decimal(6, 5)
+  minWithdrawalUsd     Decimal  @db.Decimal(20, 4)
+  updatedById          String? // soft ref -> users (operator)
+  updatedAt            DateTime @updatedAt
+
+  @@map("platform_settings")
+}
+
+/// Editable indicative USD rate per currency (1 unit of currency = usdRate USD).
+model FxRate {
+  currency    Currency @id
+  usdRate     Decimal  @db.Decimal(20, 8)
+  updatedById String? // soft ref -> users (operator)
+  updatedAt   DateTime @updatedAt
+
+  @@map("fx_rates")
+}
+
+// =============================================================================
+// SERVICE: admin/platform-service - system settings & legal content
+// system_settings (grouped JSON config), legal_documents
+// =============================================================================
+
+/// Grouped platform configuration, one row per group key
+/// ("general" | "markets" | "verification" | "providers"). The value is a JSON
+/// blob whose shape is validated per-group in settingsadmin.validation.
+model SystemSetting {
+  key         String   @id
+  value       Json
+  updatedById String? // soft ref -> users (operator)
+  updatedAt   DateTime @updatedAt
+
+  @@map("system_settings")
+}
+
+enum LegalDocType {
+  TERMS
+  PRIVACY
+  AML_POLICY
+  COOKIE
+  ACCEPTABLE_USE
+  DISPUTE
+}
+
+// ---- Support (help desk) ----
+enum SupportTicketStatus {
+  OPEN
+  PENDING // awaiting the user's reply
+  RESOLVED
+  CLOSED
+}
+
+enum SupportCategory {
+  PAYMENTS
+  KYC
+  DISPUTES
+  ACCOUNT
+  TECHNICAL
+  OTHER
+}
+
+enum SupportPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum SupportAuthorType {
+  USER
+  STAFF
+}
+
+/// A user-raised help-desk ticket with a threaded conversation.
+model SupportTicket {
+  id            String              @id @default(uuid(7))
+  userId        String // soft ref -> users (requester)
+  subject       String
+  category      SupportCategory     @default(OTHER)
+  priority      SupportPriority     @default(NORMAL)
+  status        SupportTicketStatus @default(OPEN)
+  assignedToId  String? // soft ref -> users (operator)
+  lastMessageAt DateTime            @default(now())
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  messages SupportMessage[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("support_tickets")
+}
+
+model SupportMessage {
+  id         String            @id @default(uuid(7))
+  ticketId   String
+  senderId   String // soft ref -> users
+  authorType SupportAuthorType
+  body       String
+  createdAt  DateTime          @default(now())
+
+  ticket SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId])
+  @@map("support_messages")
+}
+
+/// Help-center / knowledge-base article, editable by support operators.
+model HelpArticle {
+  id          String   @id @default(uuid(7))
+  category    String
+  title       String
+  slug        String   @unique
+  body        String // markdown / plain text
+  published   Boolean  @default(false)
+  order       Int      @default(0)
+  updatedById String? // soft ref -> users (operator)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([published])
+  @@map("help_articles")
+}
+
+/// A durable record that a user accepted the Terms + Privacy Policy - kept as
+/// legal evidence of consent. Stores the exact message the user sent ("I agree"),
+/// the channel it came from, and the document versions/links they agreed to, so
+/// consent can be proven later even after the documents are updated.
+model ConsentRecord {
+  id         String   @id @default(uuid(7))
+  userId     String // soft ref -> users
+  channel    String   @default("whatsapp") // whatsapp | web | mobile
+  phone      String? // the WhatsApp/phone number that consented, when applicable
+  message    String // the exact affirmative the user sent (e.g. "I agree")
+  documents  Json // [{ type: 'TERMS'|'PRIVACY', version, url }]
+  acceptedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@map("consent_records")
+}
+
+/// A message submitted from the public marketing site's contact form. Stored
+/// for the record and surfaced to operators (email + admin notification).
+model ContactMessage {
+  id        String   @id @default(uuid(7))
+  name      String
+  email     String
+  phone     String?
+  topic     String?
+  message   String
+  handled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([handled, createdAt])
+  @@map("contact_messages")
+}
+
+/// SEO blog / articles shown on the public marketing site and authored in the
+/// admin console. Markdown body; category is a slug + label for the category
+/// index pages. Only `published` posts appear on the public site.
+model BlogPost {
+  id             String    @id @default(uuid(7))
+  slug           String    @unique
+  title          String
+  excerpt        String
+  body           String // markdown
+  category       String    @default("guides") // category slug (e.g. "scam-alerts")
+  categoryLabel  String    @default("Guides") // display name (e.g. "Scam alerts")
+  coverImage     String? // public URL or /marketing/images/… path
+  author         String?
+  readMinutes    Int       @default(4)
+  seoTitle       String?
+  seoDescription String?
+  /// Language of this post ("en" | "fr"). Each language version is its own row
+  /// with its own slug, so a French article has a French URL and French text.
+  lang           String    @default("en")
+  /// Links the language versions of one article: the slug of the original.
+  /// Null means the post has no counterpart yet and groups with itself.
+  translationKey String?
+  published      Boolean   @default(false)
+  publishedAt    DateTime?
+  createdById    String? // soft ref -> users (operator)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([published, publishedAt])
+  @@index([lang, published, publishedAt])
+  @@index([translationKey])
+  @@index([category])
+  @@map("blog_posts")
+}
+
+/// Versioned legal/policy content shown in the apps (terms, privacy, …).
+model LegalDocument {
+  id          String       @id @default(uuid(7))
+  type        LegalDocType @unique
+  title       String
+  content     String // markdown / plain text
+  version     String       @default("1.0")
+  published   Boolean      @default(false)
+  effectiveAt DateTime?
+  updatedById String? // soft ref -> users (operator)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("legal_documents")
+}
+
+// =============================================================================
+// SERVICE: dispute-service  (dispute_db)
+// disputes, dispute_evidence, dispute_responses, dispute_messages,
+// dispute_timeline, mediator_assignments, dispute_rulings, ai_recommendations
+// =============================================================================
+
+model Dispute {
+  id               String        @id @default(uuid(7))
+  contractId       String // soft ref -> contracts
+  milestoneId      String // soft ref -> milestones
+  filedById        String // soft ref -> users
+  reason           DisputeReason
+  description      String
+  status           DisputeStatus @default(FILED)
+  responseDeadline DateTime
+  createdAt        DateTime      @default(now())
+  resolvedAt       DateTime?
+
+  evidence    DisputeEvidence[]
+  responses   DisputeResponse[]
+  messages    DisputeMessage[]
+  timeline    DisputeTimelineEvent[]
+  assignments MediatorAssignment[]
+  ruling      DisputeRuling?
+  aiRec       AiRecommendation?
+
+  @@index([contractId])
+  @@index([milestoneId])
+  @@index([status])
+  @@map("disputes")
+}
+
+model DisputeEvidence {
+  id            String   @id @default(uuid(7))
+  disputeId     String
+  submittedById String // soft ref -> users
+  description   String?
+  fileIds       String[] // soft refs -> files
+  createdAt     DateTime @default(now())
+
+  dispute Dispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+
+  @@index([disputeId])
+  @@map("dispute_evidence")
+}
+
+model DisputeResponse {
+  id           String   @id @default(uuid(7))
+  disputeId    String
+  respondentId String // soft ref -> users
+  rebuttal     String
+  createdAt    DateTime @default(now())
+
+  dispute Dispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+
+  @@index([disputeId])
+  @@map("dispute_responses")
+}
+
+model DisputeMessage {
+  id        String   @id @default(uuid(7))
+  disputeId String
+  senderId  String // soft ref -> users
+  body      String
+  createdAt DateTime @default(now())
+
+  dispute Dispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+
+  @@index([disputeId])
+  @@map("dispute_messages")
+}
+
+model DisputeTimelineEvent {
+  id        String   @id @default(uuid(7))
+  disputeId String
+  event     String
+  actorId   String? // soft ref -> users
+  createdAt DateTime @default(now())
+
+  dispute Dispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+
+  @@index([disputeId])
+  @@map("dispute_timeline")
+}
+
+model MediatorAssignment {
+  id         String    @id @default(uuid(7))
+  disputeId  String
+  mediatorId String // soft ref -> users
+  assignedAt DateTime  @default(now())
+  recusedAt  DateTime?
+
+  dispute Dispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+
+  @@index([disputeId])
+  @@map("mediator_assignments")
+}
+
+model DisputeRuling {
+  id            String            @id @default(uuid(7))
+  disputeId     String            @unique
+  ruling        DisputeRulingType
+  freelancerPct Int               @default(0) // for PARTIAL_SPLIT
+  clientPct     Int               @default(0)
+  rationale     String
+  ruledById     String // soft ref -> users (mediator)
+  ruledAt       DateTime          @default(now())
+
+  dispute Dispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+
+  @@map("dispute_rulings")
+}
+
+model AiRecommendation {
+  id             String            @id @default(uuid(7))
+  disputeId      String            @unique
+  recommendation DisputeRulingType
+  freelancerPct  Int               @default(50) // recommended payee share for a split
+  confidence     Decimal           @db.Decimal(4, 3)
+  rationale      String?
+  createdAt      DateTime          @default(now())
+
+  dispute Dispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+
+  @@map("ai_recommendations")
+}
+
+// =============================================================================
+// SERVICE: notification-service  (notification_db)
+// notifications, notification_preferences, notification_delivery_log,
+// push_tokens, message_threads, messages, message_attachments
+// =============================================================================
+
+model Notification {
+  id         String                @id @default(uuid(7))
+  userId     String // soft ref -> users
+  category   NotificationCategory
+  title      String
+  body       String
+  channels   NotificationChannel[]
+  entityType String?
+  entityId   String?
+  isCritical Boolean               @default(false) // cannot be suppressed
+  readAt     DateTime?
+  createdAt  DateTime              @default(now())
+
+  deliveries NotificationDelivery[]
+
+  @@index([userId])
+  @@index([category])
+  @@map("notifications")
+}
+
+model NotificationDelivery {
+  id             String              @id @default(uuid(7))
+  notificationId String
+  channel        NotificationChannel
+  status         DeliveryStatus      @default(PENDING)
+  providerRef    String?
+  attemptedAt    DateTime            @default(now())
+
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+
+  @@index([notificationId])
+  @@map("notification_delivery_log")
+}
+
+model NotificationPreference {
+  id       String               @id @default(uuid(7))
+  userId   String // soft ref -> users
+  category NotificationCategory
+  channel  NotificationChannel
+  enabled  Boolean              @default(true)
+
+  @@unique([userId, category, channel])
+  @@map("notification_preferences")
+}
+
+model PushToken {
+  id        String         @id @default(uuid(7))
+  userId    String // soft ref -> users
+  token     String         @unique
+  platform  DevicePlatform
+  createdAt DateTime       @default(now())
+
+  @@index([userId])
+  @@map("push_tokens")
+}
+
+model MessageThread {
+  id         String   @id @default(uuid(7))
+  contractId String   @unique // soft ref -> contracts (in-contract messaging)
+  createdAt  DateTime @default(now())
+
+  messages Message[]
+
+  @@map("message_threads")
+}
+
+model Message {
+  id          String    @id @default(uuid(7))
+  threadId    String
+  senderId    String // soft ref -> users
+  recipientId String? // soft ref -> users (the other party in the thread)
+  body        String
+  readAt      DateTime?
+  removedAt   DateTime? // set when a moderator removes the message
+  createdAt   DateTime  @default(now())
+
+  thread      MessageThread       @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  attachments MessageAttachment[]
+  reports     MessageReport[]
+
+  @@index([threadId])
+  @@map("messages")
+}
+
+// ---- In-contract message moderation (admin console) ----
+enum MessageReportStatus {
+  PENDING
+  REMOVED
+  DISMISSED
+}
+
+enum MessageReportSource {
+  RECIPIENT // flagged by the person who received it
+  CLASSIFIER // flagged automatically by the abuse classifier
+}
+
+model MessageReport {
+  id           String              @id @default(uuid(7))
+  messageId    String
+  reportedById String? // soft ref -> users (who reported it; null for classifier)
+  reason       String
+  source       MessageReportSource @default(RECIPIENT)
+  status       MessageReportStatus @default(PENDING)
+  resolvedById String? // soft ref -> users (moderator)
+  resolvedAt   DateTime?
+  createdAt    DateTime            @default(now())
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([messageId])
+  @@map("message_reports")
+}
+
+/// Editable notification copy (email / SMS / push) managed by operators
+/// (`notifications.manage`). `body`/`subject` may embed {{variables}}.
+model NotificationTemplate {
+  id          String                @id @default(uuid(7))
+  key         String                @unique // welcome_verify, kyc_approved, ...
+  name        String
+  category    NotificationCategory
+  channels    NotificationChannel[]
+  subject     String
+  body        String
+  variables   String[]              @default([])
+  updatedById String? // soft ref -> users (operator)
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+
+  @@map("notification_templates")
+}
+
+model MessageAttachment {
+  id        String @id @default(uuid(7))
+  messageId String
+  fileId    String // soft ref -> files
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([messageId])
+  @@map("message_attachments")
+}
+
+// ---- Admin operator notifications (platform console) ----
+// A single notification row fanned out to every operator whose RBAC role grants
+// `permission` (null = all operators). Read-state is tracked per operator so the
+// same event can be read independently by each recipient.
+enum AdminEventType {
+  KYC_SUBMITTED
+  KYC_ESCALATED
+  AML_ALERT
+  SANCTIONS_MATCH
+  ACCOUNT_FROZEN
+  DISPUTE_FILED
+  DISPUTE_ESCALATED
+  PAYOUT_PENDING
+  ESCROW_ADJUSTED
+  OPERATOR_ADDED
+  ROLE_CHANGED
+  SETTINGS_CHANGED
+  REPORT_READY
+  BROADCAST_SENT
+  SYSTEM
+}
+
+enum AdminEventSeverity {
+  INFO
+  SUCCESS
+  WARNING
+  CRITICAL
+}
+
+model AdminNotification {
+  id         String             @id @default(uuid(7))
+  type       AdminEventType
+  severity   AdminEventSeverity @default(INFO)
+  title      String
+  body       String
+  /// RBAC visibility gate: only operators holding this permission key receive
+  /// the notification (super admins receive all). null = every operator.
+  permission String?
+  entityType String?
+  entityId   String?
+  /// Deep link into the admin console, e.g. "/aml/<id>".
+  link       String?
+  actorId    String? // soft ref -> users (who/what triggered it)
+  createdAt  DateTime           @default(now())
+
+  reads AdminNotificationRead[]
+
+  @@index([type])
+  @@index([permission])
+  @@index([createdAt])
+  @@map("admin_notifications")
+}
+
+model AdminNotificationRead {
+  id             String   @id @default(uuid(7))
+  notificationId String
+  operatorId     String // soft ref -> users (the operator who read it)
+  readAt         DateTime @default(now())
+
+  notification AdminNotification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+
+  @@unique([notificationId, operatorId])
+  @@index([operatorId])
+  @@map("admin_notification_reads")
+}
+
+// =============================================================================
+// SERVICE: file-service  (S3 metadata)
+// =============================================================================
+
+model File {
+  id         String         @id @default(uuid(7))
+  ownerId    String? // soft ref -> users
+  bucket     String
+  objectKey  String         @unique
+  url        String? // Cloudinary secure URL (null for locally-stored files)
+  fileName   String
+  mimeType   String
+  sizeBytes  Int
+  purpose    String? // kyc | deliverable | dispute | message | portfolio
+  scanStatus FileScanStatus @default(PENDING)
+  createdAt  DateTime       @default(now())
+
+  @@index([ownerId])
+  @@map("files")
+}
+
+// =============================================================================
+// SERVICE: compliance-service / admin-service / reporting-service
+// aml_alerts, audit_logs, reports
+// =============================================================================
+
+model AmlAlert {
+  id             String         @id @default(uuid(7))
+  userId         String? // soft ref -> users
+  transactionRef String? // soft ref -> escrow/wallet txn
+  type           AmlAlertType
+  status         AmlAlertStatus @default(NEW)
+  assignedToId   String? // soft ref -> users (compliance)
+  details        Json?
+  createdAt      DateTime       @default(now())
+  reviewedAt     DateTime?
+
+  @@index([userId])
+  @@index([status])
+  @@map("aml_alerts")
+}
+
+model AuditLog {
+  id          String   @id @default(uuid(7))
+  actorId     String? // soft ref -> users
+  action      String
+  entityType  String
+  entityId    String?
+  result      String   @default("SUCCESS") // SUCCESS | FAILED
+  ipAddress   String?
+  userAgent   String?
+  beforeState Json?
+  afterState  Json?
+  createdAt   DateTime @default(now())
+
+  @@index([actorId])
+  @@index([entityType, entityId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model Report {
+  id            String       @id @default(uuid(7))
+  type          ReportType
+  generatedById String? // soft ref -> users
+  periodStart   DateTime?
+  periodEnd     DateTime?
+  format        ReportFormat @default(PDF)
+  s3Key         String?
+  status        String       @default("PENDING")
+  createdAt     DateTime     @default(now())
+
+  @@index([type])
+  @@map("reports")
+}
+
+// =============================================================================
+// WhatsApp Assistant channel - a single shared bot users chat with to run
+// BiZik. Identity = the verified WhatsApp phone (phone-first); a transaction
+// PIN gates money actions. Conversation/flow state lives in Redis (ephemeral);
+// only durable channel settings + an audit log live here.
+// =============================================================================
+
+enum WhatsAppDirection {
+  INBOUND
+  OUTBOUND
+}
+
+model WhatsAppChannel {
+  /// When this person last MESSAGED us. WhatsApp only allows free-form replies
+  /// within 24 hours of that moment, so it decides whether a proactive message
+  /// can reach them at all - outside the window we must use SMS or a template.
+  lastInboundAt DateTime?
+
+  id          String   @id @default(uuid(7))
+  userId      String   @unique // soft ref -> users
+  phone       String   @unique // E.164 WhatsApp number
+  optIn       Boolean  @default(true)
+  locked      Boolean  @default(false)
+  pinHash     String? // bcrypt hash of the 4-6 digit transaction PIN
+  pinFailures Int      @default(0)
+  locale      String   @default("en") // en | fr
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("whatsapp_channels")
+}
+
+model WhatsAppMessage {
+  id          String            @id @default(uuid(7))
+  phone       String // E.164
+  userId      String? // soft ref -> users (null before onboarding)
+  direction   WhatsAppDirection
+  waMessageId String? // provider message id (inbound dedup)
+  kind        String // text | interactive | image | audio | document | template | system
+  body        String? // text / rendered summary (never secrets or PINs)
+  createdAt   DateTime          @default(now())
+
+  @@index([phone])
+  @@index([userId])
+  @@index([waMessageId])
+  @@map("whatsapp_messages")
+}
+
+// -----------------------------------------------------------------------------
+// Outreach campaigns: an operator sending one approved WhatsApp template to a
+// SEGMENT of users (signed up but never verified, verified but never dealt,
+// and so on). Separate from the assistant above, which only ever REPLIES to
+// someone; this is the platform starting the conversation, which is exactly why
+// it needs an audience recorded, an opt-out honoured, and a per-recipient
+// outcome kept - an operator has to be able to answer "who did we message, and
+// did it arrive?" months later.
+// -----------------------------------------------------------------------------
+
+enum WhatsAppCampaignStatus {
+  DRAFT
+  SENDING
+  SENT
+  /// Every single send was refused. Kept distinct from SENT so a broken
+  /// template name does not look like a delivered campaign.
+  FAILED
+  CANCELLED
+}
+
+enum WhatsAppRecipientStatus {
+  QUEUED
+  SENT
+  FAILED
+  /// Excluded before sending: the person turned WhatsApp messages off. Recorded
+  /// rather than dropped, so the audience number always adds up.
+  SKIPPED_OPTOUT
+}
+
+model WhatsAppCampaign {
+  id        String  @id @default(uuid(7))
+  /// Operator-facing name, e.g. "September - nudge unverified signups".
+  name      String
+  /// Segment key resolved at SEND time (see campaign-segments.ts). The key is
+  /// stored, not the resulting list, because the list is in `recipients`.
+  segment   String
+  /// Name of the APPROVED Meta template. Meta refuses business-initiated
+  /// messages without one, so this is never free text.
+  template  String
+  language  String  @default("en")
+  /// Ordered body variables for the template, as a JSON array of strings.
+  variables Json?
+  /// The message text, used by rails that send free text rather than a
+  /// pre-approved template. Meta refuses business-initiated free text, so it
+  /// ignores this and sends `template`; WasenderAPI has no templates at all and
+  /// sends this. Both are stored so switching rails does not need a rewrite.
+  body      String?
+  /// Why this campaign was sent. Internal only, never delivered.
+  note      String?
+
+  status       WhatsAppCampaignStatus @default(DRAFT)
+  createdById  String // soft ref -> users (the operator)
+  audienceSize Int                    @default(0)
+  sentCount    Int                    @default(0)
+  failedCount  Int                    @default(0)
+  skippedCount Int                    @default(0)
+  startedAt    DateTime?
+  finishedAt   DateTime?
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+
+  recipients WhatsAppCampaignRecipient[]
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("whatsapp_campaigns")
+}
+
+model WhatsAppCampaignRecipient {
+  id          String                  @id @default(uuid(7))
+  campaignId  String
+  campaign    WhatsAppCampaign        @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  userId      String? // soft ref -> users
+  phone       String
+  status      WhatsAppRecipientStatus @default(QUEUED)
+  /// How many times delivery has been attempted. A rate limit is transient and
+  /// puts the row back in the queue, so without a counter a rail that keeps
+  /// refusing would retry the same person for ever.
+  attempts    Int                     @default(0)
+  /// Meta's own reason when a send is refused, so a failure can be diagnosed
+  /// without digging through server logs.
+  error       String?
+  waMessageId String?
+  sentAt      DateTime?
+  createdAt   DateTime                @default(now())
+
+  @@unique([campaignId, phone])
+  @@index([campaignId, status])
+  @@map("whatsapp_campaign_recipients")
+}
+
+// =============================================================================
+// PRODUCT ANALYTICS
+// Three business questions had no data behind them at all: how many people
+// visit, where they drop out, and whether the company makes money. The first
+// two need events that nobody was recording; the third needs costs that nobody
+// was entering. Revenue, funnel and retention are all derivable from the
+// existing tables and are computed, never stored.
+// =============================================================================
+
+/**
+ * One thing a visitor did. Deliberately thin.
+ * `visitorId` is a random id the browser generates for itself and is NOT a user
+ * id: most of the funnel happens before anyone signs up, and a funnel that can
+ * only see signed-in people cannot show where people leave. It becomes linked
+ * to a user only once that visitor signs in, which is what makes
+ * "visits that became accounts" answerable.
+ * No IP address and no device details are kept. The questions this exists to
+ * answer - how many, which pages, where did they stop - need none of that, and
+ * collecting personal data because it might be useful later is how a product
+ * analytics table becomes a compliance problem.
+ */
+model AnalyticsEvent {
+  id         String   @id @default(uuid(7))
+  /// Anonymous, browser-generated. Not an identity.
+  visitorId  String
+  /// Set only once the visitor is signed in, so a session can be tied to them.
+  userId     String?
+  /// 'page_view', 'signup_started', 'kyc_started', and so on.
+  name       String
+  path       String?
+  referrer   String?
+  /// Milliseconds on the page, reported when the visitor leaves it.
+  durationMs Int?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([name, createdAt])
+  @@index([visitorId])
+  @@index([userId])
+  @@map("analytics_events")
+}
+
+enum OperatingCostCategory {
+  INFRASTRUCTURE
+  SALARIES
+  PAYMENT_PROVIDER
+  MARKETING
+  LEGAL_COMPLIANCE
+  OTHER
+}
+
+/**
+ * What the business spends, by month.
+ * Entered by an operator, because nothing in the platform knows what a server,
+ * a salary or a lawyer costs. Without it EBITDA and profit cannot be computed
+ * at all - and a profit figure derived from revenue alone, with costs assumed
+ * to be zero, is worse than no figure because somebody will act on it.
+ */
+model OperatingCost {
+  id          String                @id @default(uuid(7))
+  /// First day of the month it belongs to, UTC.
+  month       DateTime
+  category    OperatingCostCategory
+  amountXaf   Decimal               @db.Decimal(20, 4)
+  note        String?
+  createdById String // soft ref -> users (the operator)
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+
+  @@unique([month, category])
+  @@index([month])
+  @@map("operating_costs")
+}
+
+// =============================================================================
+// SERVICE: account-lifecycle  (dormant-account review)
+// =============================================================================
+
+/**
+ * Why an account is up for deletion.
+ */
+enum DormancyReason {
+  /// Signed up, never completed identity verification.
+  NEVER_VERIFIED
+  /// Fully verified and then never did anything at all.
+  NEVER_ACTIVE
+}
+
+/**
+ * A warning sent to someone before their account is deleted, one row per
+ * warning actually delivered.
+ * Recorded rather than derived, because "we told them" is a claim that has to
+ * survive the account being gone. Computing it from the user's timestamps would
+ * mean the evidence disappears at exactly the moment it matters - when somebody
+ * asks why their account went, or a regulator asks whether notice was given.
+ * It is also what makes the schedule idempotent: the job runs daily and sends a
+ * warning only if there is no row for that stage, so a double run, a retry or a
+ * restart cannot warn the same person twice in a day.
+ */
+model AccountDormancyNotice {
+  id           String         @id @default(uuid(7))
+  userId       String // soft ref -> users
+  reason       DormancyReason
+  /// 1 = two weeks out, 2 = one week out, 3 = final notice.
+  stage        Int
+  /// The deletion date the user was told about, so a warning can be shown to
+  /// have named the right day even after the schedule shifts.
+  scheduledFor DateTime
+  channel      String // whatsapp | sms | email | none
+  sentAt       DateTime       @default(now())
+
+  @@unique([userId, reason, stage])
+  @@index([userId])
+  @@index([sentAt])
+  @@map("account_dormancy_notices")
+}

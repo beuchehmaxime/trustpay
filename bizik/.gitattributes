@@ -1,0 +1,22 @@
+# Normalise line endings: store as LF in the repo, check out LF everywhere.
+* text=auto eol=lf
+
+# Shell scripts must stay LF (the Docker entrypoint breaks with CRLF).
+*.sh text eol=lf
+# Windows batch files stay CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Treat these as binary (never line-ending convert / diff as text).
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.jks binary
+*.keystore binary

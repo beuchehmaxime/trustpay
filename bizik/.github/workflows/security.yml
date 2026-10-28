@@ -1,0 +1,109 @@
+name: Security
+
+# Nothing stopped a known-vulnerable dependency reaching production, and nothing
+# stopped a credential being committed. Both had already happened by the time
+# the compliance audit looked: a critical Next.js advisory was live in two apps,
+# and real Orange API keys had been pasted into a file named `.env.example`.
+#
+# This is the gate. It maps to SOC 2 CC7.1 and ISO 27001 A.8.8 (management of
+# technical vulnerabilities), and it is the kind of control an auditor asks for
+# evidence of - which is why it runs on every push and pull request rather than
+# on a schedule somebody can forget.
+
+on:
+  push:
+  pull_request:
+  schedule:
+    # Advisories are published against code that has not changed, so a repo with
+    # no commits this week can still become vulnerable. Monday morning sweep.
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  dependencies:
+    name: Dependency audit (${{ matrix.app }})
+    runs-on: ubuntu-latest
+    strategy:
+      # Keep going so one failing app still reports the others, rather than
+      # hiding three results behind the first failure.
+      fail-fast: false
+      matrix:
+        include:
+          - app: backend
+            blocking: true
+          - app: web/user
+            blocking: true
+          - app: web/admin
+            blocking: true
+          # Mobile reports but does not block, and the reason is not leniency.
+          # A React Native app does not deploy its npm tree: it ships a compiled
+          # JS bundle plus native code. Every high advisory here is in Expo CLI,
+          # Metro, chokidar, fast-glob or micromatch - the toolchain that builds
+          # that bundle on a developer machine and in EAS, none of which exists
+          # on a phone. Blocking on them would mean a permanently red job that
+          # nobody can turn green, which teaches people to ignore this workflow -
+          # exactly the failure it is meant to prevent. The findings are still
+          # printed, so a genuine advisory in shipped code is visible.
+          - app: mobile
+            blocking: false
+    defaults:
+      run:
+        working-directory: ${{ matrix.app }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: ${{ matrix.app }}/package-lock.json
+
+      - name: Install
+        run: npm ci --ignore-scripts
+
+      # Production dependencies only. A vulnerable test runner is worth fixing
+      # but is not a vulnerability in the deployed product, and failing the
+      # build on one teaches people to ignore this job.
+      #
+      # The verdict comes from a script rather than from npm's exit code, for
+      # two reasons. `--omit=dev` filters the report but not the exit status, so
+      # npm still exits non-zero over a dev-only advisory. And npm has no notion
+      # of a reviewed exception, so without one the only way past an advisory
+      # that genuinely cannot be reached is to switch the whole gate off.
+      - name: Audit production dependencies
+        run: |
+          npm audit --omit=dev --json > audit.json || true
+          node "$GITHUB_WORKSPACE/.github/scripts/audit-verdict.js" \
+            "${{ matrix.app }}" "${{ matrix.blocking }}" < audit.json
+
+      # Advisory, not blocking: moderates are worth seeing in the log without
+      # stopping a release over a denial of service in a parser we never reach.
+      - name: Report everything else
+        if: always()
+        run: npm audit --omit=dev || true
+
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Scan the history, not just the tip. A credential committed and then
+          # removed is still a leaked credential - it lives in the history and
+          # has to be rotated, so the scan has to be able to see it.
+          fetch-depth: 0
+
+      # The gitleaks ACTION requires a paid licence for organisation-owned
+      # repositories and fails without one, which is a licence error dressed up
+      # as a security finding - the worst kind of red build, because it trains
+      # everyone to ignore this job. The binary itself is MIT licensed and has
+      # no such requirement, so it is run directly.
+      - name: Scan git history for committed credentials
+        run: |
+          VERSION=8.30.1
+          curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/v${VERSION}/gitleaks_${VERSION}_linux_x64.tar.gz" \
+            | tar -xz gitleaks
+          # --config carries one narrowly scoped allowlist; see .gitleaks.toml
+          # for what it covers and why. Everything else is the default ruleset.
+          ./gitleaks detect --source . --config .gitleaks.toml --redact --no-banner --exit-code 1

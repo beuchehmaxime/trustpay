@@ -1,0 +1,11 @@
+-- The message text for rails that send free text instead of a template.
+--
+-- Meta refuses a business-initiated message that is not a pre-approved
+-- template, so campaigns only ever stored a template NAME. WasenderAPI has no
+-- templates at all and needs the prose. Both are now stored side by side, so
+-- switching rails is a setting rather than a rewrite.
+--
+-- Nullable: every campaign that predates this was sent through Meta and has no
+-- body, which is the honest value rather than an empty string pretending to be
+-- a message nobody sent.
+ALTER TABLE "whatsapp_campaigns" ADD COLUMN "body" TEXT;
