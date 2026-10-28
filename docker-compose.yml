@@ -1,64 +1,183 @@
-# TrustPay - the AI mediation service.
+# TrustPay - the whole application.
 #
 #   docker compose up -d --build
-#   curl http://localhost:4100/health
 #
-# TrustPay's container ONLY. Bizik runs from its own compose file, as it
-# always has - duplicating its services here would mean two definitions of the
-# same stack drifting apart, and this service does not need them to run.
+#   User app          http://localhost:3000
+#   Mediator console  http://localhost:3001   <- the demo lives here
+#   Backend API       http://localhost:4000/health
+#   AI service        http://localhost:4100/health
 #
-# What that leaves is the point: no database, no redis, no payment rail, no
-# credential for any of them. "The model cannot move money" is a fact about
-# what this container is given, not a promise made in a README.
+# TrustPay is its own project: its own database, its own backend, its own
+# frontends. The source under ./bizik is where the platform code came FROM;
+# nothing here connects to Bizik's infrastructure and nothing here needs it
+# to be running.
+#
+# One piece of the architecture is readable straight off this file: the `ai`
+# service has no DATABASE_URL, no redis and no payment credential. It cannot
+# reach the ledger because it was never given a way to. "No model outcome
+# moves money" is a property of this compose file, not a promise in a README.
+
+name: trustpay
 
 services:
-  # ---- TrustPay: the hackathon build ---------------------------------------
+  # ---- Data ----------------------------------------------------------------
 
-  trustpay:
+  postgres:
+    image: postgres:16-alpine
+    container_name: trustpay-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-trustpay}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-trustpay}
+      POSTGRES_DB: ${POSTGRES_DB:-trustpay}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # 5433 on the host: a local Postgres on 5432 is common, and the clash is
+    # confusing to diagnose from inside a container.
+    ports: ["5433:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-trustpay} -d ${POSTGRES_DB:-trustpay}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+    networks: [trustpay]
+
+  redis:
+    image: redis:7-alpine
+    container_name: trustpay-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+    networks: [trustpay]
+
+  # ---- Backend -------------------------------------------------------------
+  # The escrow platform. Its entrypoint runs the Prisma migrations on boot, so
+  # a fresh volume comes up with a working schema and no manual step.
+
+  backend:
+    build:
+      context: ./bizik/backend
+    container_name: trustpay-backend
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      DATABASE_URL: postgresql://${POSTGRES_USER:-trustpay}:${POSTGRES_PASSWORD:-trustpay}@postgres:5432/${POSTGRES_DB:-trustpay}?schema=public
+      REDIS_URL: redis://redis:6379
+      APP_URL: ${APP_URL:-http://localhost:3000}
+      # Throwaway secrets, and ENFORCE_PROD_SECRETS is off precisely BECAUSE
+      # they are throwaway: that guard exists to stop values like these
+      # reaching production, and this stack is not production.
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-dev-access-secret-not-for-production}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-dev-refresh-secret-not-for-production}
+      KYC_ENC_KEY: ${KYC_ENC_KEY:-dev-kyc-encryption-key-32-chars-ok}
+      ENFORCE_PROD_SECRETS: "false"
+      # No real money on this stack, ever. The simulated rail is the default
+      # and there are no provider credentials here to switch it off with.
+      PAYMENTS_MODE: simulated
+      PAYMENT_DEFAULT_CURRENCY: XAF
+      # Off so a demo account can be created without an SMS round trip.
+      PHONE_VERIFICATION_REQUIRED: "false"
+      RATE_LIMIT_MAX: ${RATE_LIMIT_MAX:-1000}
+      # Unset WhatsApp keys mean messages are logged rather than sent, which
+      # is what a demo stack should do.
+      WHATSAPP_ENABLED: ${WHATSAPP_ENABLED:-false}
+      WASENDER_API_KEY: ${WASENDER_API_KEY:-}
+      # Where a case file goes for mediation.
+      TRUSTPAY_AI_URL: http://ai:4100
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    ports: ["4000:3000"]
+    restart: unless-stopped
+    networks: [trustpay]
+
+  # ---- Frontends -----------------------------------------------------------
+  # NEXT_PUBLIC_* is baked in at BUILD time, not read at runtime, so the API
+  # URL is a build arg. It has to be the address the BROWSER can reach, which
+  # is localhost - the compose service name only resolves inside the network.
+
+  web:
+    build:
+      context: ./bizik/web/user
+      args:
+        NEXT_PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost:4000/api/v1}
+    container_name: trustpay-web
+    depends_on: [backend]
+    ports: ["3000:3000"]
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+    networks: [trustpay]
+
+  # The mediator console: where a human approves or rejects a recommendation,
+  # and where the demo gets recorded.
+  admin:
+    build:
+      context: ./bizik/web/admin
+      args:
+        NEXT_PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost:4000/api/v1}
+    container_name: trustpay-admin
+    depends_on: [backend]
+    ports: ["3001:3000"]
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+    networks: [trustpay]
+
+  # ---- The AI mediation service -------------------------------------------
+  # Its own container, with deliberately nothing in it. It reads a case file,
+  # calls Meta's models, and returns a recommendation for a human to approve.
+
+  ai:
     build:
       context: .
-    container_name: trustpay-service
+    container_name: trustpay-ai
     cap_drop: ["ALL"]
     security_opt: ["no-new-privileges:true"]
     environment:
       NODE_ENV: production
       PORT: "4100"
-      # Meta Model API. Pinned ids: the docs list muse-spark-1.3, 1.2 and 1.1
-      # and at least one client defaults to 1.1, so an unpinned id would let
-      # the demo change under us mid-build.
-      # Not :? - the service starts without it so the scrubber can be
+      # Not `:?` - the service starts without a key so the scrubber can be
       # exercised, and /health reports NOT READY rather than lying.
       MODEL_API_KEY: ${MODEL_API_KEY:-}
       META_API_BASE_URL: ${META_API_BASE_URL:-https://api.meta.ai/v1}
+      # Pinned. The docs list muse-spark-1.3, 1.2 and 1.1 and at least one
+      # client still defaults to 1.1, so an unpinned id lets the demo change
+      # under us mid-build.
       MUSE_SPARK_MODEL: ${MUSE_SPARK_MODEL:-muse-spark-1.3}
       MUSE_WONDER_MODEL: ${MUSE_WONDER_MODEL:-muse-wonder-1.0}
       MUSE_VOICE_MODEL: ${MUSE_VOICE_MODEL:-}
       SAM_MODEL: ${SAM_MODEL:-}
-      # Open-weight path, for the harness and the open-weights prize. The
-      # meta-models/ prefix is part of the id and must not be dropped.
+      # The meta-models/ prefix is part of the id and does not resolve without.
       OPEN_WEIGHTS_BASE_URL: ${OPEN_WEIGHTS_BASE_URL:-}
       OPEN_WEIGHTS_API_KEY: ${OPEN_WEIGHTS_API_KEY:-}
       OPEN_WEIGHTS_MODEL: ${OPEN_WEIGHTS_MODEL:-meta-models/muse-spark-open-1026}
-      # Escalate rather than decide. Deliberately cautious defaults.
       ESCALATE_BELOW_CONFIDENCE: ${ESCALATE_BELOW_CONFIDENCE:-0.75}
       ESCALATE_ABOVE_AMOUNT_XAF: ${ESCALATE_ABOVE_AMOUNT_XAF:-250000}
-      # Posts a suggestion row and nothing else. There is deliberately no
-      # endpoint behind this token that could resolve a dispute.
-      # Bizik runs from its own compose file, so reach it on the host.
-      BIZIK_API_BASE_URL: ${BIZIK_API_BASE_URL:-http://host.docker.internal:4000/api/v1}
+      # Writes a suggestion row and nothing else.
+      BIZIK_API_BASE_URL: http://backend:3000/api/v1
       BIZIK_SERVICE_TOKEN: ${BIZIK_SERVICE_TOKEN:-dev-service-token}
-      # Evidence arrives as WhatsApp media URLs. TrustPay fetches, processes
-      # and drops it - nothing is retained between requests.
+      # Evidence arrives as WhatsApp media URLs. Fetched, processed, dropped -
+      # nothing is retained between requests.
       WASENDER_API_KEY: ${WASENDER_API_KEY:-}
       WASENDER_BASE_URL: ${WASENDER_BASE_URL:-}
+    depends_on: [backend]
     ports: ["4100:4100"]
-    extra_hosts: ["host.docker.internal:host-gateway"]
     restart: unless-stopped
-    # NOTE the networks: `platform` to talk to the backend, and that is all.
-    # No postgres credential is passed and none would help - but the service
-    # also has no reason to hold one, so it does not.
     networks: [trustpay]
 
 networks:
   trustpay:
     driver: bridge
+
+volumes:
+  pgdata:
+  redisdata:

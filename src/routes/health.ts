@@ -1,6 +1,8 @@
 import { Router } from 'express';
 
 import { config, missingConfig } from '../config/env';
+import { asyncHandler } from '../lib/errors';
+import { smokeTest } from '../meta/client';
 
 /**
  * Liveness, and an honest answer about what is wired.
@@ -28,5 +30,21 @@ router.get('/health', (_req, res) => {
     escalation: config.escalation,
   });
 });
+
+/**
+ * Prove the key and the base URL actually work.
+ *
+ * Its own endpoint rather than part of /health, because it makes a real
+ * outbound call and a liveness probe should never depend on a third party.
+ * It catches the failure that otherwise wastes a day: a key that is present
+ * but wrong, or a model id that does not exist - both of which look like
+ * "nothing happens" from inside the pipeline.
+ */
+router.get(
+  '/smoke',
+  asyncHandler(async (_req, res) => {
+    res.json(await smokeTest());
+  }),
+);
 
 export default router;
