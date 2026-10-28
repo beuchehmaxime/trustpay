@@ -1,0 +1,12 @@
+# The TrustPay image builds from src/ only. bizik/ has its own images and
+# shipping it here would multiply the build context for nothing.
+bizik/
+node_modules/
+dist/
+docs/
+demo/
+.git/
+.env
+.env.*
+!*.example
+*.log

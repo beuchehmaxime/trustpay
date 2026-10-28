@@ -1,0 +1,46 @@
+# This repository is PUBLIC (a hackathon rule). Nothing secret may ever land in
+# it, and nothing may be copied in from the private Bizik repo without being
+# read first. The entries below are the floor, not the whole safeguard.
+node_modules/
+dist/
+coverage/
+
+# Secrets. Real env files never, example files always - Bizik ships
+# deploy/.env.production.example and a plain `!.env.example` negation would
+# not rescue it, because the negation matches the basename only.
+.env
+.env.*
+!*.example
+
+# Local scratch
+*.log
+.DS_Store
+tmp/
+scratch/
+
+# Demo media can be large; keep generated output out of git.
+demo/output/
+
+# ---- Markdown stays out of git --------------------------------------------
+# Not deleted - the files stay on disk and are still ours to read. They are
+# simply never committed to a PUBLIC repository.
+#
+# This matters more than it first looks. bizik/docs/ holds genuinely internal
+# material: compliance-audit.md and processor-register.md cite our own audit
+# findings by severity (H-4, M-4), incident-response.md is an operational
+# runbook, DEPLOYMENT.md describes the infrastructure, and the WhatsApp and
+# WasenderAPI guides carry live setup identifiers. Publishing a list of your
+# own unresolved findings is a map for anyone who wants to use them.
+#
+# Our own planning notes go too: docs/HACKATHON.md carries prize targets, the
+# track decision and a cut list, and docs/BUILD-PLAN.md is strategy. None of
+# that belongs in front of the people judging us, or our competitors.
+*.md
+
+# The ONE exception, and only at the root. The rules make "failure to clearly
+# identify your original contributions" an immediate disqualification, and the
+# README is where that identification lives: which files predate the hackathon
+# and which were written inside it. A public repo with no README answers that
+# question with silence. The leading slash keeps it to this file - bizik's own
+# READMEs stay ignored.
+!/README.md

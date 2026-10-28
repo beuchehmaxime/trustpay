@@ -1,0 +1,12 @@
+# Shell scripts must keep LF endings. A CRLF checkout makes the shebang read
+# `#!/usr/bin/env bash\r`, and bash reports "bad interpreter: No such file or
+# directory" - which is what would have happened to bootstrap-history.sh on a
+# fresh clone tomorrow. Bizik's own backend Dockerfile strips CR from its
+# entrypoint for exactly this reason; this prevents it instead.
+*.sh text eol=lf
+docker-entrypoint.sh text eol=lf
+
+# Dockerfiles and compose files are read by Linux tooling too.
+Dockerfile text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
