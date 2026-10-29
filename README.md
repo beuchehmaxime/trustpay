@@ -126,11 +126,24 @@ file by file.
 
 ### Reused from Bizik (pre-existing, NOT hackathon work)
 
-**The whole of `bizik/` is pre-existing production software.** It is the live
-escrow platform this is built on, vendored unchanged so judges can run the
-stack and see the new work in its real setting rather than in a mock. Not one
-line of it was written during the hackathon, and it is not edited - TrustPay
-adds alongside it.
+**`bizik/` is pre-existing production software.** It is the live escrow
+platform this is built on, vendored so judges can run the stack and see the new
+work in its real setting rather than in a mock. None of it was written during
+the hackathon.
+
+**Three files inside it were CHANGED during the hackathon**, and they are named
+here rather than left to be discovered:
+
+| File | The hackathon change |
+|---|---|
+| `backend/src/whatsapp/whatsapp-ai.ts` | The assistant's brain swapped from Anthropic/OpenAI to **Muse Spark**: `authToken` for Bearer auth, Meta's base host, and a raised token ceiling. |
+| `backend/src/config/env.ts` | The model, base URL, key and token budget behind that swap. |
+| `docker-compose.yml` | Wiring the above into the stack. |
+
+Everything else under `bizik/` is untouched. The swap is a base URL and an auth
+header, not a rewrite - Meta's Messages API is Anthropic-compatible, so the
+existing SDK, the `MessageParam` types, the `tool_use` blocks and the multi-hop
+tool loop all keep working as they were.
 
 What that includes: the escrow lifecycle, wallets and ledger, MTN MoMo and
 Orange Money rails through Fapshi, KYC, AML screening, RBAC, the audit log,

@@ -385,10 +385,36 @@ export const config = {
    * The model default follows the claude-api skill (Opus 5); override for cost.
    */
   ai: {
-    anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
-    anthropicModel: process.env.ANTHROPIC_MODEL || 'claude-opus-5',
+    /**
+     * The assistant's brain. Meta Model API by default.
+     *
+     * Meta's Messages API is Anthropic-compatible, so the Anthropic SDK is
+     * pointed at it rather than replaced: same client, same MessageParam
+     * types, same tool_use blocks, same multi-hop loop. Verified against the
+     * live endpoint - tools work and a turn comes back as
+     * `redacted_thinking, text, tool_use` with `stop_reason: "tool_use"`.
+     *
+     * Leave ANTHROPIC_BASE_URL unset to use Meta. Setting it back to
+     * Anthropic's own host with an Anthropic key restores the previous
+     * behaviour, which is why the switch is a base URL and not a rewrite.
+     */
+    anthropicApiKey: process.env.MODEL_API_KEY || process.env.ANTHROPIC_API_KEY || '',
+    // BARE host, no /v1: the Anthropic SDK appends /v1/messages itself.
+    anthropicBaseUrl: process.env.ANTHROPIC_BASE_URL || 'https://api.meta.ai',
+    anthropicModel: process.env.ASSISTANT_MODEL || process.env.ANTHROPIC_MODEL || 'muse-spark-1.3',
+    /**
+     * Muse Spark THINKS before it answers, and the thinking is billed against
+     * max_tokens before a single word of reply is written. Measured on this
+     * endpoint: a one-tool turn spent 440 of 490 output tokens thinking. The
+     * old ceiling of 1024 would leave a complex turn - read the deal, work out
+     * who pays, propose the action - with almost nothing left to answer with,
+     * and the symptom is an empty reply rather than an error.
+     */
+    assistantMaxTokens: Number(process.env.ASSISTANT_MAX_TOKENS) || 8192,
     openaiApiKey: process.env.OPENAI_API_KEY || '',
     openaiTranscribeModel: process.env.OPENAI_TRANSCRIBE_MODEL || 'whisper-1',
+    /** Muse Voice Transcribe: 25 languages WITH code-switching, turn-level timing. */
+    metaVoiceModel: process.env.MUSE_VOICE_MODEL || 'muse-voice-transcribe-1.0',
   },
 
   /** SMTP email delivery (transactional email - verification codes, etc.). */

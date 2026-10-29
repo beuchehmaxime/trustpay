@@ -88,6 +88,19 @@ services:
       # Off so a demo account can be created without an SMS round trip.
       PHONE_VERIFICATION_REQUIRED: "false"
       RATE_LIMIT_MAX: ${RATE_LIMIT_MAX:-1000}
+      # ---- The assistant's brain: Meta Model API ---------------------------
+      # Meta's Messages API is Anthropic-compatible, so the existing SDK is
+      # repointed rather than replaced. Same client, same tool_use blocks,
+      # same multi-hop loop - only the base URL, the key and the model change.
+      MODEL_API_KEY: ${MODEL_API_KEY:-}
+      # Bare host - the Anthropic SDK appends /v1/messages itself.
+      ANTHROPIC_BASE_URL: ${ANTHROPIC_BASE_URL:-https://api.meta.ai}
+      ASSISTANT_MODEL: ${ASSISTANT_MODEL:-muse-spark-1.3}
+      # Muse Spark thinks before it answers and spends that from the same
+      # budget: a one-tool turn used 440 of 490 output tokens thinking. The
+      # old 1024 ceiling would cut a complex turn off mid-answer.
+      ASSISTANT_MAX_TOKENS: ${ASSISTANT_MAX_TOKENS:-8192}
+      MUSE_VOICE_MODEL: ${MUSE_VOICE_MODEL:-muse-voice-transcribe-1.0}
       # Unset WhatsApp keys mean messages are logged rather than sent, which
       # is what a demo stack should do.
       WHATSAPP_ENABLED: ${WHATSAPP_ENABLED:-false}

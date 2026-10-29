@@ -14,7 +14,7 @@ import {
 import { TOOL_DEFINITIONS, WhatsAppTools, type ToolContext } from './whatsapp-tools';
 
 /**
- * The AI brain. Claude interprets the user's message and calls tools (read tools
+ * The AI brain. Muse Spark interprets the user's message and calls tools (read tools
  * run immediately; money tools only PROPOSE - they return a confirmation the
  * user must approve + PIN before anything executes). OpenAI Whisper transcribes
  * voice notes. The model never has authority to move money.
@@ -23,9 +23,33 @@ import { TOOL_DEFINITIONS, WhatsAppTools, type ToolContext } from './whatsapp-to
 let anthropic: Anthropic | null = null;
 let openai: OpenAI | null = null;
 
+/**
+ * The assistant's model client, pointed at Meta Model API.
+ *
+ * Meta's Messages API is Anthropic-compatible, so this is a base URL change
+ * rather than a rewrite: the SDK, the MessageParam types, the tool_use blocks
+ * and the multi-hop loop below all keep working unchanged. Verified live - a
+ * tool turn returns `redacted_thinking, text, tool_use` with
+ * `stop_reason: "tool_use"`, exactly the shape this file already handles.
+ *
+ * The thinking blocks matter: they come back opaque and must be passed BACK in
+ * the next hop, which the loop already does by pushing `response.content`
+ * wholesale rather than the text it extracted.
+ */
 function anthropicClient(): Anthropic | null {
   if (!config.ai.anthropicApiKey) return null;
-  if (!anthropic) anthropic = new Anthropic({ apiKey: config.ai.anthropicApiKey });
+  if (!anthropic) {
+    // `authToken`, not `apiKey`. The SDK sends apiKey as `x-api-key`, which
+    // Meta rejects with 401 invalid_api_key; authToken sends
+    // `Authorization: Bearer`, which is what Meta documents. The base URL is
+    // the BARE host for the same reason the docs give - the SDK appends
+    // /v1/messages itself, so including /v1 here asks for /v1/v1/messages
+    // and gets a bodyless 404 that looks like an outage rather than a typo.
+    anthropic = new Anthropic({
+      authToken: config.ai.anthropicApiKey,
+      baseURL: config.ai.anthropicBaseUrl,
+    });
+  }
   return anthropic;
 }
 
@@ -108,7 +132,11 @@ export const WhatsAppAI = {
     try {
       const response = await client.messages.create({
         model: config.ai.anthropicModel,
-        max_tokens: 1024,
+        // Muse Spark thinks before it answers and the thinking is spent from
+        // this budget first - a turn measured here used 440 of 490 output
+        // tokens thinking. At 1024 a structured answer can be cut off mid-way
+        // and come back unparseable, which reads as "the model is broken".
+        max_tokens: config.ai.assistantMaxTokens,
         output_config: {
           effort: 'low',
           format: { type: 'json_schema', schema: GUEST_DECISION_SCHEMA },
@@ -175,7 +203,7 @@ export const WhatsAppAI = {
       for (let hop = 0; hop < 5; hop += 1) {
         const response = await client.messages.create({
           model: config.ai.anthropicModel,
-          max_tokens: 1024,
+          max_tokens: config.ai.assistantMaxTokens,
           output_config: { effort: 'low' },
           system: SYSTEM_PROMPT,
           tools: TOOL_DEFINITIONS,
