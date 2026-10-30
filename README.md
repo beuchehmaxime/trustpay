@@ -131,17 +131,29 @@ platform this is built on, vendored so judges can run the stack and see the new
 work in its real setting rather than in a mock. None of it was written during
 the hackathon.
 
-**Three files inside it were CHANGED during the hackathon**, and they are named
+**These files inside it were CHANGED during the hackathon**, and they are named
 here rather than left to be discovered:
 
 | File | The hackathon change |
 |---|---|
 | `backend/src/whatsapp/whatsapp-ai.ts` | The assistant's brain swapped from Anthropic/OpenAI to **Muse Spark**: `authToken` for Bearer auth, Meta's base host, and a raised token ceiling. |
 | `backend/src/config/env.ts` | The model, base URL, key and token budget behind that swap. |
+| `backend/src/index.ts` | Three lines mounting the new in-app assistant route. |
+| `web/user/src/app/(app)/layout.tsx` | Mounts the assistant launcher on the app shell. |
+| `web/user/src/lib/api/endpoints.ts` | The assistant's endpoint paths. |
+| `web/user/src/lib/i18n/locales/{en,fr}.json` | The assistant's user-facing strings, EN and FR. |
 | `docker-compose.yml` | Wiring the above into the stack. |
 
-Everything else under `bizik/` is untouched. The swap is a base URL and an auth
-header, not a rewrite - Meta's Messages API is Anthropic-compatible, so the
+**These directories inside it are NEW**, written during the hackathon:
+
+| Directory | What it is |
+|---|---|
+| `backend/src/assistant/` | The in-app agent: session, reasoning loop, service, HTTP surface, and the test suite that attacks the money rule. |
+| `web/user/src/components/assistant/` | The chat panel, the approval card and the launcher. |
+| `web/user/src/lib/api/assistant.api.ts` | The client for the above. |
+
+Everything else under `bizik/` is untouched. The model swap is a base URL and an
+auth header, not a rewrite - Meta's Messages API is Anthropic-compatible, so the
 existing SDK, the `MessageParam` types, the `tool_use` blocks and the multi-hop
 tool loop all keep working as they were.
 
@@ -164,6 +176,17 @@ payment keys, and no `.env` is tracked.
 
 ### Built during the hackathon (everything outside `bizik/`)
 
+- **The in-app agent** (`bizik/backend/src/assistant/`, `bizik/web/user/src/components/assistant/`) -
+  a chat panel inside the app where a user starts a deal, invites the other
+  party, funds a milestone, sends money or opens a dispute by asking for it.
+  It runs on **Muse Spark** and reuses the existing tool layer, which turned
+  out to be channel-agnostic already: `ToolContext` is `{ userId, locale }` and
+  nothing more. The money rule is the same one as everywhere else here, and it
+  is structural rather than prompted - the agent can propose and the proposal
+  carries an id, but execution is a separate authenticated call that needs the
+  user's PIN. `assistant.service.test.ts` is written to break that separation
+  rather than to confirm it: approving an id that was never proposed, approving
+  twice, approving without a PIN, approving after the conversation moved on
 - `src/` - the mediation pipeline: Meta model adapters, the voice and visual
   evidence analysers, the agent that reasons over them, the escalation policy
   and the case-file format

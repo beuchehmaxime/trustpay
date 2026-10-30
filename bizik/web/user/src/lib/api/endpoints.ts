@@ -126,4 +126,16 @@ export const endpoints = {
     ticket: (id: string) => `/support/tickets/${id}`,
     reply: (id: string) => `/support/tickets/${id}/reply`,
   },
+  // The in-app assistant. `confirm` is the only one of these that can move
+  // money, and it takes a proposal id rather than an action: the server already
+  // knows what it offered.
+  assistant: {
+    status: '/assistant/status',
+    history: '/assistant/history',
+    chat: '/assistant/chat',
+    confirm: '/assistant/confirm',
+    cancel: '/assistant/cancel',
+    pin: '/assistant/pin',
+    reset: '/assistant/reset',
+  },
 } as const;

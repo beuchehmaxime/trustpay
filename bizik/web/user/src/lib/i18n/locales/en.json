@@ -2561,5 +2561,25 @@
       "done": "Support is in the app whenever you need it.",
       "cta": "See help"
     }
+  },
+  "assistant": {
+    "title": "BiZik assistant",
+    "open": "Ask BiZik",
+    "disclosure": "AI assistant. It proposes, you approve.",
+    "placeholder": "Ask about a deal, your balance, or what to do next",
+    "empty": "Ask me anything about your deals, your wallet, or how BiZik works.",
+    "openerBalance": "What is my balance?",
+    "openerDeals": "Show me my deals",
+    "openerHow": "How does escrow protect me?",
+    "reset": "Start over",
+    "approve": "Approve",
+    "dismiss": "Not now",
+    "nothingHappenedYet": "Nothing has happened yet. Approve to go ahead.",
+    "proposalExpired": "This confirmation expired. Ask again to get a fresh one.",
+    "expiresIn": "Expires in {{time}}",
+    "pinPlaceholder": "Your 4 to 6 digit PIN",
+    "createPinPrompt": "Create a PIN to approve money actions. You will use it every time.",
+    "createPin": "Create PIN",
+    "pinCreated": "PIN created. You can approve now."
   }
 }

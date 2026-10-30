@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 
 import { AppShell } from '@/components/app-shell';
+import { AssistantLauncher } from '@/components/assistant/assistant-launcher';
 import { Walkthrough } from '@/components/onboarding/walkthrough';
 import { useAuthStore } from '@/lib/auth/auth.store';
 
@@ -38,6 +39,10 @@ export default function AppLayout({ children }: { children: ReactNode }) {
           rather than only the people who happen to start on the dashboard. */}
       <Walkthrough />
       {children}
+      {/* On the shell rather than a route of its own: the point of an in-app
+          assistant is that you can ask it from the screen you are already on,
+          with the deal or the balance you are asking about still in view. */}
+      <AssistantLauncher />
     </AppShell>
   );
 }

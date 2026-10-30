@@ -50,6 +50,7 @@ import transferRoutes from './transfer/transfer.routes';
 import analyticsIngestRoutes from './analytics/ingest.routes';
 import smsRoutes from './sms/sms.routes';
 import whatsappRoutes from './whatsapp/whatsapp.routes';
+import assistantRoutes from './assistant/assistant.routes';
 
 dotenv.config();
 
@@ -262,6 +263,9 @@ app.use('/api/v1/fx', fxRoutes);
 app.use('/api/v1/disputes', disputeRoutes);
 app.use('/api/v1/notification', notificationRoutes);
 app.use('/api/v1/support', supportRoutes);
+// The in-app assistant. Its /chat limiter lives inside the router rather than
+// here, because it has to run AFTER requireAuth to see who is asking.
+app.use('/api/v1/assistant', assistantRoutes);
 // Public marketing content (blog / help / legal) - no auth.
 app.use('/api/v1', contentRoutes);
 app.use('/api/v1/insights', insightsRoutes);

@@ -2561,5 +2561,25 @@
       "done": "L'assistance est dans l'application quand vous en avez besoin.",
       "cta": "Voir l'aide"
     }
+  },
+  "assistant": {
+    "title": "Assistant BiZik",
+    "open": "Demander a BiZik",
+    "disclosure": "Assistant IA. Il propose, vous approuvez.",
+    "placeholder": "Posez une question sur un accord, votre solde ou la suite",
+    "empty": "Posez-moi une question sur vos accords, votre portefeuille ou le fonctionnement de BiZik.",
+    "openerBalance": "Quel est mon solde ?",
+    "openerDeals": "Montre-moi mes accords",
+    "openerHow": "Comment le sequestre me protege-t-il ?",
+    "reset": "Recommencer",
+    "approve": "Approuver",
+    "dismiss": "Pas maintenant",
+    "nothingHappenedYet": "Rien n'est encore fait. Approuvez pour continuer.",
+    "proposalExpired": "Cette confirmation a expire. Redemandez pour en obtenir une nouvelle.",
+    "expiresIn": "Expire dans {{time}}",
+    "pinPlaceholder": "Votre code PIN de 4 a 6 chiffres",
+    "createPinPrompt": "Creez un code PIN pour approuver les operations d'argent. Vous l'utiliserez a chaque fois.",
+    "createPin": "Creer le PIN",
+    "pinCreated": "PIN cree. Vous pouvez approuver."
   }
 }
