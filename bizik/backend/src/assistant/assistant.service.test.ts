@@ -80,13 +80,13 @@ vi.mock('../whatsapp/whatsapp-security', () => ({
   },
 }));
 
-vi.mock('../whatsapp/whatsapp-tools', () => ({
-  WhatsAppTools: {
+vi.mock('./assistant-tools', () => ({
+  AssistantTools: {
     run: vi.fn(),
     executeConfirmed: doubles.executeConfirmed,
   },
-  TOOL_DEFINITIONS: [],
-  READ_TOOLS: new Set<string>(),
+  ASSISTANT_TOOL_DEFINITIONS: [],
+  ASSISTANT_READ_TOOLS: new Set<string>(),
 }));
 
 // The model is replaced wholesale. What it would actually say is not the

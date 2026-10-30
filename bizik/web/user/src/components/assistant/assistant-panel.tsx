@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { Loader2, RotateCcw, Send, Sparkles, X } from 'lucide-react';
+import { Loader2, Mic, RotateCcw, Send, Sparkles, Square, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -12,7 +12,15 @@ import {
   type AssistantProposal,
 } from '@/lib/api/assistant.api';
 import { normaliseError } from '@/lib/api/client';
+import {
+  blobToBase64,
+  canRecord,
+  MAX_RECORDING_SECONDS,
+  startRecording,
+  type Recorder,
+} from '@/lib/audio/wav-recorder';
 import { cn } from '@/lib/utils';
+import { AssistantText } from './assistant-text';
 import { ProposalCard } from './proposal-card';
 
 /**
@@ -26,10 +34,36 @@ import { ProposalCard } from './proposal-card';
  * without the PIN.
  */
 
-/** Suggestions for an empty thread. Deliberately not money actions. */
-const OPENERS = ['assistant.openerBalance', 'assistant.openerDeals', 'assistant.openerHow'] as const;
+/**
+ * How tall the composer may grow before it starts scrolling: six lines.
+ *
+ * Six because that is roughly a paragraph of someone explaining what went
+ * wrong with an order, which is the longest thing anyone types here. Past it
+ * the box would start eating the conversation it is a reply to.
+ *
+ * 20px is `leading-5`, and 16px is the `py-2` above and below. Computed rather
+ * than written as a class so the number and the line count cannot drift apart.
+ */
+const COMPOSER_LINE_HEIGHT = 20;
+const COMPOSER_MAX_LINES = 6;
+const COMPOSER_MAX_HEIGHT = COMPOSER_LINE_HEIGHT * COMPOSER_MAX_LINES + 16;
 
-export function AssistantPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
+/** Suggestions for an empty thread. Deliberately not money actions. */
+const OPENERS = [
+  'assistant.openerBalance',
+  'assistant.openerDeals',
+  'assistant.openerDispute',
+] as const;
+
+export function AssistantPanel({
+  open,
+  voiceAvailable,
+  onClose,
+}: {
+  open: boolean;
+  voiceAvailable: boolean;
+  onClose: () => void;
+}) {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<AssistantMessage[]>([]);
   const [proposal, setProposal] = useState<AssistantProposal | undefined>();
@@ -37,6 +71,10 @@ export function AssistantPanel({ open, onClose }: { open: boolean; onClose: () =
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [approving, setApproving] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [recordedSeconds, setRecordedSeconds] = useState(0);
+  const [composerFocused, setComposerFocused] = useState(false);
+  const recorderRef = useRef<Recorder | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -71,6 +109,27 @@ export function AssistantPanel({ open, onClose }: { open: boolean; onClose: () =
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages, proposal, sending]);
+
+  /**
+   * Grow the composer to fit what has been typed.
+   *
+   * Height is reset to `auto` first and only then read: `scrollHeight` on an
+   * element that is already tall enough reports the height it currently has,
+   * so without the reset the box can only ever grow and never shrink back
+   * after a deletion. The CSS max-height takes over past that point and the
+   * textarea scrolls, which is why nothing clamps it here.
+   */
+  useEffect(() => {
+    const field = inputRef.current;
+    if (!field) return;
+    field.style.height = 'auto';
+    const wanted = Math.min(field.scrollHeight, COMPOSER_MAX_HEIGHT);
+    field.style.height = `${wanted}px`;
+    // Past the cap the box stops growing and scrolls instead. Pinning it to the
+    // bottom keeps the caret in view, which is the whole reason someone wants a
+    // field that grows: to see what they are still writing.
+    if (field.scrollHeight > COMPOSER_MAX_HEIGHT) field.scrollTop = field.scrollHeight;
+  }, [draft, composerFocused, open]);
 
   useEffect(() => {
     if (!open) return;
@@ -111,6 +170,90 @@ export function AssistantPanel({ open, onClose }: { open: boolean; onClose: () =
     },
     [sending],
   );
+
+  /**
+   * Send a recording.
+   *
+   * The transcript is pushed into the thread as the user's own message, so
+   * what the machine heard is on screen next to what it answered. When it
+   * mishears "four" as "fourteen", that is the only way the user can tell why
+   * the reply made no sense.
+   */
+  const sendVoice = useCallback(async (audio: Blob) => {
+    setSending(true);
+    setProposal(undefined);
+    try {
+      const base64 = await blobToBase64(audio);
+      const result = await assistantApi.voice(base64);
+      setMessages((prior) => [
+        ...prior,
+        { role: 'user', content: result.transcript, at: Date.now() },
+        { role: 'assistant', content: result.reply, at: Date.now() },
+      ]);
+      setProposal(result.proposal);
+    } catch (error) {
+      toast.error(normaliseError(error).message);
+    } finally {
+      setSending(false);
+    }
+  }, []);
+
+  const beginRecording = useCallback(async () => {
+    if (recording || sending) return;
+    // Browsers only expose a microphone on a secure origin. Opening the app at
+    // http://192.168.x.x on a phone is the common way to hit this, and the
+    // browser's own error says nothing useful, so name the actual rule.
+    if (!canRecord()) {
+      toast.error(t('assistant.micInsecure'));
+      return;
+    }
+    try {
+      recorderRef.current = await startRecording();
+      setRecordedSeconds(0);
+      setRecording(true);
+    } catch {
+      // Denied, or no microphone. Either way the typed path still works, so
+      // say what happened rather than leaving a dead button.
+      toast.error(t('assistant.micDenied'));
+    }
+  }, [recording, sending, t]);
+
+  const finishRecording = useCallback(async () => {
+    const recorder = recorderRef.current;
+    recorderRef.current = null;
+    setRecording(false);
+    if (!recorder) return;
+    const audio = await recorder.stop();
+    // Under a second is a mis-tap, not a message, and transcribing it costs a
+    // call to come back empty.
+    if (audio.size < 8000) {
+      toast.error(t('assistant.micTooShort'));
+      return;
+    }
+    await sendVoice(audio);
+  }, [sendVoice, t]);
+
+  // The clock, and the hard stop at the length the endpoint will accept.
+  useEffect(() => {
+    if (!recording) return;
+    const tick = setInterval(() => {
+      setRecordedSeconds((seconds) => {
+        if (seconds + 1 >= MAX_RECORDING_SECONDS) void finishRecording();
+        return seconds + 1;
+      });
+    }, 1000);
+    return () => clearInterval(tick);
+  }, [recording, finishRecording]);
+
+  // Closing the panel mid-recording must release the microphone. Leaving the
+  // track open keeps the browser's recording indicator lit over a panel that
+  // is not even on screen.
+  useEffect(() => {
+    if (open) return;
+    recorderRef.current?.cancel();
+    recorderRef.current = null;
+    setRecording(false);
+  }, [open]);
 
   const approve = useCallback(
     async (pin?: string) => {
@@ -241,13 +384,19 @@ export function AssistantPanel({ open, onClose }: { open: boolean; onClose: () =
               >
                 <div
                   className={cn(
-                    'max-w-[85%] whitespace-pre-wrap rounded-2xl px-3 py-2 text-sm',
+                    'max-w-[85%] rounded-2xl px-3 py-2 text-sm',
                     message.role === 'user'
                       ? 'rounded-br-sm bg-primary text-primary-foreground'
                       : 'rounded-bl-sm bg-muted text-foreground',
                   )}
                 >
-                  {message.content}
+                  {/* The user's own words are shown exactly as typed or
+                      transcribed; only the assistant's are formatted. */}
+                  {message.role === 'assistant' ? (
+                    <AssistantText text={message.content} />
+                  ) : (
+                    <span className="whitespace-pre-wrap">{message.content}</span>
+                  )}
                 </div>
               </div>
             ))
@@ -272,6 +421,35 @@ export function AssistantPanel({ open, onClose }: { open: boolean; onClose: () =
           )}
         </div>
 
+        {recording ? (
+          <div className="flex items-center gap-3 border-t border-border px-3 py-3">
+            <span className="relative flex size-3 shrink-0">
+              <span className="absolute inline-flex size-full animate-ping rounded-full bg-destructive opacity-75" />
+              <span className="relative inline-flex size-3 rounded-full bg-destructive" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium">{t('assistant.listening')}</p>
+              <p className="text-xs text-muted-foreground">
+                {Math.floor(recordedSeconds / 60)}:
+                {String(recordedSeconds % 60).padStart(2, '0')} / {MAX_RECORDING_SECONDS / 60}:00
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                recorderRef.current?.cancel();
+                recorderRef.current = null;
+                setRecording(false);
+              }}
+            >
+              {t('assistant.dismiss')}
+            </Button>
+            <Button size="icon" onClick={finishRecording} aria-label={t('assistant.stopRecording')}>
+              <Square className="size-4" />
+            </Button>
+          </div>
+        ) : (
         <form
           className="flex items-end gap-2 border-t border-border px-3 py-3"
           onSubmit={(event) => {
@@ -279,27 +457,61 @@ export function AssistantPanel({ open, onClose }: { open: boolean; onClose: () =
             send(draft);
           }}
         >
-          <textarea
-            ref={inputRef}
-            rows={1}
-            value={draft}
-            onChange={(event) => setDraft(event.target.value)}
-            onKeyDown={(event) => {
-              // Enter sends, Shift+Enter breaks the line. Phone keyboards send
-              // a newline rather than a submit, which the form handles.
-              if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                send(draft);
-              }
-            }}
-            placeholder={t('assistant.placeholder')}
-            maxLength={2000}
-            className="max-h-32 min-h-9 flex-1 resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-          />
+          <div className="relative flex-1">
+            <textarea
+              ref={inputRef}
+              rows={1}
+              value={draft}
+              onChange={(event) => setDraft(event.target.value)}
+              onFocus={() => setComposerFocused(true)}
+              onBlur={() => setComposerFocused(false)}
+              onKeyDown={(event) => {
+                // Enter sends, Shift+Enter breaks the line. Phone keyboards
+                // send a newline rather than a submit, which the form handles.
+                if (event.key === 'Enter' && !event.shiftKey) {
+                  event.preventDefault();
+                  send(draft);
+                }
+              }}
+              placeholder={t('assistant.placeholder')}
+              maxLength={2000}
+              className={cn(
+                'w-full resize-none overflow-y-auto rounded-lg border border-border bg-background py-2 pl-3 text-sm leading-5 outline-none transition-[min-height]',
+                'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
+                // Room on the right for the mic sitting inside the field.
+                voiceAvailable ? 'pr-11' : 'pr-3',
+                // Taller the moment it is in use, so what is being typed stays
+                // visible instead of the first line scrolling out of sight.
+                composerFocused || draft ? 'min-h-16' : 'min-h-10',
+              )}
+              style={{ maxHeight: `${COMPOSER_MAX_HEIGHT}px` }}
+            />
+            {/* Inside the field, at its right edge. Shown whenever the server
+                has voice configured - `canRecord()` deliberately does NOT gate
+                it, because that is false on any non-localhost HTTP address and
+                a mic that silently vanishes when you open the app from your
+                phone looks like a broken feature rather than a browser rule.
+                It is shown, and clicking it says why. */}
+            {voiceAvailable && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                disabled={sending}
+                onClick={beginRecording}
+                aria-label={t('assistant.startRecording')}
+                title={t('assistant.startRecording')}
+                className="absolute bottom-1.5 right-1.5 text-muted-foreground hover:text-foreground"
+              >
+                <Mic className="size-4" />
+              </Button>
+            )}
+          </div>
           <Button type="submit" size="icon" disabled={!draft.trim() || sending}>
             <Send className="size-4" />
           </Button>
         </form>
+        )}
       </aside>
     </>
   );

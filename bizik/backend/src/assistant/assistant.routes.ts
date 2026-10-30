@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
 
@@ -43,6 +43,18 @@ const chatLimiter = rateLimit({
 router.get('/status', requireAuth, AssistantController.status);
 router.get('/history', requireAuth, AssistantController.history);
 router.post('/chat', requireAuth, chatLimiter, AssistantController.chat);
+
+// Voice costs a transcription call on top of the model turn, so it is metered
+// on the same per-user budget. The body limit is its own: the global JSON limit
+// is sized for ordinary API payloads and a base64 WAV is far larger than any of
+// them.
+router.post(
+  '/voice',
+  requireAuth,
+  chatLimiter,
+  express.json({ limit: '12mb' }),
+  AssistantController.voice,
+);
 
 // The approval path. Rate limited like the other credential-checking endpoints,
 // because a wrong PIN here is a guess at a money action and should cost the

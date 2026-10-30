@@ -6,8 +6,9 @@ import { isVerifiedTier } from '../lib/kyc-gate';
 import { prisma } from '../lib/prisma';
 import { WhatsAppRepository } from '../whatsapp/whatsapp.repository';
 import { WhatsAppSecurity } from '../whatsapp/whatsapp-security';
-import { WhatsAppTools } from '../whatsapp/whatsapp-tools';
 import { AssistantAgent } from './assistant.agent';
+import { AssistantTools } from './assistant-tools';
+import { AssistantVoice } from './assistant-voice';
 import {
   AssistantSessionStore,
   type AssistantSession,
@@ -164,6 +165,11 @@ export const AssistantService = {
     return AssistantAgent.available();
   },
 
+  /** Whether voice input is configured, so the mic can hide rather than fail. */
+  voiceAvailable(): boolean {
+    return AssistantVoice.available();
+  },
+
   /** The thread as the user left it, so the panel reopens where it was. */
   async history(userId: string): Promise<{ messages: ChatMessage[]; proposal?: ProposalView }> {
     const session = await AssistantSessionStore.get(userId);
@@ -236,6 +242,21 @@ export const AssistantService = {
     record(session, 'assistant', reply);
     await AssistantSessionStore.save(session);
     return { reply, unavailable: turn.unavailable };
+  },
+
+  /**
+   * A voice note: transcribe it, then treat the words as the user's message.
+   *
+   * The transcript is returned alongside the reply rather than kept hidden.
+   * Speech recognition gets things wrong, and someone whose complaint was
+   * misheard needs to see what the machine thought they said - otherwise the
+   * assistant answers a question they never asked and they have no way to tell
+   * why.
+   */
+  async voice(userId: string, audio: Buffer): Promise<ChatReply & { transcript: string }> {
+    const { text } = await AssistantVoice.transcribe(audio);
+    const result = await this.chat(userId, text.slice(0, MAX_MESSAGE_LENGTH));
+    return { ...result, transcript: text };
   },
 
   /** Set a transaction PIN, for a user who does not have one yet. */
@@ -313,7 +334,7 @@ export const AssistantService = {
     await AssistantSessionStore.save(session);
 
     try {
-      const outcome = await WhatsAppTools.executeConfirmed(proposal, {
+      const outcome = await AssistantTools.executeConfirmed(proposal, {
         userId: user.id,
         locale: user.locale,
       });

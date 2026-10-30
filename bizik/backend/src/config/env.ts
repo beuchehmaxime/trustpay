@@ -415,6 +415,16 @@ export const config = {
     openaiTranscribeModel: process.env.OPENAI_TRANSCRIBE_MODEL || 'whisper-1',
     /** Muse Voice Transcribe: 25 languages WITH code-switching, turn-level timing. */
     metaVoiceModel: process.env.MUSE_VOICE_MODEL || 'muse-voice-transcribe-1.0',
+    /**
+     * The REST base, WITH /v1.
+     *
+     * Separate from `anthropicBaseUrl` above, and the difference is not
+     * cosmetic: that one is bare because the Anthropic SDK appends the version
+     * and the path itself. Transcription is a plain fetch with no SDK in front
+     * of it, so the version has to be here or the request lands on /asr/...
+     * and gets a bodyless 404 that reads like an outage.
+     */
+    metaApiBaseUrl: process.env.META_API_BASE_URL || 'https://api.meta.ai/v1',
   },
 
   /** SMTP email delivery (transactional email - verification codes, etc.). */

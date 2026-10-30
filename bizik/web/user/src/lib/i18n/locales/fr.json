@@ -2566,8 +2566,8 @@
     "title": "Assistant BiZik",
     "open": "Demander a BiZik",
     "disclosure": "Assistant IA. Il propose, vous approuvez.",
-    "placeholder": "Posez une question sur un accord, votre solde ou la suite",
-    "empty": "Posez-moi une question sur vos accords, votre portefeuille ou le fonctionnement de BiZik.",
+    "placeholder": "Posez une question, ou appuyez sur le micro",
+    "empty": "Posez-moi une question sur vos accords, votre portefeuille, ou un probleme avec une commande. Ecrivez, ou appuyez sur le micro et parlez.",
     "openerBalance": "Quel est mon solde ?",
     "openerDeals": "Montre-moi mes accords",
     "openerHow": "Comment le sequestre me protege-t-il ?",
@@ -2580,6 +2580,13 @@
     "pinPlaceholder": "Votre code PIN de 4 a 6 chiffres",
     "createPinPrompt": "Creez un code PIN pour approuver les operations d'argent. Vous l'utiliserez a chaque fois.",
     "createPin": "Creer le PIN",
-    "pinCreated": "PIN cree. Vous pouvez approuver."
+    "pinCreated": "PIN cree. Vous pouvez approuver.",
+    "listening": "Ecoute en cours...",
+    "startRecording": "Enregistrer un message vocal",
+    "stopRecording": "Arreter et envoyer",
+    "micDenied": "Nous n'avons pas pu acceder a votre micro. Verifiez l'autorisation, ou ecrivez plutot.",
+    "micTooShort": "C'etait trop court pour etre entendu. Restez appuye un peu plus longtemps.",
+    "openerDispute": "J'ai un probleme avec un accord",
+    "micInsecure": "Votre navigateur n'autorise le micro que sur une adresse securisee. Ouvrez l'application sur localhost ou en https, ou ecrivez plutot."
   }
 }

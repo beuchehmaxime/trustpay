@@ -32,6 +32,7 @@ import { redis } from '../lib/redis';
 import { provisionUserWallets } from '../lib/seed';
 import { generateTotpSecret, totpUri, verifyTotp } from '../lib/totp';
 import { revokeBeforeKey, revokedSessionKey } from '../middleware/auth.middleware';
+import { logDevCode } from '../lib/dev-code-log';
 import { sendVerificationCode } from '../lib/verification-code';
 import { UsernameService } from '../user/username.service';
 import { AuthRepository } from './auth.repository';
@@ -160,6 +161,7 @@ async function sendPhoneCodeFor(phone: string): Promise<CodeSendClaim> {
   // already in Redis, so verification works whether or not delivery succeeds.
   // WhatsApp first (free, instant, and not subject to SMS filtering), SMS when
   // the number is not on WhatsApp or the template is not approved yet.
+  logDevCode('phone verification', phone, code);
   void sendVerificationCode(phone, code, { purpose: 'phone verification' }).catch((e) =>
     console.error('[code] send failed:', (e as Error).message),
   );
@@ -397,6 +399,7 @@ export const AuthService = {
         { EX: config.otpTtlMinutes * 60 },
       );
       await enqueueEmail({ kind: 'admin-mfa', to: user.email, name: user.fullName, code });
+      logDevCode('staff sign-in', user.email, code);
       return { mfaRequired: true, challengeId, email: maskEmail(user.email) };
     }
 
@@ -485,6 +488,7 @@ export const AuthService = {
     );
     await redis.del(mfaAttemptsKey(challengeId));
     await enqueueEmail({ kind: 'admin-mfa', to: user.email, name: user.fullName, code });
+    logDevCode('staff sign-in', user.email, code);
   },
 
   async registerFailedAttempt(identifier: string, user: User | null) {
@@ -783,6 +787,7 @@ export const AuthService = {
     });
     // Attempts are NOT reset by requesting a new code - see sendPhoneCodeFor.
     // Fire-and-forget so the response isn't blocked by SMS latency.
+    logDevCode('password reset', user.phone, code);
     void sendVerificationCode(user.phone, code, { purpose: 'password reset' }).catch((e) =>
       console.error('[code] reset code send failed:', (e as Error).message),
     );

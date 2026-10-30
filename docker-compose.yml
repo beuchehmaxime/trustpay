@@ -58,6 +58,29 @@ services:
     restart: unless-stopped
     networks: [trustpay]
 
+  # A dev mailbox. Staff sign-in sends a 6-digit code by email and there is no
+  # bypass in the code - the code is stored hashed, so it cannot be read back
+  # out of Redis either. That is the right design and not worth weakening for a
+  # demo, so the stack gets a real SMTP server instead and the mail lands in a
+  # web inbox nobody has to configure.
+  #
+  #   http://localhost:8025
+  #
+  # It accepts everything and delivers nowhere, so no demo mail can escape.
+  mailpit:
+    image: axllent/mailpit:v1.21
+    container_name: trustpay-mailpit
+    environment:
+      MP_MAX_MESSAGES: "500"
+      MP_SMTP_AUTH_ACCEPT_ANY: "true"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "true"
+    ports:
+      - "8025:8025" # the inbox
+      - "1025:1025" # SMTP, for anything running outside the compose network
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+    networks: [trustpay]
+
   # ---- Backend -------------------------------------------------------------
   # The escrow platform. Its entrypoint runs the Prisma migrations on boot, so
   # a fresh volume comes up with a working schema and no manual step.
@@ -107,9 +130,23 @@ services:
       WASENDER_API_KEY: ${WASENDER_API_KEY:-}
       # Where a case file goes for mediation.
       TRUSTPAY_AI_URL: http://ai:4100
+      # Mail goes to the local inbox at http://localhost:8025. Staff MFA codes
+      # arrive there, which is the only way into the admin console on a stack
+      # with no real SMTP.
+      EMAIL_HOST: ${EMAIL_HOST:-mailpit}
+      EMAIL_PORT: ${EMAIL_PORT:-1025}
+      # Also print one-time codes (staff sign-in, phone verification, password
+      # reset) to `docker compose logs backend`, so a demo stack with no real
+      # mailbox or phone is still usable. The code refuses to honour this
+      # unless PAYMENTS_MODE is "simulated", and says loudly on every boot that
+      # it is on. Remove it for anything that is not a local demo.
+      LOG_VERIFICATION_CODES: ${LOG_VERIFICATION_CODES:-true}
+      FROM_NAME: ${FROM_NAME:-BiZik}
+      FROM_EMAIL: ${FROM_EMAIL:-no-reply@trustpay.demo}
     depends_on:
       postgres: { condition: service_healthy }
       redis: { condition: service_healthy }
+      mailpit: { condition: service_started }
     ports: ["4000:3000"]
     restart: unless-stopped
     networks: [trustpay]

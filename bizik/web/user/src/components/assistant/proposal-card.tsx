@@ -7,6 +7,7 @@ import { Loader2, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { AssistantProposal } from '@/lib/api/assistant.api';
+import { AssistantText } from './assistant-text';
 
 /**
  * The approval card.
@@ -24,38 +25,6 @@ import type { AssistantProposal } from '@/lib/api/assistant.api';
  * It holds the PIN in component state only. Nothing persists it, nothing logs
  * it, and it is dropped the moment the card unmounts.
  */
-/**
- * Render the backend's summary, which is written in WhatsApp's conventions.
- *
- * The summary deliberately comes from the backend rather than the model, so
- * that what is approved and what is shown cannot drift apart. The cost of that
- * is its formatting: WhatsApp bold is one asterisk each side, and bullets are
- * literal. Translating it here keeps the single source of truth intact - the
- * words are not touched, only how they are drawn.
- */
-function renderSummary(summary: string) {
-  return summary.split('\n').map((line, lineIndex) => {
-    const trimmed = line.trim();
-    if (!trimmed) return <div key={lineIndex} className="h-2" />;
-    // Split on *bold* runs, keeping the delimiters so the odd segments are the
-    // emphasised ones.
-    const segments = trimmed.split(/\*([^*]+)\*/g);
-    return (
-      <p key={lineIndex} className="text-sm text-foreground">
-        {segments.map((segment, segmentIndex) =>
-          segmentIndex % 2 === 1 ? (
-            <strong key={segmentIndex} className="font-semibold">
-              {segment}
-            </strong>
-          ) : (
-            <span key={segmentIndex}>{segment}</span>
-          ),
-        )}
-      </p>
-    );
-  });
-}
-
 export function ProposalCard({
   proposal,
   busy,
@@ -96,8 +65,11 @@ export function ProposalCard({
     <div className="rounded-xl border border-border bg-card p-3 shadow-sm">
       <div className="flex items-start gap-2">
         <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" />
-        <div className="min-w-0 flex-1 space-y-0.5">
-          {renderSummary(proposal.summary)}
+        {/* The summary is written by the BACKEND, not the model, so what is
+            approved and what is shown cannot drift apart. It arrives in
+            WhatsApp's conventions, which the shared formatter also reads. */}
+        <div className="min-w-0 flex-1 space-y-0.5 text-sm text-foreground">
+          <AssistantText text={proposal.summary} />
           <p className="pt-1 text-xs text-muted-foreground">
             {expired ? t('assistant.proposalExpired') : t('assistant.nothingHappenedYet')}
           </p>

@@ -1,4 +1,5 @@
 import { assertProductionSecrets, config } from './config/env';
+import { warnIfCodeLoggingEnabled } from './lib/dev-code-log';
 import { installProcessErrorHandlers } from './lib/observability';
 import { connectRedis } from './lib/redis';
 
@@ -141,6 +142,10 @@ async function start() {
           : ' No resume date set (PHONE_VERIFICATION_RESUME_ON).'),
     );
   }
+
+  // Printing one-time codes to the log is a security property turned off, so
+  // it says so on every boot rather than waiting to be found in a config file.
+  warnIfCodeLoggingEnabled();
 
   const httpServer = app.listen(config.port, () => {
     console.log(`BiZik Backend Server running on port ${config.port}`);

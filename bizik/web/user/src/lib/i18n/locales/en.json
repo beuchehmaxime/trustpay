@@ -2566,8 +2566,8 @@
     "title": "BiZik assistant",
     "open": "Ask BiZik",
     "disclosure": "AI assistant. It proposes, you approve.",
-    "placeholder": "Ask about a deal, your balance, or what to do next",
-    "empty": "Ask me anything about your deals, your wallet, or how BiZik works.",
+    "placeholder": "Ask anything, or tap the mic to speak",
+    "empty": "Ask me anything about your deals, your wallet, or a problem with an order. Type it, or tap the mic and say it.",
     "openerBalance": "What is my balance?",
     "openerDeals": "Show me my deals",
     "openerHow": "How does escrow protect me?",
@@ -2580,6 +2580,13 @@
     "pinPlaceholder": "Your 4 to 6 digit PIN",
     "createPinPrompt": "Create a PIN to approve money actions. You will use it every time.",
     "createPin": "Create PIN",
-    "pinCreated": "PIN created. You can approve now."
+    "pinCreated": "PIN created. You can approve now.",
+    "listening": "Listening...",
+    "startRecording": "Record a voice message",
+    "stopRecording": "Stop and send",
+    "micDenied": "We could not reach your microphone. Check the permission, or type instead.",
+    "micTooShort": "That was too short to hear. Hold on a moment longer.",
+    "openerDispute": "I have a problem with a deal",
+    "micInsecure": "Your browser only allows the microphone on a secure address. Open the app at localhost or over https, or type instead."
   }
 }

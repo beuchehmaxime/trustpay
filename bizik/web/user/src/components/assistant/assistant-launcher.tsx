@@ -21,6 +21,7 @@ import { AssistantPanel } from './assistant-panel';
 export function AssistantLauncher() {
   const { t } = useTranslation();
   const [available, setAvailable] = useState(false);
+  const [voiceAvailable, setVoiceAvailable] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -28,7 +29,9 @@ export function AssistantLauncher() {
     assistantApi
       .status()
       .then((status) => {
-        if (!cancelled) setAvailable(status.available);
+        if (cancelled) return;
+        setAvailable(status.available);
+        setVoiceAvailable(status.voice);
       })
       .catch(() => {
         if (!cancelled) setAvailable(false);
@@ -48,16 +51,24 @@ export function AssistantLauncher() {
           onClick={() => setOpen(true)}
           aria-label={t('assistant.open')}
           className={cn(
-            'fixed z-30 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-medium text-primary-foreground shadow-lg transition-transform',
+            // A circle, not a pill: a fixed size on both axes with no padding
+            // and no label, so nothing inside it can stretch one side.
+            'fixed z-30 flex size-14 items-center justify-center rounded-full p-0',
+            'bg-primary text-primary-foreground shadow-lg transition-transform',
             'hover:scale-[1.03] active:scale-95',
+            // Bottom RIGHT, and clear of the tab bar on phones. The tabs are
+            // the primary navigation; this must never sit on top of them.
             'bottom-24 right-4 md:bottom-6 md:right-6',
           )}
         >
-          <Sparkles className="size-4" />
-          <span className="hidden sm:inline">{t('assistant.open')}</span>
+          <Sparkles className="size-6" />
         </button>
       )}
-      <AssistantPanel open={open} onClose={() => setOpen(false)} />
+      <AssistantPanel
+        open={open}
+        voiceAvailable={voiceAvailable}
+        onClose={() => setOpen(false)}
+      />
     </>
   );
 }

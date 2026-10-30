@@ -44,7 +44,23 @@ export interface AssistantThread {
 
 export const assistantApi = {
   async status() {
-    const { data } = await api.get<{ available: boolean }>(endpoints.assistant.status);
+    const { data } = await api.get<{ available: boolean; voice: boolean }>(
+      endpoints.assistant.status,
+    );
+    return data;
+  },
+  /**
+   * Send a voice note.
+   *
+   * The transcript comes back with the reply rather than staying hidden:
+   * speech recognition gets things wrong, and someone who was misheard needs
+   * to see what the machine thought they said.
+   */
+  async voice(audioBase64: string) {
+    const { data } = await api.post<AssistantReply & { transcript: string }>(
+      endpoints.assistant.voice,
+      { audio: audioBase64 },
+    );
     return data;
   },
   async history() {

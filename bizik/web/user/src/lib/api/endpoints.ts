@@ -133,6 +133,7 @@ export const endpoints = {
     status: '/assistant/status',
     history: '/assistant/history',
     chat: '/assistant/chat',
+    voice: '/assistant/voice',
     confirm: '/assistant/confirm',
     cancel: '/assistant/cancel',
     pin: '/assistant/pin',
