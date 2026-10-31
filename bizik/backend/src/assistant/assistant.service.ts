@@ -7,6 +7,7 @@ import { prisma } from '../lib/prisma';
 import { WhatsAppRepository } from '../whatsapp/whatsapp.repository';
 import { WhatsAppSecurity } from '../whatsapp/whatsapp-security';
 import { AssistantAgent } from './assistant.agent';
+import { AssistantRepository, titleFrom } from './assistant.repository';
 import { AssistantTools } from './assistant-tools';
 import { AssistantVoice } from './assistant-voice';
 import {
@@ -125,9 +126,52 @@ function historyFor(session: AssistantSession): Anthropic.MessageParam[] {
   }));
 }
 
-function record(session: AssistantSession, role: ChatMessage['role'], content: string): void {
-  if (!content) return;
-  session.messages.push({ role, content, at: Date.now() });
+/**
+ * Find or start the conversation this user is writing into.
+ *
+ * The open conversation is remembered in the Redis session, so a refresh keeps
+ * writing to the same one. When that session has expired, the most recent
+ * conversation is reopened rather than a new one started - someone coming back
+ * an hour later is almost always continuing, not beginning again, and the
+ * alternative scatters one topic across several entries in their list.
+ */
+async function activeConversation(session: AssistantSession, firstMessage: string): Promise<string> {
+  if (session.conversationId) {
+    if (await AssistantRepository.ownsConversation(session.userId, session.conversationId)) {
+      return session.conversationId;
+    }
+    // Deleted from another tab. Fall through and start a fresh one.
+    session.conversationId = undefined;
+  }
+
+  const latest = await AssistantRepository.latestConversation(session.userId);
+  if (latest) {
+    session.conversationId = latest;
+    return latest;
+  }
+
+  const created = await AssistantRepository.createConversation(
+    session.userId,
+    titleFrom(firstMessage),
+  );
+  session.conversationId = created;
+  return created;
+}
+
+/**
+ * Write an assistant line into whichever conversation is open.
+ *
+ * Used by the approval paths, where the outcome ("Sent 5,000 FCFA...") is the
+ * single most important line in the thread and the one a user is most likely
+ * to come back looking for. If no conversation is open the line is dropped
+ * rather than inventing one to hold it.
+ */
+async function appendToOpenConversation(
+  session: AssistantSession,
+  content: string,
+): Promise<void> {
+  if (!session.conversationId || !content) return;
+  await AssistantRepository.append(session.conversationId, 'assistant', content);
 }
 
 /** What a proposal looks like to the client. Note what is absent: the args. */
@@ -154,6 +198,8 @@ function viewOf(proposal: PendingProposal, hasPin: boolean): ProposalView {
 
 export interface ChatReply {
   reply: string;
+  /** Which conversation this landed in, so the client can follow a new one. */
+  conversationId?: string;
   proposal?: ProposalView;
   /** True when the model itself could not be reached, so the UI can say so. */
   unavailable?: boolean;
@@ -170,19 +216,90 @@ export const AssistantService = {
     return AssistantVoice.available();
   },
 
-  /** The thread as the user left it, so the panel reopens where it was. */
-  async history(userId: string): Promise<{ messages: ChatMessage[]; proposal?: ProposalView }> {
+  /**
+   * The open conversation, read from the record rather than the cache.
+   *
+   * This is what makes a refresh harmless. The Redis session may well have
+   * expired; the messages are in Postgres either way, and the worst case is
+   * that a pending proposal is gone, which is correct - a confirmation should
+   * not survive half an hour of silence.
+   */
+  async history(
+    userId: string,
+    conversationId?: string,
+  ): Promise<{ conversationId: string | null; messages: ChatMessage[]; proposal?: ProposalView }> {
     const session = await AssistantSessionStore.get(userId);
-    if (!session) return { messages: [] };
-    const live = session.pending && !AssistantSessionStore.expired(session.pending);
+
+    let openId = conversationId ?? session?.conversationId ?? null;
+    if (openId && !(await AssistantRepository.ownsConversation(userId, openId))) {
+      // Either not theirs or already deleted. Say "nothing open" rather than
+      // confirming whether that id exists for somebody else.
+      openId = null;
+    }
+    if (!openId) openId = await AssistantRepository.latestConversation(userId);
+    if (!openId) return { conversationId: null, messages: [] };
+
+    // Asked for a specific conversation, so make it the one being written to.
+    if (session && session.conversationId !== openId) {
+      session.conversationId = openId;
+      // Switching conversations drops any proposal from the old one: approving
+      // a card that belongs to a different thread is never what was meant.
+      session.pending = undefined;
+      await AssistantSessionStore.save(session);
+    }
+
+    const messages = await AssistantRepository.messages(openId);
+    const live =
+      session?.pending &&
+      !AssistantSessionStore.expired(session.pending) &&
+      session.conversationId === openId;
+
     return {
-      messages: session.messages,
-      proposal: live ? viewOf(session.pending!, await WhatsAppSecurity.hasPin(userId)) : undefined,
+      conversationId: openId,
+      messages,
+      proposal: live ? viewOf(session!.pending!, await WhatsAppSecurity.hasPin(userId)) : undefined,
     };
   },
 
-  async reset(userId: string): Promise<void> {
-    await AssistantSessionStore.clear(userId);
+  /** Past conversations, most recent first. */
+  async conversations(userId: string) {
+    return AssistantRepository.listConversations(userId);
+  },
+
+  /**
+   * Start a new conversation.
+   *
+   * Note what this does NOT do: delete anything. The button used to wipe the
+   * thread, which is a reasonable thing to want and a terrible default - it
+   * made every "start again" destroy a record the user might need. The old
+   * conversation stays in the list; only the empty one being abandoned is
+   * tidied away.
+   */
+  async newConversation(userId: string): Promise<{ conversationId: null }> {
+    const session = await AssistantSessionStore.get(userId);
+    if (session?.conversationId) {
+      await AssistantRepository.discardIfEmpty(session.conversationId);
+    }
+    if (session) {
+      session.conversationId = undefined;
+      session.pending = undefined;
+      await AssistantSessionStore.save(session);
+    }
+    // No row is created until something is actually said, so opening and
+    // closing the panel does not litter the list with empty entries.
+    return { conversationId: null };
+  },
+
+  /** Delete one conversation, with everything in it. */
+  async deleteConversation(userId: string, conversationId: string): Promise<void> {
+    const deleted = await AssistantRepository.deleteConversation(userId, conversationId);
+    if (!deleted) throw new AppError(404, 'Q-404', 'That conversation was not found.');
+    const session = await AssistantSessionStore.get(userId);
+    if (session?.conversationId === conversationId) {
+      session.conversationId = undefined;
+      session.pending = undefined;
+      await AssistantSessionStore.save(session);
+    }
   },
 
   /**
@@ -207,12 +324,25 @@ export const AssistantService = {
     // that answers a question they are no longer asking.
     session.pending = undefined;
 
-    const turn = await AssistantAgent.run(message, historyFor(session), {
-      userId: user.id,
-      locale: user.locale,
-    });
+    const conversationId = await activeConversation(session, message);
 
-    record(session, 'user', message);
+    // Written down before the model is called, not after. A turn that times
+    // out or crashes must not lose what the user said - that is the half of
+    // the exchange they cannot reproduce.
+    await AssistantRepository.append(conversationId, 'user', message);
+
+    const context = await AssistantRepository.contextFor(conversationId);
+    const turn = await AssistantAgent.run(
+      message,
+      // The message just stored is the one being sent, so it is dropped from
+      // the prior context to avoid handing the model the same line twice.
+      historyFor({ ...session, messages: context.slice(0, -1) }),
+      { userId: user.id, locale: user.locale },
+    );
+
+    const record = async (role: ChatMessage['role'], content: string) => {
+      if (content) await AssistantRepository.append(conversationId, role, content);
+    };
 
     if (turn.pending) {
       // Refuse here rather than at execution time. The gate is enforced again
@@ -221,17 +351,21 @@ export const AssistantService = {
       // PIN prompt for something that was never going to go through.
       if (VERIFICATION_GATED.has(turn.pending.tool) && !isVerifiedTier(user.kycTier)) {
         const refusal = verificationRefusal(turn.pending.tool, user.locale);
-        record(session, 'assistant', refusal);
+        await record('assistant', refusal);
         await AssistantSessionStore.save(session);
-        return { reply: refusal };
+        return { reply: refusal, conversationId };
       }
 
       const proposal = AssistantSessionStore.propose(turn.pending);
       session.pending = proposal;
       const spoken = turn.text || proposal.summary;
-      record(session, 'assistant', spoken);
+      await record('assistant', spoken);
       await AssistantSessionStore.save(session);
-      return { reply: spoken, proposal: viewOf(proposal, await WhatsAppSecurity.hasPin(userId)) };
+      return {
+        reply: spoken,
+        conversationId,
+        proposal: viewOf(proposal, await WhatsAppSecurity.hasPin(userId)),
+      };
     }
 
     const reply =
@@ -239,9 +373,9 @@ export const AssistantService = {
       (turn.unavailable
         ? 'The assistant is not available right now.'
         : 'Sorry, I did not catch that. Could you say it another way?');
-    record(session, 'assistant', reply);
+    await record('assistant', reply);
     await AssistantSessionStore.save(session);
-    return { reply, unavailable: turn.unavailable };
+    return { reply, conversationId, unavailable: turn.unavailable };
   },
 
   /**
@@ -338,18 +472,18 @@ export const AssistantService = {
         userId: user.id,
         locale: user.locale,
       });
-      record(session, 'assistant', outcome);
+      await appendToOpenConversation(session, outcome);
       await AssistantSessionStore.save(session);
-      return { reply: outcome };
+      return { reply: outcome, conversationId: session.conversationId };
     } catch (error) {
       const reason = error instanceof AppError ? error.message : 'That did not go through.';
       // Said plainly, and not re-proposed. The user asked once; if they still
       // want it they will ask again, and that is their call to make.
       const failure =
         user.locale === 'fr' ? `Cela n'a pas abouti. ${reason}` : `That did not go through. ${reason}`;
-      record(session, 'assistant', failure);
+      await appendToOpenConversation(session, failure);
       await AssistantSessionStore.save(session);
-      return { reply: failure };
+      return { reply: failure, conversationId: session.conversationId };
     }
   },
 
@@ -361,8 +495,8 @@ export const AssistantService = {
     }
     session.pending = undefined;
     const reply = session.locale === 'fr' ? "D'accord, annule." : 'Okay, cancelled.';
-    record(session, 'assistant', reply);
+    await appendToOpenConversation(session, reply);
     await AssistantSessionStore.save(session);
-    return { reply };
+    return { reply, conversationId: session.conversationId };
   },
 };

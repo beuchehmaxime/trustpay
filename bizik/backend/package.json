@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "mtn:provision": "node dist/payments/infrastructure/mtn/provision-sandbox.js",
-    "seed:demo": "node dist/scripts/seed-demo-accounts.js"
+    "seed:demo": "node dist/scripts/seed-demo-accounts.js",
+    "seed:scenario": "node dist/scripts/seed-demo-scenario.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.120.0",

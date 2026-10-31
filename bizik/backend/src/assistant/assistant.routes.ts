@@ -42,6 +42,8 @@ const chatLimiter = rateLimit({
 // this panel without an account already.
 router.get('/status', requireAuth, AssistantController.status);
 router.get('/history', requireAuth, AssistantController.history);
+router.get('/conversations', requireAuth, AssistantController.conversations);
+router.delete('/conversations/:id', requireAuth, AssistantController.deleteConversation);
 router.post('/chat', requireAuth, chatLimiter, AssistantController.chat);
 
 // Voice costs a transcription call on top of the model turn, so it is metered

@@ -132,6 +132,8 @@ export const endpoints = {
   assistant: {
     status: '/assistant/status',
     history: '/assistant/history',
+    conversations: '/assistant/conversations',
+    conversation: (id: string) => `/assistant/conversations/${id}`,
     chat: '/assistant/chat',
     voice: '/assistant/voice',
     confirm: '/assistant/confirm',

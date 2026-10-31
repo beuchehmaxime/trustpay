@@ -72,8 +72,21 @@ export const AssistantController = {
     res.json(await AssistantService.voice(userId(req), bytes));
   }),
 
+  /** The open conversation, or a named one when the client asks for it. */
   history: asyncHandler(async (req: Request, res: Response) => {
-    res.json(await AssistantService.history(userId(req)));
+    const conversationId =
+      typeof req.query.conversationId === 'string' ? req.query.conversationId : undefined;
+    res.json(await AssistantService.history(userId(req), conversationId));
+  }),
+
+  /** Past conversations, for the list. */
+  conversations: asyncHandler(async (req: Request, res: Response) => {
+    res.json(await AssistantService.conversations(userId(req)));
+  }),
+
+  deleteConversation: asyncHandler(async (req: Request, res: Response) => {
+    await AssistantService.deleteConversation(userId(req), req.params.id);
+    res.status(204).send();
   }),
 
   chat: asyncHandler(async (req: Request, res: Response) => {
@@ -97,8 +110,13 @@ export const AssistantController = {
     res.status(204).send();
   }),
 
+  /**
+   * Start a new conversation.
+   *
+   * Still mounted at /reset so an older client keeps working, but it no longer
+   * deletes anything - the previous conversation stays in the list.
+   */
   reset: asyncHandler(async (req: Request, res: Response) => {
-    await AssistantService.reset(userId(req));
-    res.status(204).send();
+    res.json(await AssistantService.newConversation(userId(req)));
   }),
 };

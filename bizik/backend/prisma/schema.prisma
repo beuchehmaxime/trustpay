@@ -2208,3 +2208,47 @@ model AccountDormancyNotice {
   @@index([sentAt])
   @@map("account_dormancy_notices")
 }
+
+/**
+ * A conversation with the in-app assistant, kept so it can be read again.
+ * The working session lives in Redis and expires in half an hour, which is the
+ * right lifetime for the model's rolling context and the wrong one for a user's
+ * own words. Refreshing the page should not destroy what you said, and a
+ * dispute discussed with the assistant on Monday is worth finding on Thursday.
+ * Postgres holds the record; Redis holds only which conversation is open, any
+ * proposal awaiting approval, and the PIN step-up window - state that is
+ * genuinely momentary and should not outlive the session.
+ */
+model AssistantConversation {
+  id     String @id @default(uuid(7))
+  userId String // soft ref -> users
+  /// Taken from the first thing the user said, so the list is scannable
+  /// without spending a model call per conversation to name it.
+  title  String
+
+  createdAt     DateTime @default(now())
+  /// Denormalised so the list can be ordered and shown without joining every
+  /// conversation's messages to find its most recent one.
+  lastMessageAt DateTime @default(now())
+
+  messages AssistantMessage[]
+
+  @@index([userId, lastMessageAt])
+  @@map("assistant_conversations")
+}
+
+model AssistantMessage {
+  id             String @id @default(uuid(7))
+  conversationId String
+  /// user | assistant. The user's own words are stored exactly as typed or
+  /// transcribed - never the tidied version the model read back.
+  role           String
+  content        String
+
+  createdAt DateTime @default(now())
+
+  conversation AssistantConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+  @@map("assistant_messages")
+}

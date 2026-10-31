@@ -69,7 +69,18 @@ const SECURITY_HEADERS = [
   { key: 'X-Frame-Options', value: 'DENY' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=()' },
+  // `microphone=(self)` and nothing more.
+  //
+  // The assistant records voice notes, which trade here arrives as. Everything
+  // else stays denied outright, and the microphone is allowed only to this
+  // origin - an embedded third-party frame still cannot reach it. Without this
+  // the browser refuses before it ever asks the user, with "microphone is not
+  // allowed in this document", which looks like a broken feature rather than a
+  // policy.
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(), microphone=(self), geolocation=(), payment=(), usb=()',
+  },
   { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
   { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
 ];

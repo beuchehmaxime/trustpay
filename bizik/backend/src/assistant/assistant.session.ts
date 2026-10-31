@@ -41,6 +41,15 @@ export interface PendingProposal extends PendingAction {
 export interface AssistantSession {
   userId: string;
   locale: 'en' | 'fr';
+  /**
+   * Which stored conversation this session is writing into.
+   *
+   * The messages themselves live in Postgres. This is the only part of a
+   * conversation worth caching: it says where to append, and losing it costs
+   * nothing but reopening the most recent thread.
+   */
+  conversationId?: string;
+  /** Kept only to carry the shape the model reads; the record is in Postgres. */
   messages: ChatMessage[];
   pending?: PendingProposal;
   /** Epoch ms of the last successful PIN entry, for the step-up window. */

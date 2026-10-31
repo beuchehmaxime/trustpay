@@ -3,7 +3,8 @@
     "retry": "Retry",
     "error": "Something went wrong",
     "processing": "Processing…",
-    "close": "Close"
+    "close": "Close",
+    "back": "Back"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -2587,6 +2588,10 @@
     "micDenied": "We could not reach your microphone. Check the permission, or type instead.",
     "micTooShort": "That was too short to hear. Hold on a moment longer.",
     "openerDispute": "I have a problem with a deal",
-    "micInsecure": "Your browser only allows the microphone on a secure address. Open the app at localhost or over https, or type instead."
+    "micInsecure": "Your browser only allows the microphone on a secure address. Open the app at localhost or over https, or type instead.",
+    "history": "Previous chats",
+    "newChat": "New chat",
+    "noHistory": "No previous chats yet. Anything you ask will be saved here.",
+    "deleteConversation": "Delete this chat"
   }
 }

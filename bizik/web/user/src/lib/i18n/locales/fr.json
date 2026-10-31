@@ -3,7 +3,8 @@
     "retry": "Réessayer",
     "error": "Une erreur est survenue",
     "processing": "Traitement en cours…",
-    "close": "Fermer"
+    "close": "Fermer",
+    "back": "Retour"
   },
   "nav": {
     "dashboard": "Tableau de bord",
@@ -2587,6 +2588,10 @@
     "micDenied": "Nous n'avons pas pu acceder a votre micro. Verifiez l'autorisation, ou ecrivez plutot.",
     "micTooShort": "C'etait trop court pour etre entendu. Restez appuye un peu plus longtemps.",
     "openerDispute": "J'ai un probleme avec un accord",
-    "micInsecure": "Votre navigateur n'autorise le micro que sur une adresse securisee. Ouvrez l'application sur localhost ou en https, ou ecrivez plutot."
+    "micInsecure": "Votre navigateur n'autorise le micro que sur une adresse securisee. Ouvrez l'application sur localhost ou en https, ou ecrivez plutot.",
+    "history": "Conversations precedentes",
+    "newChat": "Nouvelle conversation",
+    "noHistory": "Aucune conversation pour l'instant. Tout ce que vous demanderez sera enregistre ici.",
+    "deleteConversation": "Supprimer cette conversation"
   }
 }

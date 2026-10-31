@@ -3,11 +3,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { Loader2, Mic, RotateCcw, Send, Sparkles, Square, X } from 'lucide-react';
+import { ArrowLeft, History, Loader2, Mic, Plus, Send, Sparkles, Square, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
   assistantApi,
+  type AssistantConversation,
   type AssistantMessage,
   type AssistantProposal,
 } from '@/lib/api/assistant.api';
@@ -21,6 +22,7 @@ import {
 } from '@/lib/audio/wav-recorder';
 import { cn } from '@/lib/utils';
 import { AssistantText } from './assistant-text';
+import { ConversationList } from './conversation-list';
 import { ProposalCard } from './proposal-card';
 
 /**
@@ -74,6 +76,10 @@ export function AssistantPanel({
   const [recording, setRecording] = useState(false);
   const [recordedSeconds, setRecordedSeconds] = useState(0);
   const [composerFocused, setComposerFocused] = useState(false);
+  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [showHistory, setShowHistory] = useState(false);
+  const [conversations, setConversations] = useState<AssistantConversation[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
   const recorderRef = useRef<Recorder | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -90,6 +96,7 @@ export function AssistantPanel({
         if (cancelled) return;
         setMessages(thread.messages);
         setProposal(thread.proposal);
+        setConversationId(thread.conversationId);
       })
       .catch(() => {
         if (!cancelled) setMessages([]);
@@ -153,6 +160,7 @@ export function AssistantPanel({
       setSending(true);
       try {
         const result = await assistantApi.chat(message);
+        if (result.conversationId) setConversationId(result.conversationId);
         setMessages((prior) => [
           ...prior,
           { role: 'assistant', content: result.reply, at: Date.now() },
@@ -185,6 +193,7 @@ export function AssistantPanel({
     try {
       const base64 = await blobToBase64(audio);
       const result = await assistantApi.voice(base64);
+      if (result.conversationId) setConversationId(result.conversationId);
       setMessages((prior) => [
         ...prior,
         { role: 'user', content: result.transcript, at: Date.now() },
@@ -314,11 +323,60 @@ export function AssistantPanel({
     }
   }, [proposal]);
 
-  const reset = useCallback(async () => {
-    await assistantApi.reset().catch(() => undefined);
+  /** Start a fresh conversation. The current one stays in the history. */
+  const startNew = useCallback(async () => {
+    await assistantApi.newConversation().catch(() => undefined);
     setMessages([]);
     setProposal(undefined);
+    setConversationId(null);
+    setShowHistory(false);
   }, []);
+
+  const openHistory = useCallback(async () => {
+    setShowHistory(true);
+    setHistoryLoading(true);
+    try {
+      setConversations(await assistantApi.conversations());
+    } catch {
+      setConversations([]);
+    } finally {
+      setHistoryLoading(false);
+    }
+  }, []);
+
+  const openConversation = useCallback(async (id: string) => {
+    setShowHistory(false);
+    setLoading(true);
+    try {
+      const thread = await assistantApi.history(id);
+      setMessages(thread.messages);
+      setProposal(thread.proposal);
+      setConversationId(thread.conversationId);
+    } catch (error) {
+      toast.error(normaliseError(error).message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const removeConversation = useCallback(
+    async (id: string) => {
+      try {
+        await assistantApi.deleteConversation(id);
+        setConversations((prior) => prior.filter((entry) => entry.id !== id));
+        // Deleting the one on screen leaves an empty panel rather than a
+        // thread the user can still type into but can never find again.
+        if (id === conversationId) {
+          setMessages([]);
+          setProposal(undefined);
+          setConversationId(null);
+        }
+      } catch (error) {
+        toast.error(normaliseError(error).message);
+      }
+    },
+    [conversationId],
+  );
 
   if (!open) return null;
 
@@ -341,19 +399,65 @@ export function AssistantPanel({
         )}
       >
         <header className="flex items-center gap-2 border-b border-border px-4 py-3">
-          <Sparkles className="size-4 text-primary" />
+          {showHistory ? (
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => setShowHistory(false)}
+              aria-label={t('common.back')}
+            >
+              <ArrowLeft className="size-4" />
+            </Button>
+          ) : (
+            <Sparkles className="size-4 text-primary" />
+          )}
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold">{t('assistant.title')}</p>
-            <p className="truncate text-xs text-muted-foreground">{t('assistant.disclosure')}</p>
+            <p className="truncate text-sm font-semibold">
+              {showHistory ? t('assistant.history') : t('assistant.title')}
+            </p>
+            {!showHistory && (
+              <p className="truncate text-xs text-muted-foreground">{t('assistant.disclosure')}</p>
+            )}
           </div>
-          <Button variant="ghost" size="icon-sm" onClick={reset} aria-label={t('assistant.reset')}>
-            <RotateCcw className="size-4" />
-          </Button>
+          {!showHistory && (
+            <>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={openHistory}
+                aria-label={t('assistant.history')}
+                title={t('assistant.history')}
+              >
+                <History className="size-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={startNew}
+                aria-label={t('assistant.newChat')}
+                title={t('assistant.newChat')}
+              >
+                <Plus className="size-4" />
+              </Button>
+            </>
+          )}
           <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label={t('common.close')}>
             <X className="size-4" />
           </Button>
         </header>
 
+        {showHistory ? (
+          <div className="flex-1 overflow-y-auto">
+            <ConversationList
+              conversations={conversations}
+              loading={historyLoading}
+              activeId={conversationId}
+              onOpen={openConversation}
+              onDelete={removeConversation}
+            />
+          </div>
+        ) : (
+        <>
         <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
           {loading ? (
             <div className="flex h-full items-center justify-center">
@@ -511,6 +615,8 @@ export function AssistantPanel({
             <Send className="size-4" />
           </Button>
         </form>
+        )}
+        </>
         )}
       </aside>
     </>

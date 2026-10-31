@@ -31,6 +31,8 @@ export interface AssistantProposal {
 
 export interface AssistantReply {
   reply: string;
+  /** Which conversation this landed in, so the client can follow a new one. */
+  conversationId?: string;
   proposal?: AssistantProposal;
   /** The model itself could not be reached, so the UI says that rather than
    *  implying the assistant did not understand. */
@@ -38,8 +40,19 @@ export interface AssistantReply {
 }
 
 export interface AssistantThread {
+  /** Null when this user has never said anything yet. */
+  conversationId: string | null;
   messages: AssistantMessage[];
   proposal?: AssistantProposal;
+}
+
+/** One past conversation, for the list. */
+export interface AssistantConversation {
+  id: string;
+  title: string;
+  preview: string;
+  lastMessageAt: number;
+  messageCount: number;
 }
 
 export const assistantApi = {
@@ -63,9 +76,19 @@ export const assistantApi = {
     );
     return data;
   },
-  async history() {
-    const { data } = await api.get<AssistantThread>(endpoints.assistant.history);
+  /** The open conversation, or a named one. */
+  async history(conversationId?: string) {
+    const { data } = await api.get<AssistantThread>(endpoints.assistant.history, {
+      params: conversationId ? { conversationId } : undefined,
+    });
     return data;
+  },
+  async conversations() {
+    const { data } = await api.get<AssistantConversation[]>(endpoints.assistant.conversations);
+    return data;
+  },
+  async deleteConversation(id: string) {
+    await api.delete(endpoints.assistant.conversation(id));
   },
   async chat(message: string) {
     const { data } = await api.post<AssistantReply>(endpoints.assistant.chat, { message });
@@ -86,7 +109,8 @@ export const assistantApi = {
   async setPin(pin: string) {
     await api.post(endpoints.assistant.pin, { pin });
   },
-  async reset() {
+  /** Start a new conversation. Deletes nothing - the old one stays in the list. */
+  async newConversation() {
     await api.post(endpoints.assistant.reset);
   },
 };

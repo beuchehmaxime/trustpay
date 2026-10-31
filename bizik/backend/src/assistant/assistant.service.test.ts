@@ -31,12 +31,26 @@ const doubles = vi.hoisted(() => ({
   currentUser: { id: 'user-1', phone: '+237677112233', locale: 'en', kycTier: 2 },
   pin: { hasPin: true, result: 'ok' as 'ok' | 'wrong' | 'locked', left: 4 },
   executeConfirmed: vi.fn(async () => 'Sent 5,000 FCFA to Marie Ngo.'),
+  // The conversation store. Messages live in Postgres now, so the record is
+  // a double here and the assertions are about WHAT gets written.
+  stored: {
+    createConversation: vi.fn(async () => 'conv-1'),
+    ownsConversation: vi.fn(async () => true),
+    append: vi.fn(async () => undefined),
+    messages: vi.fn(async () => [] as unknown[]),
+    contextFor: vi.fn(async () => [] as unknown[]),
+    listConversations: vi.fn(async () => [] as unknown[]),
+    latestConversation: vi.fn(async () => null as string | null),
+    deleteConversation: vi.fn(async () => true),
+    discardIfEmpty: vi.fn(async () => undefined),
+  },
   agentTurn: vi.fn(),
   channelByUser: vi.fn(async () => null as { pinHash?: string } | null),
   createChannel: vi.fn(async () => ({})),
 }));
 
-const { store, currentUser, pin: pinState, executeConfirmed, agentTurn, createChannel } = doubles;
+const { store, currentUser, pin: pinState, executeConfirmed, agentTurn, createChannel, stored } =
+  doubles;
 
 vi.mock('../lib/redis', () => ({
   redis: {
@@ -91,6 +105,11 @@ vi.mock('./assistant-tools', () => ({
 
 // The model is replaced wholesale. What it would actually say is not the
 // subject; what the service does with a proposal is.
+vi.mock('./assistant.repository', () => ({
+  AssistantRepository: doubles.stored,
+  titleFrom: (first: string) => first.slice(0, 60),
+}));
+
 vi.mock('./assistant.agent', () => ({
   AssistantAgent: {
     available: () => true,
@@ -361,13 +380,36 @@ describe('cancelling', () => {
 });
 
 describe('the thread the user comes back to', () => {
-  it('keeps the conversation and the live proposal', async () => {
+  it('writes what the user said down before calling the model', async () => {
+    // A turn that times out must not lose the user's own words - they are the
+    // half of the exchange that cannot be reproduced.
+    agentTurn.mockRejectedValueOnce(new Error('upstream exploded'));
+
+    await AssistantService.chat('user-1', 'what is my balance').catch(() => undefined);
+
+    expect(stored.append).toHaveBeenCalledWith(
+      expect.any(String),
+      'user',
+      'what is my balance',
+    );
+  });
+
+  it('keeps the messages in the record, not the session', async () => {
+    await proposeSendMoney();
+
+    // Both halves are persisted, so a refresh after the Redis session expires
+    // still shows the conversation.
+    const roles = stored.append.mock.calls.map((call) => (call as unknown as [string, string])[1]);
+    expect(roles).toEqual(['user', 'assistant']);
+  });
+
+  it('offers a live proposal back on reopen', async () => {
     await proposeSendMoney();
 
     const thread = await AssistantService.history('user-1');
 
-    expect(thread.messages.map((message) => message.role)).toEqual(['user', 'assistant']);
     expect(thread.proposal).toBeDefined();
+    expect(thread.conversationId).toBe('conv-1');
   });
 
   it('does not offer an expired proposal back', async () => {
@@ -380,10 +422,17 @@ describe('the thread the user comes back to', () => {
     vi.restoreAllMocks();
   });
 
-  it('forgets everything on reset', async () => {
+  it('starting a new conversation DELETES nothing', async () => {
+    // The old button wiped the thread. That made "start again" destroy a
+    // record the user may need, which is why this test exists.
     await proposeSendMoney();
-    await AssistantService.reset('user-1');
 
-    expect(await AssistantService.history('user-1')).toEqual({ messages: [] });
+    await AssistantService.newConversation('user-1');
+
+    expect(stored.deleteConversation).not.toHaveBeenCalled();
+    // Only the proposal is dropped - approving a card from an abandoned
+    // thread is never what was meant.
+    const thread = await AssistantService.history('user-1');
+    expect(thread.proposal).toBeUndefined();
   });
 });
