@@ -608,7 +608,7 @@ function TemplateEditor({ template }: { template: NotificationTemplate }) {
 
 const AUDIENCE_OPTIONS: { value: BroadcastAudience; label: string }[] = [
   { value: 'ALL', label: 'All users' },
-  { value: 'FREELANCERS', label: 'Freelancers' },
+  { value: 'FREELANCERS', label: 'Sellers' },
   { value: 'CLIENTS', label: 'Clients' },
 ];
 

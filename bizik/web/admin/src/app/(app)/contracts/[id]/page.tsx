@@ -204,9 +204,9 @@ export default function ProjectDetailPage() {
           {/* Parties */}
           <div className="rounded-lg border border-hairline bg-surface p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
             <div className="flex items-center gap-3">
-              <PartyBlock label="Client · Payer" party={payer} />
+              <PartyBlock label="Buyer · Payer" party={payer} />
               <ArrowRight className="size-4 shrink-0 text-muted-foreground" />
-              <PartyBlock label="Freelancer · Payee" party={payee} align="right" />
+              <PartyBlock label="Seller · Payee" party={payee} align="right" />
             </div>
           </div>
 

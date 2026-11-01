@@ -184,7 +184,7 @@ export default function EscrowAccountDetailPage() {
               onClick={() => setModal('refund')}
               className="inline-flex items-center gap-2 rounded-lg border border-negative/40 bg-white px-4 py-2 text-sm font-semibold text-negative transition hover:bg-negative-bg/50"
             >
-              <Undo2 className="size-4" /> Refund to client
+              <Undo2 className="size-4" /> Refund to buyer
             </button>
             <button
               type="button"
@@ -417,7 +417,7 @@ export default function EscrowAccountDetailPage() {
         onRefund={async (milestoneId, reason) => {
           try {
             await actions.refund.mutateAsync({ milestoneId, reason });
-            toast.success('Funds refunded to client');
+            toast.success('Funds refunded to buyer');
             setModal(null);
           } catch (actionError) {
             toast.error('Refund failed', { description: normaliseError(actionError).message });
@@ -465,7 +465,7 @@ function ReleaseModal({
         <DialogHeader>
           <DialogTitle className="text-lg">Manual release</DialogTitle>
           <DialogDescription>
-            Release held funds to the payee. The freelancer fee is deducted and the net is credited
+            Release held funds to the payee. The seller fee is deducted and the net is credited
             to their wallet immediately.
           </DialogDescription>
         </DialogHeader>
@@ -503,7 +503,7 @@ function RefundModal({
     <Dialog open={open} onOpenChange={(next) => !next && !pending && onClose()}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="text-lg">Refund to client</DialogTitle>
+          <DialogTitle className="text-lg">Refund to buyer</DialogTitle>
           <DialogDescription>
             Return a held milestone’s funds to the payer. The milestone reverts to unfunded.
           </DialogDescription>

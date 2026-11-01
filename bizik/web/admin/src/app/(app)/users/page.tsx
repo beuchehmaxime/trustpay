@@ -270,7 +270,7 @@ export default function UsersPage() {
           </p>
           <h1 className="mt-1 text-2xl font-bold tracking-tight text-ink">Users &amp; accounts</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Clients, freelancers and agencies across all markets.
+            Buyers, sellers and businesses across all markets.
           </p>
         </div>
         <Button variant="outline" onClick={exportCsv} disabled={users.length === 0}>
@@ -325,8 +325,8 @@ export default function UsersPage() {
             }}
           >
             <option value="">All roles</option>
-            <option value="CLIENT">Client</option>
-            <option value="FREELANCER">Freelancer</option>
+            <option value="CLIENT">Buyer</option>
+            <option value="FREELANCER">Seller</option>
             <option value="AGENCY">Agency</option>
           </FilterSelect>
           <FilterSelect

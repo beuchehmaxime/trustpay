@@ -2592,6 +2592,7 @@
     "history": "Conversations precedentes",
     "newChat": "Nouvelle conversation",
     "noHistory": "Aucune conversation pour l'instant. Tout ce que vous demanderez sera enregistre ici.",
-    "deleteConversation": "Supprimer cette conversation"
+    "deleteConversation": "Supprimer cette conversation",
+    "transcribing": "Transcription en cours..."
   }
 }

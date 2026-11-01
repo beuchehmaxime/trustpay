@@ -387,10 +387,18 @@ export const AssistantService = {
    * assistant answers a question they never asked and they have no way to tell
    * why.
    */
-  async voice(userId: string, audio: Buffer): Promise<ChatReply & { transcript: string }> {
+  async voice(userId: string, audio: Buffer): Promise<{ transcript: string }> {
+    // Transcribe ONLY. This used to run the agent turn as well, and the two
+    // together could take well over a minute - transcription, then a reasoning
+    // model doing up to five tool hops - which the browser gave up on long
+    // before the answer arrived.
+    //
+    // Splitting it is better than raising a timeout. The user sees their own
+    // words in a few seconds instead of staring at a spinner, and if the model
+    // then fails the transcript still exists: they can resend or edit it
+    // rather than having to say the whole thing again.
     const { text } = await AssistantVoice.transcribe(audio);
-    const result = await this.chat(userId, text.slice(0, MAX_MESSAGE_LENGTH));
-    return { ...result, transcript: text };
+    return { transcript: text.slice(0, MAX_MESSAGE_LENGTH) };
   },
 
   /** Set a transaction PIN, for a user who does not have one yet. */

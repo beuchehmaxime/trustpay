@@ -169,7 +169,7 @@ function GeneralTab({ value, readOnly }: { value: GeneralSettings; readOnly: boo
           />
           <ToggleRow
             label="Require KYC to create contracts"
-            hint="Freelancers must be verified before they can create or fund deals."
+            hint="Sellers must be verified before they can create or fund deals."
             checked={draft.kycRequiredForContracts}
             onChange={(next) => set('kycRequiredForContracts', next)}
             disabled={readOnly}

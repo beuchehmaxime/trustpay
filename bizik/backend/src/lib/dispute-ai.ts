@@ -21,12 +21,23 @@ const REASON_LABEL: Record<DisputeReason, string> = {
   OTHER: 'the stated reason',
 };
 
-/** Baseline payee (freelancer) share by reason, and a short reasoning note. */
+/**
+ * Baseline payee share by reason, and a short reasoning note.
+ *
+ * The parties are a BUYER and a SELLER. BiZik is not a freelancing platform:
+ * anyone selling anything uses it, and most deals here are goods rather than
+ * work. The wording below is read by a mediator and quoted back to both
+ * parties, so it has to use the words they do.
+ *
+ * `freelancerPct` keeps its name. It is the field the admin client, the ruling
+ * form and every stored AiRecommendation already read, and renaming it would
+ * be a data migration dressed up as a copy change.
+ */
 const REASON_PROFILE: Record<DisputeReason, { lean: number; note: string }> = {
-  NON_DELIVERY: { lean: 8, note: 'the client reports nothing was delivered' },
-  INCOMPLETE_WORK: { lean: 45, note: 'the work appears only partially delivered' },
-  QUALITY_BELOW_SPEC: { lean: 55, note: 'the delivery reportedly fell short of the agreed quality' },
-  SCOPE_CREEP: { lean: 72, note: 'the freelancer appears to have delivered the agreed scope' },
+  NON_DELIVERY: { lean: 8, note: 'the buyer reports nothing was delivered' },
+  INCOMPLETE_WORK: { lean: 45, note: 'the order appears only partially delivered' },
+  QUALITY_BELOW_SPEC: { lean: 55, note: 'the delivery reportedly fell short of what was agreed' },
+  SCOPE_CREEP: { lean: 72, note: 'the seller appears to have delivered what was agreed' },
   COMMUNICATION_BREAKDOWN: { lean: 50, note: 'responsibility looks shared between both sides' },
   OTHER: { lean: 50, note: 'the claim is finely balanced on the available facts' },
 };
@@ -87,18 +98,18 @@ export function buildRecommendation(input: AiInput): AiRecommendationResult {
     payeeEvidence === 0 && payerEvidence === 0
       ? 'Neither side has filed supporting evidence yet.'
       : payeeEvidence > payerEvidence
-        ? 'The freelancer has documented their side more thoroughly.'
+        ? 'The seller has documented their side more thoroughly.'
         : payerEvidence > payeeEvidence
-          ? 'The client has documented their side more thoroughly.'
+          ? 'The buyer has documented their side more thoroughly.'
           : 'Both sides have filed comparable evidence.';
 
   const reasonLabel = REASON_LABEL[input.reason];
   const rationale =
     recommendation === 'FULL_REFUND'
-      ? `On a claim of ${reasonLabel}, ${profile.note}. ${evidenceNote} Recommending a full refund to the client.`
+      ? `On a claim of ${reasonLabel}, ${profile.note}. ${evidenceNote} Recommending a full refund to the buyer.`
       : recommendation === 'FULL_RELEASE'
-        ? `On a claim of ${reasonLabel}, ${profile.note}. ${evidenceNote} Recommending release of the full amount to the freelancer.`
-        : `On a claim of ${reasonLabel}, ${profile.note}. ${evidenceNote} Recommending a ${freelancerPct}/${100 - freelancerPct} split (freelancer/client) to reflect partial delivery.`;
+        ? `On a claim of ${reasonLabel}, ${profile.note}. ${evidenceNote} Recommending release of the full amount to the seller.`
+        : `On a claim of ${reasonLabel}, ${profile.note}. ${evidenceNote} Recommending a ${freelancerPct}/${100 - freelancerPct} split (seller/buyer) to reflect partial delivery.`;
 
   return { recommendation, freelancerPct, confidence, rationale };
 }

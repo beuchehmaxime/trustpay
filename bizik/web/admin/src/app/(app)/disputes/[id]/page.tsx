@@ -454,7 +454,7 @@ export default function DisputeDetailPage() {
                 {ruling === 'PARTIAL_SPLIT' ? (
                   <div>
                     <label className="text-xs font-medium text-muted-foreground">
-                      Freelancer share (%)
+                      Seller share (%)
                     </label>
                     <input
                       value={pct}
@@ -463,8 +463,8 @@ export default function DisputeDetailPage() {
                       className="mt-1 h-10 w-full rounded-lg border border-field bg-white px-3 text-sm text-ink outline-none transition focus:border-brand-400 focus:ring-4 focus:ring-brand-500/10"
                     />
                     <p className="mt-1 text-xs text-muted-foreground">
-                      {money(payeeShare, dispute.currency)} to freelancer ·{' '}
-                      {money(payerShare, dispute.currency)} to client
+                      {money(payeeShare, dispute.currency)} to seller ·{' '}
+                      {money(payerShare, dispute.currency)} to buyer
                     </p>
                   </div>
                 ) : null}

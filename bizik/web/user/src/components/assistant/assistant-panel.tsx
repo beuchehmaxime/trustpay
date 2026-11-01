@@ -76,6 +76,7 @@ export function AssistantPanel({
   const [recording, setRecording] = useState(false);
   const [recordedSeconds, setRecordedSeconds] = useState(0);
   const [composerFocused, setComposerFocused] = useState(false);
+  const [transcribing, setTranscribing] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState(false);
   const [conversations, setConversations] = useState<AssistantConversation[]>([]);
@@ -187,25 +188,28 @@ export function AssistantPanel({
    * mishears "four" as "fourteen", that is the only way the user can tell why
    * the reply made no sense.
    */
-  const sendVoice = useCallback(async (audio: Blob) => {
-    setSending(true);
-    setProposal(undefined);
-    try {
-      const base64 = await blobToBase64(audio);
-      const result = await assistantApi.voice(base64);
-      if (result.conversationId) setConversationId(result.conversationId);
-      setMessages((prior) => [
-        ...prior,
-        { role: 'user', content: result.transcript, at: Date.now() },
-        { role: 'assistant', content: result.reply, at: Date.now() },
-      ]);
-      setProposal(result.proposal);
-    } catch (error) {
-      toast.error(normaliseError(error).message);
-    } finally {
-      setSending(false);
-    }
-  }, []);
+  const sendVoice = useCallback(
+    async (audio: Blob) => {
+      setTranscribing(true);
+      setProposal(undefined);
+      let transcript: string;
+      try {
+        const base64 = await blobToBase64(audio);
+        ({ transcript } = await assistantApi.voice(base64));
+      } catch (error) {
+        toast.error(normaliseError(error).message);
+        return;
+      } finally {
+        setTranscribing(false);
+      }
+
+      // Answered as an ordinary message. Two requests rather than one: the
+      // user sees their own words in a few seconds instead of waiting out a
+      // transcription AND a reasoning turn behind a single spinner.
+      await send(transcript);
+    },
+    [send],
+  );
 
   const beginRecording = useCallback(async () => {
     if (recording || sending) return;
@@ -506,10 +510,15 @@ export function AssistantPanel({
             ))
           )}
 
-          {sending && (
+          {(sending || transcribing) && (
             <div className="flex justify-start">
-              <div className="rounded-2xl rounded-bl-sm bg-muted px-3 py-2">
+              <div className="flex items-center gap-2 rounded-2xl rounded-bl-sm bg-muted px-3 py-2">
                 <Loader2 className="size-4 animate-spin text-muted-foreground" />
+                {transcribing && (
+                  <span className="text-xs text-muted-foreground">
+                    {t('assistant.transcribing')}
+                  </span>
+                )}
               </div>
             </div>
           )}
@@ -581,7 +590,7 @@ export function AssistantPanel({
               maxLength={2000}
               className={cn(
                 'w-full resize-none overflow-y-auto rounded-lg border border-border bg-background py-2 pl-3 text-sm leading-5 outline-none transition-[min-height]',
-                'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
+                'focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/15',
                 // Room on the right for the mic sitting inside the field.
                 voiceAvailable ? 'pr-11' : 'pr-3',
                 // Taller the moment it is in use, so what is being typed stays
@@ -611,7 +620,7 @@ export function AssistantPanel({
               </Button>
             )}
           </div>
-          <Button type="submit" size="icon" disabled={!draft.trim() || sending}>
+          <Button type="submit" size="icon" disabled={!draft.trim() || sending || transcribing}>
             <Send className="size-4" />
           </Button>
         </form>

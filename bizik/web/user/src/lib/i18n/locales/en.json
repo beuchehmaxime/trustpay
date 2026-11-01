@@ -2592,6 +2592,7 @@
     "history": "Previous chats",
     "newChat": "New chat",
     "noHistory": "No previous chats yet. Anything you ask will be saved here.",
-    "deleteConversation": "Delete this chat"
+    "deleteConversation": "Delete this chat",
+    "transcribing": "Writing down what you said..."
   }
 }

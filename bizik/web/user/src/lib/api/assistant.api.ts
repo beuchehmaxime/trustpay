@@ -55,6 +55,20 @@ export interface AssistantConversation {
   messageCount: number;
 }
 
+/**
+ * How long an assistant call may take.
+ *
+ * The shared client times out at 30 seconds, which is right for ordinary API
+ * calls and far too short here. Muse Spark reasons before it answers and may
+ * run several tool hops, and transcription is a round trip to another model
+ * on top of that. The old 30s cut genuine answers off mid-flight and showed
+ * the user a failure for a request that was still working.
+ *
+ * Set per call rather than on the shared instance: a wallet or deal request
+ * that hangs for two minutes IS broken and should still fail fast.
+ */
+const ASSISTANT_TIMEOUT_MS = 180_000;
+
 export const assistantApi = {
   async status() {
     const { data } = await api.get<{ available: boolean; voice: boolean }>(
@@ -63,16 +77,18 @@ export const assistantApi = {
     return data;
   },
   /**
-   * Send a voice note.
+   * Transcribe a recording. Does NOT answer it - the transcript comes back so
+   * it can be shown immediately, then sent as an ordinary message.
    *
-   * The transcript comes back with the reply rather than staying hidden:
-   * speech recognition gets things wrong, and someone who was misheard needs
-   * to see what the machine thought they said.
+   * Showing it also matters on its own: speech recognition mishears, and
+   * someone whose complaint was misread needs to see what the machine thought
+   * they said.
    */
   async voice(audioBase64: string) {
-    const { data } = await api.post<AssistantReply & { transcript: string }>(
+    const { data } = await api.post<{ transcript: string }>(
       endpoints.assistant.voice,
       { audio: audioBase64 },
+      { timeout: ASSISTANT_TIMEOUT_MS },
     );
     return data;
   },
@@ -91,15 +107,20 @@ export const assistantApi = {
     await api.delete(endpoints.assistant.conversation(id));
   },
   async chat(message: string) {
-    const { data } = await api.post<AssistantReply>(endpoints.assistant.chat, { message });
+    const { data } = await api.post<AssistantReply>(
+      endpoints.assistant.chat,
+      { message },
+      { timeout: ASSISTANT_TIMEOUT_MS },
+    );
     return data;
   },
   /** The only call that can move money, and the PIN is why it may. */
   async confirm(proposalId: string, pin?: string) {
-    const { data } = await api.post<AssistantReply>(endpoints.assistant.confirm, {
-      proposalId,
-      pin,
-    });
+    const { data } = await api.post<AssistantReply>(
+      endpoints.assistant.confirm,
+      { proposalId, pin },
+      { timeout: ASSISTANT_TIMEOUT_MS },
+    );
     return data;
   },
   async cancel(proposalId: string) {

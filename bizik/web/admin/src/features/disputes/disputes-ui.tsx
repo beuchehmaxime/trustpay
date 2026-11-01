@@ -31,8 +31,8 @@ export function DisputeStatusBadge({
 }
 
 const RULING_LABEL: Record<RulingType, string> = {
-  FULL_RELEASE: 'Release to freelancer',
-  FULL_REFUND: 'Refund to client',
+  FULL_RELEASE: 'Release to seller',
+  FULL_REFUND: 'Refund to buyer',
   PARTIAL_SPLIT: 'Split',
 };
 

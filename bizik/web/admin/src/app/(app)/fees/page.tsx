@@ -25,8 +25,8 @@ function usd(amount: number): string {
 }
 
 const FEE_ROWS: { key: keyof FeeSchedule; label: string; hint: string }[] = [
-  { key: 'clientServicePct', label: 'Client service fee', hint: 'Charged to the payer at funding' },
-  { key: 'freelancerFeePct', label: 'Freelancer fee', hint: 'Deducted from the payee at release' },
+  { key: 'clientServicePct', label: 'Buyer service fee', hint: 'Charged to the payer at funding' },
+  { key: 'freelancerFeePct', label: 'Seller fee', hint: 'Deducted from the payee at release' },
   { key: 'expressWithdrawalPct', label: 'Express withdrawal', hint: 'Surcharge for fast payouts' },
   { key: 'fxMarginPct', label: 'FX margin', hint: 'Applied below mid-market on conversion' },
 ];
@@ -71,7 +71,7 @@ export default function FeesPage() {
         </p>
         <h1 className="mt-1 text-2xl font-bold tracking-tight text-ink">Fees &amp; FX</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Configure service and freelancer fees, express and FX margins, and manage exchange rates.
+          Configure buyer and seller fees, express and FX margins, and manage exchange rates.
         </p>
       </div>
 
