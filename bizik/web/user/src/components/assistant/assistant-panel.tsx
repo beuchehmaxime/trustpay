@@ -77,6 +77,7 @@ export function AssistantPanel({
   const [recordedSeconds, setRecordedSeconds] = useState(0);
   const [composerFocused, setComposerFocused] = useState(false);
   const [transcribing, setTranscribing] = useState(false);
+  const [justTranscribed, setJustTranscribed] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState(false);
   const [conversations, setConversations] = useState<AssistantConversation[]>([]);
@@ -157,6 +158,7 @@ export function AssistantPanel({
       // take seconds; a composer that just empties looks broken.
       setMessages((prior) => [...prior, { role: 'user', content: message, at: Date.now() }]);
       setDraft('');
+      setJustTranscribed(false);
       setProposal(undefined);
       setSending(true);
       try {
@@ -203,12 +205,24 @@ export function AssistantPanel({
         setTranscribing(false);
       }
 
-      // Answered as an ordinary message. Two requests rather than one: the
-      // user sees their own words in a few seconds instead of waiting out a
-      // transcription AND a reasoning turn behind a single spinner.
-      await send(transcript);
+      // The transcript goes into the composer for the user to read, NOT
+      // straight to the model.
+      //
+      // Speech recognition mishears, and it mishears Cameroonian Pidgin more
+      // than it mishears English. In this product a wrong word is not a
+      // cosmetic problem: "four" heard as "forty" is a dispute filed over the
+      // wrong amount, and a misheard handle is money proposed to the wrong
+      // person. Showing the text and letting them fix it costs one tap and
+      // removes a whole class of error that the user could otherwise only
+      // discover afterwards.
+      //
+      // It also means a voice note is never acted on without its speaker
+      // having seen what the machine made of it.
+      setDraft((existing) => (existing.trim() ? `${existing.trim()} ${transcript}` : transcript));
+      inputRef.current?.focus();
+      setJustTranscribed(true);
     },
-    [send],
+    [],
   );
 
   const beginRecording = useCallback(async () => {
@@ -563,6 +577,12 @@ export function AssistantPanel({
             </Button>
           </div>
         ) : (
+        <>
+        {justTranscribed && !sending && (
+          <p className="border-t border-border px-4 pt-2 text-xs text-muted-foreground">
+            {t('assistant.checkTranscript')}
+          </p>
+        )}
         <form
           className="flex items-end gap-2 border-t border-border px-3 py-3"
           onSubmit={(event) => {
@@ -624,6 +644,7 @@ export function AssistantPanel({
             <Send className="size-4" />
           </Button>
         </form>
+        </>
         )}
         </>
         )}

@@ -2594,6 +2594,7 @@
     "newChat": "Nouvelle conversation",
     "noHistory": "Aucune conversation pour l'instant. Tout ce que vous demanderez sera enregistre ici.",
     "deleteConversation": "Supprimer cette conversation",
-    "transcribing": "Transcription en cours..."
+    "transcribing": "Transcription en cours...",
+    "checkTranscript": "Verifiez ce que nous avons entendu, puis envoyez"
   }
 }
