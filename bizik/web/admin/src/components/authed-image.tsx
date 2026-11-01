@@ -15,11 +15,18 @@ import { cn } from '@/lib/utils';
  */
 export function AuthedImage({
   fileId,
+  src,
   alt,
   className,
   onReady,
 }: {
-  fileId: string;
+  /** A stored file's id, for callers that have one (KYC documents). */
+  fileId?: string;
+  /**
+   * A URL, for callers that get one back from the API (dispute evidence).
+   * An absolute URL renders directly; anything else goes through the proxy.
+   */
+  src?: string;
   alt: string;
   className?: string;
   onReady?: (objectUrl: string) => void;
@@ -33,8 +40,19 @@ export function AuthedImage({
     setObjectUrl(null);
     setFailed(false);
 
+    // Already public (Cloudinary), or already a local preview.
+    if (src && /^(https?:|data:|blob:)/.test(src)) {
+      setObjectUrl(src);
+      onReady?.(src);
+      return;
+    }
+
+    // The api client's baseURL already ends in /api/v1, so that prefix comes
+    // off or the request lands on /api/v1/api/v1/file/...
+    const path = src ? src.replace(/^\/?api\/v1/, '') : `/file/${fileId}`;
+
     api
-      .get(`/file/${fileId}`, { responseType: 'blob', silent: true })
+      .get(path, { responseType: 'blob', silent: true })
       .then((response) => {
         if (revoked) return;
         createdUrl = URL.createObjectURL(response.data as Blob);
@@ -51,7 +69,7 @@ export function AuthedImage({
     };
     // onReady is intentionally excluded - callers pass inline handlers.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fileId]);
+  }, [fileId, src]);
 
   if (failed) {
     return (

@@ -115,15 +115,27 @@ export function buildRecommendation(input: AiInput): AiRecommendationResult {
 }
 
 /**
- * Idempotently ensure a dispute has a stored AI recommendation, creating one
- * from the current case file if missing. Safe to call from the filing flow and
- * lazily when a case is opened. Never throws - returns null on failure.
+ * Keep a dispute's recommendation current with its case file.
+ *
+ * This used to create the row once and return it unchanged for ever after.
+ * That was wrong in a way a mediator could see: a case filed with no evidence
+ * kept saying "neither side has filed supporting evidence yet" after both
+ * sides had filed plenty, while the console displayed it as a live reading of
+ * the case. A stale recommendation shown next to fresh evidence is worse than
+ * no recommendation, because it quietly argues from facts that have changed.
+ *
+ * So it recomputes from the current record and updates the row. That is cheap
+ * - this is arithmetic over a handful of counts, not a model call - and it
+ * means the panel always reflects what is actually on the case.
+ *
+ * It does NOT touch any ruling. A mediator who has already decided is
+ * recorded in DisputeRuling, which this never writes.
+ *
+ * Never throws: a recommendation is an aid, and failing to produce one must
+ * not stop a mediator opening the case.
  */
 export async function ensureAiRecommendation(disputeId: string) {
   try {
-    const existing = await prisma.aiRecommendation.findUnique({ where: { disputeId } });
-    if (existing) return existing;
-
     const dispute = await prisma.dispute.findUnique({
       where: { id: disputeId },
       include: { evidence: { select: { submittedById: true } }, messages: true, responses: true },
@@ -145,14 +157,17 @@ export async function ensureAiRecommendation(disputeId: string) {
       responseCount: dispute.responses.length,
     });
 
-    return await prisma.aiRecommendation.create({
-      data: {
-        disputeId,
-        recommendation: result.recommendation,
-        freelancerPct: result.freelancerPct,
-        confidence: result.confidence,
-        rationale: result.rationale,
-      },
+    const payload = {
+      recommendation: result.recommendation,
+      freelancerPct: result.freelancerPct,
+      confidence: result.confidence,
+      rationale: result.rationale,
+    };
+
+    return await prisma.aiRecommendation.upsert({
+      where: { disputeId },
+      create: { disputeId, ...payload },
+      update: payload,
     });
   } catch (error) {
     // Race (unique constraint) or transient failure - fall back to whatever exists.

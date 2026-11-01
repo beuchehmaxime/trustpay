@@ -223,6 +223,10 @@ export const DisputeService = {
       throw new AppError(403, 'Q-403', 'This dispute was not shared with you.');
     }
     await DisputeRepository.addMessage(id, userId, input.body);
+    // A new message changes what the recommendation was computed from.
+    // Refreshed here so the mediator console is current the moment they
+    // open it, rather than one page view behind.
+    await ensureAiRecommendation(id);
     const m = c.milestones.find((x) => x.id === d.milestoneId);
     void NotificationService.notifyProjectEvent({
       contract: c,
@@ -254,6 +258,9 @@ export const DisputeService = {
     const fileIds = await FileService.storeImages(userId, input.images, 'dispute');
     if (fileIds.length === 0) throw new AppError(422, 'Q-422', 'No valid images were uploaded.');
     await DisputeRepository.addEvidence(id, userId, fileIds, input.description);
+    // Evidence is the single biggest input to the recommendation - it is
+    // what decides whether one side has documented their case better.
+    await ensureAiRecommendation(id);
     return this.byId(userId, id, role);
   },
 

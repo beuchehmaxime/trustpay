@@ -14,8 +14,10 @@ import {
   Send,
   Sparkles,
   UserPlus,
+  X,
 } from 'lucide-react';
 
+import { AuthedImage } from '@/components/authed-image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ConfirmDialog } from '@/components/confirm-dialog';
@@ -54,6 +56,7 @@ export default function DisputeDetailPage() {
   const actions = useDisputeActions();
 
   const [mediatorId, setMediatorId] = useState('');
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [readingEvidence, setReadingEvidence] = useState(false);
   const [evidenceReading, setEvidenceReading] = useState<{
     finding: string;
@@ -314,14 +317,18 @@ export default function DisputeDetailPage() {
                       {item.images.length > 0 ? (
                         <div className="mt-2 flex flex-wrap gap-2">
                           {item.images.map((src, index) => (
-                            <a key={index} href={src} target="_blank" rel="noreferrer">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
-                                src={src}
-                                alt="Evidence"
-                                className="size-20 rounded-lg border border-hairline object-cover transition-opacity hover:opacity-90"
-                              />
-                            </a>
+                            // Not an <a href>: the file proxy needs a bearer
+                            // token, so a new tab would 401 just as the plain
+                            // <img> did. Fetched with auth, shown full size
+                            // in place.
+                            <button
+                              key={index}
+                              type="button"
+                              onClick={() => setPhotoPreview(src)}
+                              className="overflow-hidden rounded-lg border border-hairline transition-opacity hover:opacity-90"
+                            >
+                              <AuthedImage src={src} alt="Evidence" className="size-20 object-cover" />
+                            </button>
                           ))}
                         </div>
                       ) : null}
@@ -590,6 +597,32 @@ export default function DisputeDetailPage() {
           }
         }}
       />
+
+      {/* Full-size evidence. A mediator rules on what the photograph shows,
+          so a 80px thumbnail is not enough to rule on. */}
+      {photoPreview && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Evidence photo"
+          onClick={() => setPhotoPreview(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6"
+        >
+          <button
+            type="button"
+            onClick={() => setPhotoPreview(null)}
+            aria-label="Close"
+            className="absolute right-6 top-6 rounded-full bg-white/10 p-2 text-white transition hover:bg-white/20"
+          >
+            <X className="size-5" />
+          </button>
+          <AuthedImage
+            src={photoPreview}
+            alt="Evidence photo"
+            className="max-h-[85vh] max-w-full rounded-lg object-contain"
+          />
+        </div>
+      )}
     </div>
   );
 }
