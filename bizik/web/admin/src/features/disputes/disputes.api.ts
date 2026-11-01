@@ -45,6 +45,22 @@ export const disputesApi = {
     const { data } = await api.post<DisputeDetail>(endpoints.admin.disputeMessage(id), { body });
     return data;
   },
+
+  /**
+   * Ask the model to describe the delivery photographs.
+   *
+   * Costs a model call, so it is a button a mediator presses rather than
+   * something that runs on every page view. Reading images takes longer
+   * than a text turn, hence its own timeout.
+   */
+  async readEvidence(id: string) {
+    const { data } = await api.post<{ finding: string; imagesRead: number; model: string }>(
+      endpoints.admin.disputeReadEvidence(id),
+      {},
+      { timeout: 180_000 },
+    );
+    return data;
+  },
   async rule(id: string, input: RuleInput) {
     const { data } = await api.post<DisputeDetail>(endpoints.admin.disputeRule(id), input);
     return data;

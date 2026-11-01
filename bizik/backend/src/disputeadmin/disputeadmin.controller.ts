@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { DisputeStatus } from '@prisma/client';
 
 import { AppError, asyncHandler } from '../lib/errors';
+import { EvidenceVision } from '../assistant/evidence-vision';
 import { DisputeAdminService } from './disputeadmin.service';
 import {
   assignSchema,
@@ -45,6 +46,17 @@ export const DisputeAdminController = {
 
   detail: asyncHandler(async (req: Request, res: Response) => {
     res.json(await DisputeAdminService.detail(req.params.id));
+  }),
+
+  /**
+   * Read the delivery photographs on this dispute.
+   *
+   * A POST rather than a GET, and not folded into `detail`, because it spends
+   * model credit on every call. A mediator asks for it when the photos
+   * matter; most cases are settled on the text alone.
+   */
+  readEvidence: asyncHandler(async (req: Request, res: Response) => {
+    res.json(await EvidenceVision.read(req.params.id));
   }),
 
   assign: asyncHandler(async (req: Request, res: Response) => {

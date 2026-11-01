@@ -15,6 +15,15 @@ router.get('/disputes/stats', requireAuth, requirePermission('disputes.view'), D
 router.get('/disputes/mediators', requireAuth, requirePermission('disputes.view'), DisputeAdminController.mediators);
 router.get('/disputes/:id', requireAuth, requirePermission('disputes.view'), DisputeAdminController.detail);
 
+// Reading the photos is a view action, not a ruling: it produces a
+// description for the mediator and changes nothing about the case.
+router.post(
+  '/disputes/:id/read-evidence',
+  requireAuth,
+  requirePermission('disputes.view'),
+  DisputeAdminController.readEvidence,
+);
+
 router.post('/disputes/:id/assign', requireAuth, requirePermission('disputes.assign'), DisputeAdminController.assign);
 router.post('/disputes/:id/escalate', requireAuth, requirePermission('disputes.assign'), DisputeAdminController.escalate);
 router.post('/disputes/:id/message', requireAuth, requirePermission('disputes.resolve'), DisputeAdminController.message);

@@ -131,6 +131,7 @@ export const endpoints = {
     disputeAssign: (id: string) => `/admin/disputes/${id}/assign`,
     disputeEscalate: (id: string) => `/admin/disputes/${id}/escalate`,
     disputeMessage: (id: string) => `/admin/disputes/${id}/message`,
+    disputeReadEvidence: (id: string) => `/admin/disputes/${id}/read-evidence`,
     disputeRule: (id: string) => `/admin/disputes/${id}/rule`,
     // Audit log (SRS FR-ADM-006)
     audit: '/admin/audit',

@@ -16,6 +16,7 @@ import {
   UserPlus,
 } from 'lucide-react';
 
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ConfirmDialog } from '@/components/confirm-dialog';
 import { normaliseError } from '@/lib/api/client';
@@ -28,6 +29,7 @@ import {
   useDisputeActions,
   useMediators,
 } from '@/features/disputes/hooks';
+import { disputesApi } from '@/features/disputes/disputes.api';
 import { DisputeStatusBadge, money, rulingLabel } from '@/features/disputes/disputes-ui';
 import type { PartyRole, RulingType } from '@/features/disputes/types';
 
@@ -52,6 +54,12 @@ export default function DisputeDetailPage() {
   const actions = useDisputeActions();
 
   const [mediatorId, setMediatorId] = useState('');
+  const [readingEvidence, setReadingEvidence] = useState(false);
+  const [evidenceReading, setEvidenceReading] = useState<{
+    finding: string;
+    imagesRead: number;
+    model: string;
+  } | null>(null);
   const [message, setMessage] = useState('');
   const [ruling, setRuling] = useState<RulingType>('PARTIAL_SPLIT');
   const [pct, setPct] = useState('50');
@@ -134,6 +142,23 @@ export default function DisputeDetailPage() {
       setMediatorId('');
     } catch (assignError) {
       toast.error('Could not assign', { description: normaliseError(assignError).message });
+    }
+  }
+
+  /** Describe the delivery photographs for the mediator. Decides nothing. */
+  // Only disputes with actual photographs get the button.
+  const hasPhotos = (dispute?.evidence ?? []).some((item) => (item.images?.length ?? 0) > 0);
+
+  async function readEvidence() {
+    setReadingEvidence(true);
+    try {
+      setEvidenceReading(await disputesApi.readEvidence(id));
+    } catch (visionError) {
+      toast.error('Could not read the photos', {
+        description: normaliseError(visionError).message,
+      });
+    } finally {
+      setReadingEvidence(false);
     }
   }
 
@@ -226,9 +251,38 @@ export default function DisputeDetailPage() {
 
           {/* Evidence & messages - unified feed */}
           <div className="rounded-lg border border-hairline bg-surface p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
-            <p className="mb-4 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
-              Evidence &amp; messages
-            </p>
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+                Evidence &amp; messages
+              </p>
+              {/* Only offered when there are photographs to read. A button that
+                  always fails on a text-only dispute is worse than no button. */}
+              {hasPhotos && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={readEvidence}
+                  disabled={readingEvidence}
+                  title="Describe the delivery photographs"
+                >
+                  {readingEvidence ? 'Reading the photos...' : 'Read the photos'}
+                </Button>
+              )}
+            </div>
+
+            {evidenceReading && (
+              <div className="mb-4 rounded-lg border border-hairline bg-muted/40 p-4">
+                <p className="mb-1 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+                  What the photos show
+                </p>
+                <p className="text-sm text-ink">{evidenceReading.finding}</p>
+                <p className="mt-2 text-xs text-muted-foreground">
+                  {evidenceReading.imagesRead} photo(s) read by {evidenceReading.model}. This
+                  describes the images only. It is not a ruling, and it has not seen the full
+                  record you have.
+                </p>
+              </div>
+            )}
             {feed.length === 0 ? (
               <p className="text-sm text-muted-foreground">Nothing submitted yet.</p>
             ) : (
