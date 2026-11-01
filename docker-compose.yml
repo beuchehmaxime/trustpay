@@ -143,6 +143,18 @@ services:
       LOG_VERIFICATION_CODES: ${LOG_VERIFICATION_CODES:-true}
       FROM_NAME: ${FROM_NAME:-BiZik}
       FROM_EMAIL: ${FROM_EMAIL:-no-reply@trustpay.demo}
+    # Uploaded files OUTLIVE the container.
+    #
+    # Without this, every rebuild wipes them: the rows survive in Postgres and
+    # point at bytes that no longer exist, so evidence photos come back as
+    # "could not load image" and the dispute loses the thing it turns on. It
+    # cost exactly that once - a photo uploaded, read by the model, and gone an
+    # hour later for no reason the user could see.
+    #
+    # Only needed while files are stored locally. With Cloudinary configured
+    # they live remotely and this volume stays empty, which is harmless.
+    volumes:
+      - uploads:/app/uploads
     depends_on:
       postgres: { condition: service_healthy }
       redis: { condition: service_healthy }
@@ -231,3 +243,6 @@ networks:
 volumes:
   pgdata:
   redisdata:
+  # Evidence photos, delivery pictures and KYC documents, for as long as they
+  # are stored on local disk rather than Cloudinary.
+  uploads:
