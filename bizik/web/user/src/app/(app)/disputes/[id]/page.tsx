@@ -4,13 +4,14 @@ import { useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, CheckCircle2, Clock, Paperclip, Send, ShieldCheck, Upload } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Clock, Paperclip, Send, ShieldCheck, Upload, X } from 'lucide-react';
 
 import { StatusPill } from '@/components/ui/status-pill';
 import { useAddEvidence, useDispute, useDisputeMessage, useWithdrawDispute } from '@/lib/hooks/use-disputes';
 import type { DisputeDetail, DisputeEvidence, DisputeStatus as ApiDisputeStatus } from '@/lib/api/disputes.api';
 import { filesToDataUrls } from '@/lib/files';
 import { formatMoney } from '@/lib/format';
+import { AuthedImage } from '@/components/ui/authed-image';
 import { cn } from '@/lib/utils';
 
 type UiStatus = 'under_review' | 'resolved' | 'open';
@@ -69,6 +70,7 @@ export default function DisputeDetailPage() {
   const withdraw = useWithdrawDispute();
 
   const [draft, setDraft] = useState('');
+  const [preview, setPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (isLoading) {
@@ -263,7 +265,7 @@ export default function DisputeDetailPage() {
             ))}
 
             {dispute.evidence.map((item) => (
-              <EvidenceItem key={item.id} item={item} youLabel={t('disputes.detail.you')} />
+              <EvidenceItem key={item.id} item={item} youLabel={t('disputes.detail.you')} onPreview={setPreview} />
             ))}
           </div>
 
@@ -317,6 +319,32 @@ export default function DisputeDetailPage() {
             </button>
           ) : null)}
       </div>
+
+      {/* Full-size evidence. A dispute turns on what the photograph shows, so
+          it has to be viewable at more than 64 pixels. */}
+      {preview && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={t('disputes.detail.evidencePreview')}
+          onClick={() => setPreview(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+        >
+          <button
+            type="button"
+            onClick={() => setPreview(null)}
+            aria-label={t('common.close')}
+            className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white transition hover:bg-white/20"
+          >
+            <X className="size-5" />
+          </button>
+          <AuthedImage
+            src={preview}
+            alt={t('disputes.detail.evidencePreview')}
+            className="max-h-[85vh] max-w-full rounded-lg object-contain"
+          />
+        </div>
+      )}
     </div>
   );
 }
@@ -369,7 +397,15 @@ function MessageBubble({
   );
 }
 
-function EvidenceItem({ item, youLabel }: { item: DisputeEvidence; youLabel: string }) {
+function EvidenceItem({
+  item,
+  youLabel,
+  onPreview,
+}: {
+  item: DisputeEvidence;
+  youLabel: string;
+  onPreview: (src: string) => void;
+}) {
   return (
     <div className="flex gap-3">
       <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-ink text-[11px] font-bold text-white">
@@ -382,13 +418,16 @@ function EvidenceItem({ item, youLabel }: { item: DisputeEvidence; youLabel: str
           {item.images.length > 0 ? (
             <div className={cn('flex flex-wrap gap-2', item.description ? 'mt-3' : '')}>
               {item.images.map((src, index) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                // Clickable: a 64px thumbnail is not a preview, and the whole
+                // point of filing a photo is that someone can look at it.
+                <button
                   key={index}
-                  src={src}
-                  alt=""
-                  className="size-16 rounded-lg object-cover"
-                />
+                  type="button"
+                  onClick={() => onPreview(src)}
+                  className="overflow-hidden rounded-lg transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:outline-none"
+                >
+                  <AuthedImage src={src} alt="" className="size-16 object-cover" />
+                </button>
               ))}
             </div>
           ) : null}

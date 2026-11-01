@@ -720,7 +720,8 @@
       "uploadFile": "Téléverser un fichier",
       "withdrawDispute": "Retirer le litige",
       "resolved": "Résolu",
-      "outcome": "Résultat"
+      "outcome": "Résultat",
+      "evidencePreview": "Photo de preuve"
     }
   },
   "settings": {

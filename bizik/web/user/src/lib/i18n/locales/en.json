@@ -720,7 +720,8 @@
       "uploadFile": "Upload file",
       "withdrawDispute": "Withdraw dispute",
       "resolved": "Resolved",
-      "outcome": "Outcome"
+      "outcome": "Outcome",
+      "evidencePreview": "Evidence photo"
     }
   },
   "settings": {
