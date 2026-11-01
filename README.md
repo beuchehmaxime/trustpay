@@ -96,20 +96,30 @@ That is a constraint, and it made the architecture better:
 **The lawful production path is the open-weight one.** Running Muse Spark Open
 on infrastructure we control means the evidence never crosses a border at all,
 which answers both constraints at once rather than negotiating with either.
-That is why the open-weight path is wired here, and it is a better reason than
-the bonus prize.
+
+That is the plan, not the current state, and the difference matters. What
+exists today is the configuration and the single adapter the swap would go
+through; nothing here calls an open-weight endpoint. Saying so plainly is
+worth more than a claim that would not survive someone reading `src/meta/`.
 
 ## Meta models used
 
+Running, and verified end to end against the live API:
+
 | Capability | Model | Why this one |
 |---|---|---|
-| Voice note transcription | **Muse Voice Transcribe** | The disputes are audio first. This is the step that makes the rest possible. |
-| Code-switched reasoning, recommendation, bilingual rationale | **Muse Spark** | Multimodal and multilingual in one pass, so the transcript and the photo findings are reasoned over together rather than stitched. |
-| Delivery-photo segmentation, counting, defect localisation | **SAM 3.1** | Turns "it looks wrong" into "4 items, not 10, and the segment at top-left has a tear". |
-| Offline / self-hosted evaluation runs | **Muse Spark Open** | Lets the whole pipeline be re-run and scored without per-call cost. |
+| Voice note transcription | **Muse Voice Transcribe** | The disputes are audio first. This is the step that makes the rest possible. Measured at ~6s for a 7.6s clip. |
+| The in-app agent, and the dispute reasoning | **Muse Spark** | Multilingual in one pass, and a reasoning model, which is what a case with conflicting accounts needs. ~5s for a one-tool turn, ~8s for a multi-hop one. |
 
-Model access is through the Meta Model API, behind a single adapter
-(`src/meta/`) so the open-weight path and the hosted path are swappable.
+Wired but **not running**, named here rather than left to be assumed:
+
+| Capability | Model | State |
+|---|---|---|
+| Delivery-photo segmentation and counting | **SAM 3.1** | Not implemented. It was the first thing to cut when time got short, and chat has no image upload yet. |
+| Self-hosted evaluation runs | **Muse Spark Open** | Configuration only - `OPEN_WEIGHTS_BASE_URL`, `_API_KEY` and `_MODEL` are read and reported by `/health`, but no code calls them. The socket exists; nothing is plugged into it. |
+
+Model access goes through one adapter (`src/meta/`), which is what would make
+the open-weight path a swap rather than a rewrite.
 
 ---
 
