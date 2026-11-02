@@ -124,10 +124,21 @@ services:
       # old 1024 ceiling would cut a complex turn off mid-answer.
       ASSISTANT_MAX_TOKENS: ${ASSISTANT_MAX_TOKENS:-8192}
       MUSE_VOICE_MODEL: ${MUSE_VOICE_MODEL:-muse-voice-transcribe-1.0}
-      # Unset WhatsApp keys mean messages are logged rather than sent, which
-      # is what a demo stack should do.
+      # WhatsApp. Unset keys mean messages are LOGGED rather than sent, which
+      # is the right default for a demo stack - so every one of these has to
+      # be present in .env before anything leaves the machine.
+      #
+      # The credentials here are Meta's TEST number: a 5-recipient allow-list
+      # configured in the Meta console. Nothing can reach a number that is not
+      # on it, which is what makes pointing a dev stack at them reasonable.
       WHATSAPP_ENABLED: ${WHATSAPP_ENABLED:-false}
-      WASENDER_API_KEY: ${WASENDER_API_KEY:-}
+      WHATSAPP_PROVIDER: ${WHATSAPP_PROVIDER:-meta}
+      WHATSAPP_PHONE_NUMBER_ID: ${WHATSAPP_PHONE_NUMBER_ID:-}
+      WHATSAPP_ACCESS_TOKEN: ${WHATSAPP_ACCESS_TOKEN:-}
+      WHATSAPP_APP_SECRET: ${WHATSAPP_APP_SECRET:-}
+      WHATSAPP_VERIFY_TOKEN: ${WHATSAPP_VERIFY_TOKEN:-}
+      WHATSAPP_GRAPH_VERSION: ${WHATSAPP_GRAPH_VERSION:-v21.0}
+      WHATSAPP_REQUIRE_PIN: ${WHATSAPP_REQUIRE_PIN:-true}
       # Where a case file goes for mediation.
       TRUSTPAY_AI_URL: http://ai:4100
       # Mail goes to the local inbox at http://localhost:8025. Staff MFA codes
@@ -229,8 +240,6 @@ services:
       BIZIK_SERVICE_TOKEN: ${BIZIK_SERVICE_TOKEN:-dev-service-token}
       # Evidence arrives as WhatsApp media URLs. Fetched, processed, dropped -
       # nothing is retained between requests.
-      WASENDER_API_KEY: ${WASENDER_API_KEY:-}
-      WASENDER_BASE_URL: ${WASENDER_BASE_URL:-}
     depends_on: [backend]
     ports: ["4100:4100"]
     restart: unless-stopped

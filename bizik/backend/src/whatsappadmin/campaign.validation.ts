@@ -4,7 +4,7 @@ import { z } from 'zod';
  * What a campaign may carry, in the shape every rail could accept.
  *
  * It used to be template-only, because Meta refuses business-initiated free
- * text. WasenderAPI has no templates at all, so a body is now allowed too and
+ * text. A free-text rail has no templates at all, so a body is allowed too and
  * both are stored - which of them is REQUIRED is a question about the live
  * rail, answered in campaign-sender.ts rather than here.
  *

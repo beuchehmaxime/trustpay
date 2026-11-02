@@ -185,7 +185,7 @@ router.post(
 /**
  * Where verification codes are going, and whether that route is actually up.
  *
- * Worth its own endpoint because the failure here is silent: a WasenderAPI
+ * Worth its own endpoint because the failure here is silent: a messaging
  * session drops when the linked phone goes offline or someone logs the device
  * out, and from that moment every code falls through to SMS without anything
  * visibly breaking. The only symptom is users saying they never got a code.
@@ -202,34 +202,13 @@ router.get(
     const { whatsappOtpRoute } = await import('../lib/verification-code');
     const route = whatsappOtpRoute();
 
-    if (route !== 'wasender') {
-      return res.json({
-        route,
-        healthy: route !== 'none',
-        detail:
-          route === 'meta'
-            ? 'Codes go over the Meta Cloud API using the approved template.'
-            : 'No WhatsApp route is configured, so every code is sent by SMS.',
-      });
-    }
-
-    const { WasenderClient } = await import('../whatsapp/wasender-client');
-    const status = await WasenderClient.sessionStatus();
-    const detailByStatus: Record<string, string> = {
-      connected: 'The linked WhatsApp account is online and carrying codes.',
-      connecting: 'The linked account is reconnecting. Check again shortly.',
-      need_scan: 'The session needs a QR scan in the WasenderAPI dashboard before codes can send.',
-      need_passkey: 'The session is waiting for a passkey approval.',
-      disconnected: 'The linked account is offline. Every code is falling back to SMS.',
-      logged_out: 'The device was logged out of WhatsApp. Re-link it in the WasenderAPI dashboard.',
-      expired: 'The session expired. Re-link it in the WasenderAPI dashboard.',
-      unknown: 'WasenderAPI did not answer, so the session state is unknown.',
-    };
     res.json({
       route,
-      sessionStatus: status,
-      healthy: status === 'connected',
-      detail: detailByStatus[status] ?? detailByStatus.unknown,
+      healthy: route !== 'none',
+      detail:
+        route === 'meta'
+          ? 'Codes go over the Meta Cloud API using the approved template.'
+          : 'No WhatsApp route is configured, so every code is sent by SMS.',
     });
   }),
 );

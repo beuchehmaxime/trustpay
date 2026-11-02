@@ -281,33 +281,22 @@ export const config = {
     otpTemplateLanguageFr: process.env.WHATSAPP_OTP_TEMPLATE_LANG_FR || 'fr',
 
     /**
-     * Which WhatsApp route carries one-time codes: 'meta' (Cloud API template)
-     * or 'wasender' (WasenderAPI free-form text).
+     * Which WhatsApp route carries one-time codes. The Meta Cloud API, with an
+     * approved template, or nothing - codes then go by SMS.
      *
-     * Defaults to wasender whenever a WasenderAPI key is present, so the switch
-     * is one variable rather than two that have to agree. Clear the key, or set
-     * this to 'meta', and codes go back to the Cloud API with no other change -
-     * which is the point: the Meta path stays wired up for the day the official
-     * number and template are approved.
-     *
-     * This governs CODES ONLY. The assistant, the admin inbox and outreach stay
-     * on Meta regardless, because they need interactive buttons, list menus and
-     * signed webhooks that WasenderAPI does not offer.
+     * There used to be a second rail here. One rail means one thing to
+     * configure, one set of failures to recognise, and no state where codes
+     * silently take a path nobody meant them to.
      */
-    otpProvider: (process.env.WHATSAPP_OTP_PROVIDER ||
-      (process.env.WASENDER_API_KEY ? 'wasender' : 'meta')) as 'meta' | 'wasender',
+    otpProvider: 'meta' as const,
 
     /**
-     * Which rail carries OUTREACH campaigns. Separate from otpProvider on
-     * purpose: codes are one message to somebody who just asked for it, and a
-     * campaign is hundreds of unprompted messages. They carry very different
-     * risk, and being able to move one without the other is the point.
-     *
-     * Defaults the same way - wasender when a key is present - so the two stay
-     * in step unless somebody deliberately splits them.
+     * Which rail carries OUTREACH campaigns. Kept separate from otpProvider
+     * because codes are one message to somebody who just asked for it and a
+     * campaign is hundreds of unprompted ones - very different risk, worth
+     * being able to move independently if a second rail ever returns.
      */
-    outreachProvider: (process.env.WHATSAPP_OUTREACH_PROVIDER ||
-      (process.env.WASENDER_API_KEY ? 'wasender' : 'meta')) as 'meta' | 'wasender',
+    outreachProvider: 'meta' as const,
 
     /**
      * How fast a campaign is allowed to send, in messages per minute.
@@ -330,7 +319,7 @@ export const config = {
     /**
      * The hard floor between two campaign messages, in milliseconds.
      *
-     * WasenderAPI's "account protection" refuses a second message within FIVE
+     * The rail's "account protection" refuses a second message within FIVE
      * SECONDS, and refuses it as a failure rather than a wait. The first
      * version of the queue paced the gap between BATCHES of three and sent the
      * three back to back, so one of every three landed and two were written off
@@ -357,26 +346,6 @@ export const config = {
      */
     aiTurnsPerUserDaily: Number(process.env.WHATSAPP_AI_TURNS_PER_DAY ?? 80),
     aiTurnsGlobalDaily: Number(process.env.WHATSAPP_AI_TURNS_GLOBAL_PER_DAY ?? 5000),
-  },
-
-  /**
-   * WasenderAPI - the interim carrier for WhatsApp verification codes.
-   *
-   * Switched on purely by the presence of a key, with no separate enable flag,
-   * because a half-configured messaging channel is worse than an absent one:
-   * there is no state here where it is "on" but cannot send.
-   *
-   * See docs/wasender-otp-setup.md for what has to be true on their side.
-   */
-  wasender: {
-    apiKey: process.env.WASENDER_API_KEY || '',
-    baseUrl: process.env.WASENDER_BASE_URL || 'https://www.wasenderapi.com',
-    /**
-     * A code nobody has received yet is worth less with every second, and SMS
-     * is waiting behind it, so the call is given a short leash rather than the
-     * default socket timeout.
-     */
-    timeoutMs: Number(process.env.WASENDER_TIMEOUT_MS) || 10_000,
   },
 
   /**

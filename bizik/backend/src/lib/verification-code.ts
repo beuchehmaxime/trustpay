@@ -13,7 +13,6 @@ import { maskNumber } from './sms-providers/types';
  * TWO WHATSAPP ROUTES, one of which is live at a time, chosen by
  * `WHATSAPP_OTP_PROVIDER`:
  *
- *  - `wasender`  WasenderAPI. Free-form text through a linked WhatsApp account.
  *                No template to approve and no recipient allow-list, which is
  *                the only reason codes can go over WhatsApp at all today.
  *  - `meta`      The official Cloud API, which needs an APPROVED authentication
@@ -32,7 +31,7 @@ const NOT_A_WHATSAPP_USER = new Set([131026, 131051]);
 export interface CodeDelivery {
   channel: 'whatsapp' | 'sms' | 'none';
   /** Which WhatsApp route carried it, when one did. For logs and tests. */
-  provider?: 'meta' | 'wasender';
+  provider?: 'meta';
 }
 
 /**
@@ -42,10 +41,13 @@ export interface CodeDelivery {
  * to SMS rather than spending a round trip on a send that was always going to
  * be refused. Meta without an approved template is exactly that case.
  */
-export function whatsappOtpRoute(): 'meta' | 'wasender' | 'none' {
-  if (config.whatsapp.otpProvider === 'wasender') {
-    return config.wasender.apiKey ? 'wasender' : 'none';
-  }
+export function whatsappOtpRoute(): 'meta' | 'none' {
+  // One rail. Codes go through the Meta Cloud API with an approved template,
+  // or they go by SMS - there is no third option to reason about.
+  //
+  // The template is the load-bearing half: Meta refuses business-initiated
+  // free text, so a configured channel with no approved template can send
+  // nothing and must fall through to SMS rather than fail.
   return config.whatsapp.enabled && config.whatsapp.otpTemplate ? 'meta' : 'none';
 }
 
@@ -81,36 +83,6 @@ function codeMessage(code: string, locale?: string): string {
   );
 }
 
-/** Try WasenderAPI. Returns false to mean "use SMS", never throws. */
-async function trySendViaWasender(to: string, code: string, locale: string | undefined, masked: string) {
-  const { WasenderClient } = await import('../whatsapp/wasender-client');
-  const result = await WasenderClient.sendText(to, codeMessage(code, locale));
-  if (result.ok) return true;
-
-  // The number simply has no WhatsApp account. That is the designed path to
-  // SMS, not a failure, and logging it as one would make a normal signup look
-  // like an incident.
-  if (result.failure === 'not_on_whatsapp') {
-    console.log(`[code] ${masked} is not on WhatsApp; sending by SMS`);
-    return false;
-  }
-
-  // Everything else needs a different person to do a different thing, so the
-  // reasons are logged apart rather than as one "send failed".
-  const advice: Record<string, string> = {
-    not_connected: 'the linked WhatsApp account is disconnected - re-scan the QR in the WasenderAPI dashboard',
-    rate_limited: `rate limited${result.retryAfterSeconds ? ` for ${result.retryAfterSeconds}s` : ''} - a trial plan allows one message per MINUTE`,
-    unauthorised: 'the API key is rejected or the subscription is inactive',
-    invalid: 'the request was rejected as malformed',
-    not_configured: 'no WASENDER_API_KEY is set',
-    network: 'no response from WasenderAPI',
-  };
-  console.warn(
-    `[code] WhatsApp (wasender) failed for ${masked}: ${advice[result.failure ?? 'unknown'] ?? result.failure}` +
-      `${result.message ? ` - ${result.message}` : ''}; falling back to SMS`,
-  );
-  return false;
-}
 
 /** Try Meta's Cloud API. Returns false to mean "use SMS", never throws. */
 async function trySendViaMeta(to: string, code: string, locale: string | undefined, masked: string) {
@@ -145,9 +117,7 @@ export async function sendVerificationCode(
       // Imported lazily so neither provider's module is pulled in when it is
       // not the one in use.
       const sent =
-        route === 'wasender'
-          ? await trySendViaWasender(to, code, options.locale, masked)
-          : await trySendViaMeta(to, code, options.locale, masked);
+           await trySendViaMeta(to, code, options.locale, masked);
       if (sent) {
         console.log(`[code] ${purpose} sent to ${masked} over WhatsApp (${route})`);
         return { channel: 'whatsapp', provider: route };

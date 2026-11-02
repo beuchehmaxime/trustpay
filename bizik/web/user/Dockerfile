@@ -1,4 +1,7 @@
-# syntax=docker/dockerfile:1
+# No `# syntax=` directive on purpose: it makes BuildKit fetch a frontend
+# image from Docker Hub before reading the first instruction, so a DNS
+# hiccup fails the build before anything compiles. Nothing below needs a
+# newer frontend than the built-in one.
 #
 # BiZik user web app (Next.js standalone). Multi-stage: install → build →
 # minimal runtime. The user app's build script uses --webpack (Serwist needs it).

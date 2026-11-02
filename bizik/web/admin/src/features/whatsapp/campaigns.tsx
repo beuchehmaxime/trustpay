@@ -168,7 +168,7 @@ function Composer({ onSent }: { onSent: () => void }) {
   const [confirming, setConfirming] = useState(false);
 
   // Which rail is live decides what this form has to collect. Meta needs the
-  // name of a template it has approved; WasenderAPI sends the text itself.
+  // name of a template it has approved, never the prose itself.
   const rail = useOutreachRail();
   const freeText = rail.data?.freeText ?? false;
 

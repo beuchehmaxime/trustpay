@@ -1,4 +1,7 @@
-# syntax=docker/dockerfile:1
+# No `# syntax=` directive on purpose: it makes BuildKit fetch a frontend
+# image from Docker Hub before reading the first instruction, so a DNS
+# hiccup fails the build before anything compiles. Nothing below needs a
+# newer frontend than the built-in one.
 
 # ---- Build stage -----------------------------------------------------------
 # Debian-slim (not alpine): Prisma's engines need OpenSSL/glibc and work

@@ -28,7 +28,7 @@ describe('campaign validation', () => {
 
   it('allows an EMPTY template, because not every rail has templates', () => {
     // This used to be rejected here, when Meta was the only rail and a template
-    // name was always required. WasenderAPI has no templates at all and sends
+    // name was always required. A free-text rail has no templates and sends
     // the message text instead, so "is a template required?" is now a question
     // about the live rail rather than about the shape of the request.
     //

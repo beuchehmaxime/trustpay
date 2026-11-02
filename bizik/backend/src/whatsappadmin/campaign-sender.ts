@@ -3,21 +3,16 @@ import { config } from '../config/env';
 /**
  * Which rail carries a campaign message, and what it needs to send one.
  *
- * Two rails with genuinely different shapes:
+ * One rail: a pre-approved template NAME plus ordered variables. Meta refuses
+ * business-initiated free text, so the prose lives on their side and we only
+ * name it.
  *
- *  - **meta**: a pre-approved template NAME plus ordered variables. Meta refuses
- *    business-initiated free text, so the prose lives on their side and we only
- *    name it.
- *  - **wasender**: free text through a QR-linked WhatsApp account. No template
- *    to approve, which is why it works today - and no template to hide behind,
- *    which is why the body has to be written and stored here.
- *
- * Both are kept wired so switching is one environment variable, the same way
- * verification codes work. The campaign row carries a template name AND a body
- * for exactly that reason.
+ * The campaign row still carries a body alongside the template name. That is
+ * left in place deliberately - it is written data on existing rows, and
+ * dropping a column to tidy a type is not a trade worth making.
  */
 
-export type OutreachProvider = 'meta' | 'wasender';
+export type OutreachProvider = 'meta';
 
 export interface CampaignMessage {
   template: string;
@@ -43,9 +38,9 @@ export interface CampaignSendResult {
 }
 
 export function outreachProvider(): OutreachProvider {
-  if (config.whatsapp.outreachProvider === 'wasender') {
-    return config.wasender.apiKey ? 'wasender' : 'meta';
-  }
+  // One rail. Outreach goes through the Meta Cloud API with an approved
+  // template, which is also the only rail that can reach a number outside a
+  // 24-hour service window.
   return 'meta';
 }
 
@@ -60,11 +55,6 @@ export function missingForProvider(message: {
   template?: string | null;
   body?: string | null;
 }): string | null {
-  if (outreachProvider() === 'wasender') {
-    return message.body && message.body.trim().length > 0
-      ? null
-      : 'This rail sends the message text itself, so a message body is required.';
-  }
   return message.template && message.template.trim().length > 0
     ? null
     : 'A pre-approved template name is required.';
@@ -85,31 +75,6 @@ export async function sendCampaignMessage(
   const provider = outreachProvider();
 
   try {
-    if (provider === 'wasender') {
-      const { WasenderClient } = await import('../whatsapp/wasender-client');
-      if (!message.body) return { ok: false, error: 'no message body', fatal: true };
-
-      const result = await WasenderClient.sendText(phone, message.body);
-      if (result.ok) return { ok: true, messageId: String(result.messageId ?? '') || null };
-
-      // A disconnected session, a dead key or an exhausted plan will refuse
-      // every remaining recipient identically. Carrying on would turn one
-      // problem into a campaign-sized list of identical failures.
-      const fatal =
-        result.failure === 'not_connected' ||
-        result.failure === 'unauthorised' ||
-        result.failure === 'not_configured';
-      return {
-        ok: false,
-        error: [result.failure, result.message].filter(Boolean).join(': '),
-        fatal,
-        // Nothing reached this person, so they go back in the queue rather
-        // than being recorded as a failed delivery.
-        transient: result.failure === 'rate_limited',
-        retryAfterSeconds: result.retryAfterSeconds,
-      };
-    }
-
     const { WhatsAppClient } = await import('../whatsapp/whatsapp-client');
     const result = await WhatsAppClient.sendTemplate(
       phone,

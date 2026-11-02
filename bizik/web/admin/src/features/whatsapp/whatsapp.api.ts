@@ -56,7 +56,7 @@ export const adminWhatsAppApi = {
   /** Which rail outreach goes out on, and what the composer must ask for. */
   async outreachRail() {
     const { data } = await api.get<{
-      provider: 'meta' | 'wasender';
+      provider: 'meta';
       freeText: boolean;
       perMinute: number;
       dailyCap: number;

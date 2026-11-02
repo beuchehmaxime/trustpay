@@ -170,7 +170,6 @@ tool loop all keep working as they were.
 What that includes: the escrow lifecycle, wallets and ledger, MTN MoMo and
 Orange Money rails through Fapshi, KYC, AML screening, RBAC, the audit log,
 the user PWA and the admin console, and the WhatsApp channel - the assistant,
-the WaSender client, the admin inbox and outreach.
 
 Three parts of it matter most to this project:
 

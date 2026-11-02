@@ -29,7 +29,6 @@ demo/output/
 # material: compliance-audit.md and processor-register.md cite our own audit
 # findings by severity (H-4, M-4), incident-response.md is an operational
 # runbook, DEPLOYMENT.md describes the infrastructure, and the WhatsApp and
-# WasenderAPI guides carry live setup identifiers. Publishing a list of your
 # own unresolved findings is a map for anyone who wants to use them.
 #
 # Our own planning notes go too: docs/HACKATHON.md carries prize targets, the

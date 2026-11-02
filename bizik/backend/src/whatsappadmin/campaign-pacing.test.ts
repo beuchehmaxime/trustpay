@@ -16,12 +16,11 @@ import { missingForProvider, outreachProvider } from './campaign-sender';
  * come back by accident.
  */
 const whatsapp = config.whatsapp as {
-  outreachProvider: 'meta' | 'wasender';
+  outreachProvider: 'meta';
   outreachPerMinute: number;
   outreachDailyCap: number;
   outreachMinGapMs: number;
 };
-const wasender = config.wasender as { apiKey: string };
 
 describe('campaign pacing', () => {
   beforeEach(() => {
@@ -30,7 +29,7 @@ describe('campaign pacing', () => {
   });
 
   it('NEVER returns a gap under the provider refusal window', () => {
-    // The bug this replaced: WasenderAPI's account protection refuses a second
+    // The bug this replaced: the rail's account protection refuses a second
     // message inside five seconds and records it as a failure, not a wait.
     // Pacing batches of three instead of messages meant one in three landed -
     // 52 of the first 58 live sends were lost to it.
@@ -86,16 +85,9 @@ describe('campaign pacing', () => {
 
 describe('outreach rail selection', () => {
   beforeEach(() => {
-    whatsapp.outreachProvider = 'wasender';
-    wasender.apiKey = 'test-key';
-  });
-
-  it('uses WasenderAPI when it is selected and configured', () => {
-    expect(outreachProvider()).toBe('wasender');
   });
 
   it('falls back to Meta rather than sending nothing when the key is missing', () => {
-    wasender.apiKey = '';
     expect(outreachProvider()).toBe('meta');
   });
 
@@ -105,12 +97,6 @@ describe('outreach rail selection', () => {
   });
 
   describe('what each rail needs before a campaign may be created', () => {
-    it('demands the message text on the free-text rail', () => {
-      // A template name is meaningless to WasenderAPI - it sends prose.
-      expect(missingForProvider({ template: 'bizik_nudge', body: null })).toMatch(/message body/i);
-      expect(missingForProvider({ template: 'bizik_nudge', body: '   ' })).toMatch(/message body/i);
-      expect(missingForProvider({ template: '', body: 'Hello from Bizik' })).toBeNull();
-    });
 
     it('demands an approved template on the Meta rail', () => {
       whatsapp.outreachProvider = 'meta';

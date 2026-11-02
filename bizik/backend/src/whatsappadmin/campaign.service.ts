@@ -116,15 +116,18 @@ export const CampaignService = {
    * Which rail is live, and what it therefore needs from the composer.
    *
    * The composer cannot ask for the right thing without this: Meta wants a
-   * template name it has approved, WasenderAPI wants the message itself. Asking
+   * template name it has approved. A free-text rail would want the prose
+   * itself instead. Asking
    * for both would mean every campaign carries one field that does nothing.
    */
   outreachRail() {
     const provider = outreachProvider();
     return {
       provider,
-      /** Free text rather than a pre-approved template. */
-      freeText: provider === 'wasender',
+      /** Meta refuses business-initiated free text, so never. Kept in the
+       *  response because the console reads it to decide which composer to
+       *  show. */
+      freeText: false,
       perMinute: config.whatsapp.outreachPerMinute,
       dailyCap: config.whatsapp.outreachDailyCap,
     };

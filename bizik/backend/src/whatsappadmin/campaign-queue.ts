@@ -35,7 +35,7 @@ export const CAMPAIGN_SEND_JOB = 'whatsapp-campaign-send';
  * ONE message per job.
  *
  * It was three, with the delay applied between batches - so three messages went
- * out back to back and then the queue waited. WasenderAPI's account protection
+ * out back to back and then the queue waited. The rail's account protection
  * refuses anything inside five seconds, which meant one of each three landed
  * and the other two were written off as failures. 52 of the first 58.
  *
