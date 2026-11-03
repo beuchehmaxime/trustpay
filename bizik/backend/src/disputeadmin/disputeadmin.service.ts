@@ -192,6 +192,14 @@ export const DisputeAdminService = {
           confidence: Number(dispute.aiRec.confidence),
           rationale: dispute.aiRec.rationale ?? 'Model recommendation.',
           source: 'model' as const,
+          // What the photographs showed, when someone has asked. Carried on
+          // the suggestion rather than beside it so the console shows one
+          // reading of the case instead of two that have to be reconciled.
+          evidenceFinding: dispute.aiRec.evidenceFinding ?? null,
+          evidenceImages: dispute.aiRec.evidenceImages ?? null,
+          evidenceReadAt: dispute.aiRec.evidenceReadAt
+            ? dispute.aiRec.evidenceReadAt.toISOString()
+            : null,
         }
       : this.suggestRuling(dispute.reason, dispute.evidence, payerId, payeeId);
 

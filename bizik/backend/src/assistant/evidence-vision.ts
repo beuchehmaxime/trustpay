@@ -186,6 +186,24 @@ export const EvidenceVision = {
       throw new AppError(502, 'Q-502-VISION', 'The model returned nothing for those photographs.');
     }
 
+    // Kept on the case rather than handed back once. A ruling made partly on
+    // a model's description of a photograph should leave a record of what the
+    // description said, and the next mediator to open the case should see the
+    // same reading rather than having to spend another call to get one.
+    await prisma.aiRecommendation
+      .update({
+        where: { disputeId },
+        data: {
+          evidenceFinding: finding,
+          evidenceImages: blocks.length,
+          evidenceReadAt: new Date(),
+        },
+      })
+      .catch(() => {
+        // No recommendation row yet, which only happens if the case was never
+        // opened. Not worth failing the reading the mediator just asked for.
+      });
+
     return { finding, imagesRead: blocks.length, model };
   },
 };

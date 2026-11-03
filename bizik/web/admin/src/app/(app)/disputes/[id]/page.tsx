@@ -58,6 +58,9 @@ export default function DisputeDetailPage() {
   const [mediatorId, setMediatorId] = useState('');
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [readingEvidence, setReadingEvidence] = useState(false);
+  // Prefer a reading just produced; fall back to whatever is stored on the
+  // case, so reopening it shows the same thing the last mediator saw.
+  const storedFinding = dispute?.suggestion.evidenceFinding;
   const [evidenceReading, setEvidenceReading] = useState<{
     finding: string;
     imagesRead: number;
@@ -151,6 +154,12 @@ export default function DisputeDetailPage() {
   /** Describe the delivery photographs for the mediator. Decides nothing. */
   // Only disputes with actual photographs get the button.
   const hasPhotos = (dispute?.evidence ?? []).some((item) => (item.images?.length ?? 0) > 0);
+
+  const photoFinding =
+    evidenceReading ??
+    (storedFinding
+      ? { finding: storedFinding, imagesRead: dispute?.suggestion.evidenceImages ?? 0, model: '' }
+      : null);
 
   async function readEvidence() {
     setReadingEvidence(true);
@@ -254,38 +263,13 @@ export default function DisputeDetailPage() {
 
           {/* Evidence & messages - unified feed */}
           <div className="rounded-lg border border-hairline bg-surface p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
-            <div className="mb-4 flex items-center justify-between gap-3">
-              <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
-                Evidence &amp; messages
-              </p>
-              {/* Only offered when there are photographs to read. A button that
-                  always fails on a text-only dispute is worse than no button. */}
-              {hasPhotos && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={readEvidence}
-                  disabled={readingEvidence}
-                  title="Describe the delivery photographs"
-                >
-                  {readingEvidence ? 'Reading the photos...' : 'Read the photos'}
-                </Button>
-              )}
-            </div>
-
-            {evidenceReading && (
-              <div className="mb-4 rounded-lg border border-hairline bg-muted/40 p-4">
-                <p className="mb-1 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
-                  What the photos show
-                </p>
-                <p className="text-sm text-ink">{evidenceReading.finding}</p>
-                <p className="mt-2 text-xs text-muted-foreground">
-                  {evidenceReading.imagesRead} photo(s) read by {evidenceReading.model}. This
-                  describes the images only. It is not a ruling, and it has not seen the full
-                  record you have.
-                </p>
-              </div>
-            )}
+            {/* The button and the reading both live on the AI recommendation
+                panel now. Two places offering the same thing meant a mediator
+                could see a finding in one card and a stale blank in the
+                other. */}
+            <p className="mb-4 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+              Evidence &amp; messages
+            </p>
             {feed.length === 0 ? (
               <p className="text-sm text-muted-foreground">Nothing submitted yet.</p>
             ) : (
@@ -442,7 +426,7 @@ export default function DisputeDetailPage() {
             <p className="text-sm font-semibold text-ink">
               {rulingLabel(dispute.suggestion.ruling)}
               {dispute.suggestion.ruling === 'PARTIAL_SPLIT'
-                ? ` · ${dispute.suggestion.freelancerPct}% to freelancer`
+                ? ` · ${dispute.suggestion.freelancerPct}% to seller`
                 : ''}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">{dispute.suggestion.rationale}</p>
@@ -457,6 +441,32 @@ export default function DisputeDetailPage() {
                 {Math.round(dispute.suggestion.confidence * 100)}% confidence
               </span>
             </div>
+            {/* What the photographs show, kept with the recommendation rather
+                than in a separate card: a mediator should read one account of
+                the case, not two they have to reconcile. */}
+            {photoFinding ? (
+              <div className="mt-3 rounded-lg border border-hairline bg-white/70 p-3">
+                <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+                  What the photos show
+                </p>
+                <p className="mt-1 text-xs leading-relaxed text-ink">{photoFinding.finding}</p>
+                <p className="mt-2 text-[11px] text-muted-foreground">
+                  {photoFinding.imagesRead} photo(s) read. A description of the images, not a
+                  ruling - it has not seen the full record you have.
+                </p>
+              </div>
+            ) : hasPhotos ? (
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-3"
+                onClick={readEvidence}
+                disabled={readingEvidence}
+              >
+                {readingEvidence ? 'Reading the photos...' : 'Read the photos'}
+              </Button>
+            ) : null}
+
             {canResolve && dispute.open ? (
               <button
                 type="button"

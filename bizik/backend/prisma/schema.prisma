@@ -1654,7 +1654,23 @@ model AiRecommendation {
   freelancerPct  Int               @default(50) // recommended payee share for a split
   confidence     Decimal           @db.Decimal(4, 3)
   rationale      String?
-  createdAt      DateTime          @default(now())
+
+  /// What the model saw in the delivery photographs, in plain words.
+  ///
+  /// Stored rather than returned once, for two reasons. A mediator who comes
+  /// back to the case tomorrow should see the same reading as the one who ran
+  /// it, and a ruling made partly on a model's description of a photograph
+  /// should leave a record of what that description actually said.
+  ///
+  /// Null until someone asks for it: reading photographs costs a model call,
+  /// and most disputes are settled on the text.
+  evidenceFinding String?
+  evidenceReadAt  DateTime?
+  /// How many photographs the reading was based on, which is not always how
+  /// many were filed - an unreadable or missing file is skipped.
+  evidenceImages  Int?
+
+  createdAt DateTime @default(now())
 
   dispute Dispute @relation(fields: [disputeId], references: [id], onDelete: Cascade)
 

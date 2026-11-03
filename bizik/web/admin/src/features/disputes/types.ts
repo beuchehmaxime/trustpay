@@ -73,6 +73,10 @@ export interface DisputeSuggestion {
   confidence: number;
   rationale: string;
   source: 'heuristic' | 'model';
+  /** What the model saw in the delivery photographs, once someone asked. */
+  evidenceFinding?: string | null;
+  evidenceImages?: number | null;
+  evidenceReadAt?: string | null;
 }
 
 export interface DisputeDetail {
