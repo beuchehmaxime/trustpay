@@ -32,6 +32,48 @@ const DEFAULT_FILE_PERMISSION = 'kyc.view';
  */
 const PRIVATE_PURPOSES = new Set(['kyc']);
 
+/**
+ * Is this viewer on the deal that this file belongs to?
+ *
+ * A file reaches a deal by one of two routes: filed as dispute evidence, or
+ * attached to a delivery. Both carry `fileIds`, and both lead to a contract
+ * with exactly two parties.
+ *
+ * Returns false rather than throwing for anything it cannot trace, so an
+ * orphaned or unrecognised file falls through to the operator check instead of
+ * being quietly opened up.
+ */
+async function isPartyToFile(fileId: string, viewerId: string): Promise<boolean> {
+  const onContract = (contract: { creatorId: string; counterpartyId: string | null } | null) =>
+    !!contract && (contract.creatorId === viewerId || contract.counterpartyId === viewerId);
+
+  const evidence = await prisma.disputeEvidence.findFirst({
+    where: { fileIds: { has: fileId } },
+    select: { dispute: { select: { contractId: true } } },
+  });
+  if (evidence?.dispute) {
+    const contract = await prisma.contract.findUnique({
+      where: { id: evidence.dispute.contractId },
+      select: { creatorId: true, counterpartyId: true },
+    });
+    if (onContract(contract)) return true;
+  }
+
+  const submission = await prisma.milestoneSubmission.findFirst({
+    where: { fileIds: { has: fileId } },
+    select: { milestone: { select: { contractId: true } } },
+  });
+  if (submission?.milestone) {
+    const contract = await prisma.contract.findUnique({
+      where: { id: submission.milestone.contractId },
+      select: { creatorId: true, counterpartyId: true },
+    });
+    if (onContract(contract)) return true;
+  }
+
+  return false;
+}
+
 export const FileService = {
   /**
    * Persist a base64/data-URL image and record its metadata. Images go to
@@ -108,11 +150,28 @@ export const FileService = {
     }));
   },
 
-  /** Fetch a file's metadata: the owner, or an operator with the right permission. */
+  /**
+   * Fetch a file's metadata: the owner, the other party to the same deal, or
+   * an operator with the right permission.
+   *
+   * That middle case was missing, and it broke the thing a dispute is FOR. A
+   * buyer could see the photograph they filed and not the one the seller
+   * filed against them - so they were arguing against evidence they could not
+   * look at, in a case a mediator would decide on it.
+   *
+   * The check is deliberately narrow. It is not "any signed-in user": the
+   * file has to be attached to a dispute or a delivery on a deal that this
+   * viewer is a party to. A KYC document has no deal behind it and so stays
+   * owner-and-operator only, which is why the purpose is checked first.
+   */
   async getForViewer(fileId: string, viewer: { id: string; role: string }) {
     const file = await FileRepository.findById(fileId);
     if (!file) throw new AppError(404, 'Q-404', 'File not found');
     if (file.ownerId === viewer.id) return file;
+
+    if (file.purpose === 'dispute' || file.purpose === 'deliverable') {
+      if (await isPartyToFile(fileId, viewer.id)) return file;
+    }
 
     const needed = PERMISSION_BY_PURPOSE[file.purpose ?? ''] ?? DEFAULT_FILE_PERMISSION;
     const operator = await prisma.user.findUnique({

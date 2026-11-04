@@ -43,3 +43,8 @@ demo/output/
 # question with silence. The leading slash keeps it to this file - bizik's own
 # READMEs stay ignored.
 !/README.md
+
+# Screenshots dropped into docs/ while writing. The notes there are already
+# ignored; their stray images should be too.
+docs/*.png
+docs/*.jpg

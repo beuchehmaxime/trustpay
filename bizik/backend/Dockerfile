@@ -42,6 +42,9 @@ COPY --from=build /app/dist ./dist
 COPY --from=build /app/prisma ./prisma
 COPY package*.json ./
 COPY docker-entrypoint.sh ./
+# Photographs the demo reset attaches to its seeded deliveries. Not needed to
+# run the app - without them the seed just creates deals with no picture.
+COPY demo-assets ./demo-assets
 
 # Normalise line endings (in case of CRLF from Windows) and make executable.
 # Pre-create the uploads dir so the mounted named volume seeds with `node`

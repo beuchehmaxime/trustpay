@@ -31,6 +31,22 @@ import { prisma } from '../lib/prisma';
 const DEAL_TITLE = 'Ten dining chairs';
 const AMOUNT = 250_000;
 
+/**
+ * A SECOND deal, delivered and waiting, with no dispute on it.
+ *
+ * The first deal is already disputed, which is what the mediator console needs
+ * - a real case with evidence and a history to rule on. But it means the buyer
+ * cannot raise a dispute on it again, so there is nothing to demonstrate the
+ * assistant actually DOING that.
+ *
+ * Hence two deals. One to raise a dispute on, live; one that has been running
+ * long enough to have a photograph filed against it. They cannot be the same
+ * deal, because evidence can only be attached to a dispute that already
+ * exists.
+ */
+const SECOND_TITLE = 'Office desk and two shelves';
+const SECOND_AMOUNT = 60_000;
+
 /** Same guard as the account seed: never on a stack with a live money rail. */
 function assertDemoStack(): void {
   if (config.payments?.mode && config.payments.mode !== 'simulated') {
@@ -48,6 +64,45 @@ async function findUser(phone: string) {
   return user;
 }
 
+
+/** The deal a dispute can still be raised on. Separate so it is seeded even
+ *  when the first deal already exists. */
+async function seedSecondDeal(
+  marie: { id: string },
+  paul: { id: string; phone: string | null },
+  dueDate: string,
+): Promise<void> {
+  // ---- The second deal: funded, delivered, NOT disputed -----------------
+  const alreadySecond = await prisma.contract.findFirst({
+    where: { title: SECOND_TITLE, creatorId: marie.id },
+  });
+  if (!alreadySecond) {
+    const second = (await ContractService.create(marie.id, {
+      title: SECOND_TITLE,
+      description: 'One office desk and two wall shelves, delivered to Bonanjo.',
+      currency: 'XAF',
+      counterpartyName: 'Paul Mbarga',
+      counterpartyPhone: paul.phone!,
+      creatorIsPayer: true,
+      milestones: [{ title: 'Desk and shelves', amount: SECOND_AMOUNT, dueDate }],
+    })) as unknown as { id: string };
+    await ContractService.accept(paul.id, second.id);
+
+    const secondContract = await prisma.contract.findUniqueOrThrow({
+      where: { id: second.id },
+      include: { milestones: true },
+    });
+    const secondMilestone = secondContract.milestones[0];
+    await EscrowService.fundMilestone(marie.id, secondMilestone.id);
+    await ContractService.submitWork(paul.id, secondMilestone.id, {
+      note: 'Desk and both shelves dropped at Bonanjo reception.',
+    });
+    console.log(`  second deal ready to dispute: ${second.id}`);
+  } else {
+    console.log(`  second deal already seeded: ${alreadySecond.id}`);
+  }
+}
+
 async function main(): Promise<void> {
   assertDemoStack();
 
@@ -60,13 +115,17 @@ async function main(): Promise<void> {
     where: { title: DEAL_TITLE, creatorId: marie.id },
     include: { milestones: true },
   });
+  const dueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
   if (existing) {
     console.log(`Already seeded: "${DEAL_TITLE}" (${existing.id}), status ${existing.status}.`);
+    // The second deal still has to exist: it is the one a dispute can be
+    // raised on, and the first one cannot be disputed twice.
+    await seedSecondDeal(marie, paul, dueDate);
     return;
   }
 
   // 1. Marie creates the deal and invites Paul. She pays, so creatorIsPayer.
-  const dueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
   const created = (await ContractService.create(marie.id, {
     title: DEAL_TITLE,
     description: 'Ten matching dining chairs, delivered to Akwa.',
@@ -114,6 +173,8 @@ async function main(): Promise<void> {
     select: { id: true, status: true },
   });
 
+  await seedSecondDeal(marie, paul, dueDate);
+
   console.log(`
 Scenario ready.
 
@@ -121,6 +182,10 @@ Scenario ready.
   Buyer     Marie Ngo   (+237670000001)  filed the dispute
   Seller    Paul Mbarga (+237670000002)
   Dispute   ${dispute.id}, ${dispute.status}
+
+  Second deal     ${SECOND_TITLE}, ${SECOND_AMOUNT.toLocaleString('en-US')} XAF
+                  Delivered and awaiting Marie's approval. NOT disputed, so the
+                  assistant can raise one live in the demo.
 
   Admin console   http://localhost:3001/disputes
   User app        http://localhost:3000  - sign in as either party
